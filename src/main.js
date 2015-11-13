@@ -10,11 +10,11 @@ var rogue = function (config) {
     self.config = config;
 
     self.lint = function () {
-    	var options = {};
-    	var linter = new CLIEngine(options);
-    	var report = linter.executeOnFiles(['./main.js']);
+        var options = {};
+        var linter = new CLIEngine(options);
+        var report = linter.executeOnFiles(['./main.js']);
 
-    	console.log(report);
+        console.log(report);
     };
 
     self.preprocess = function () {

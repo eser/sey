@@ -3,10 +3,11 @@
 var rogue = require('../src/main.js'),
     commander = require('commander'),
     updateNotifier = require('update-notifier'),
-    pkg = require('../package.json');
+    pkg = require('../package.json'),
+    exitCode = 0;
 
 updateNotifier({ pkg: pkg })
-	.notify({ defer: false });
+    .notify({ defer: false });
 
 commander
     .version(pkg.version)
@@ -19,5 +20,14 @@ commander.cli = true;
 
 // console.log(commander.config);
 
-var instance = new rogue();
-instance.lint();
+try {
+    var instance = new rogue();
+    instance.lint();
+} catch(ex) {
+    exitCode = 1;
+    console.error(ex.stack);
+}
+
+process.on('exit', function () {
+    process.exit(exitCode);
+});
