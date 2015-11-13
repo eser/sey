@@ -1,0 +1,23 @@
+#!/usr/bin/env node
+
+var rogue = require('../src/main.js'),
+    commander = require('commander'),
+    updateNotifier = require('update-notifier'),
+    pkg = require('../package.json');
+
+updateNotifier({ pkg: pkg })
+	.notify({ defer: false });
+
+commander
+    .version(pkg.version)
+    .description(pkg.description)
+    .usage('[options]')
+    .option('-c, --config <file>', 'configuration file');
+
+commander.parse(process.argv);
+commander.cli = true;
+
+// console.log(commander.config);
+
+var instance = new rogue();
+instance.lint();
