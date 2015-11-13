@@ -1,4 +1,5 @@
-var CLIEngine = require('eslint').CLIEngine;
+var eslint = require('eslint'),
+    babel = require('babel-core');;
 
 var rogue = function (config) {
     var self = this;
@@ -11,7 +12,8 @@ var rogue = function (config) {
 
     self.lint = function () {
         var options = {};
-        var linter = new CLIEngine(options);
+
+        var linter = new eslint.CLIEngine(options);
         var report = linter.executeOnFiles(['./main.js']);
 
         console.log(report);
@@ -19,6 +21,15 @@ var rogue = function (config) {
 
     self.preprocess = function () {
 
+    };
+
+    self.transpile = function () {
+        var code = '',
+            options = {};
+
+        var result = babel.transform(code, options);
+
+        console.log(result);
     };
 };
 
