@@ -1,5 +1,5 @@
 var eslint = require('eslint'),
-    babel = require('babel-core');;
+    babel = require('babel-core');
 
 var rogue = function (config) {
     var self = this;
@@ -19,8 +19,13 @@ var rogue = function (config) {
         console.log(report);
     };
 
-    self.preprocess = function () {
-
+    this.process = function () {
+        // read file
+        // eol fix
+        // preprocess file
+        // transpile file
+        // add header
+        // write file to target
     };
 
     self.transpile = function () {
@@ -30,6 +35,14 @@ var rogue = function (config) {
         var result = babel.transform(code, options);
 
         console.log(result);
+    };
+
+    self.test = function () {
+
+    };
+
+    self.selfCheck = function () {
+
     };
 };
 
