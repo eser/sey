@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 var rogue = require('../src/main.js'),
+    path = require('path'),
     commander = require('commander'),
     updateNotifier = require('update-notifier'),
     pkg = require('../package.json'),
@@ -13,21 +14,35 @@ commander
     .version(pkg.version)
     .description(pkg.description)
     .usage('[options]')
-    .option('-c, --config <file>', 'configuration file');
+    .option('-i, --init', 'initializes a rogue file')
+    .option('-f, --file <roguefile.js>', 'loads specified rogue file');
 
 commander.parse(process.argv);
 commander.cli = true;
 
-// console.log(commander.config);
-
-try {
-    var instance = new rogue();
-    instance.lint();
-} catch(ex) {
+process.on('uncaughtException', function (err) {
+    console.error(err.stack);
     exitCode = 1;
-    console.error(ex.stack);
-}
+});
 
 process.on('exit', function () {
     process.exit(exitCode);
 });
+
+var roguefile;
+
+if (commander.file === undefined) {
+    roguefile = path.join(process.cwd(), 'roguefile.js');
+} else {
+    if (!path.isAbsolute(commander.file)) {
+        roguefile = path.join(process.cwd(), commander.file);
+    } else {
+        roguefile = commander.file;
+    }
+}
+
+if (commander.init) {
+    // copy __dirname + '/roguefile.sample.js' -> process.cwd() . '/roguefile.js'
+} else {
+    var result = require(roguefile);
+}

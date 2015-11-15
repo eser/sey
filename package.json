@@ -6,6 +6,9 @@
     "tasks",
     "taskmaster"
   ],
+  "engines": {
+    "node": ">=0.8.0"
+  },
   "author": "Eser Ozvataf",
   "homepage": "https://eserozvataf.github.io/rogue",
   "bugs": {
@@ -28,10 +31,12 @@
   },
   "devDependencies": {},
   "dependencies": {
+    "babel-core": "^6.1.20",
     "babel-eslint": "^4.1.5",
     "commander": "^2.9.0",
+    "deepmerge": "^0.2.10",
     "eslint": "^1.9.0",
-    "glob": "^6.0.1",
+    "globby": "^4.0.0",
     "update-notifier": "^0.5.0"
   },
   "scripts": {
