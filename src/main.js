@@ -1,6 +1,8 @@
 var fs = require('fs'),
+    pathlib = require('path'),
     deepmerge = require('deepmerge'),
-    globby = require('globby');
+    globAll = require('glob-all'),
+    globParent = require('glob-parent');
 
 var rogue = function (config) {
     var self = this;
@@ -122,6 +124,79 @@ var rogue = function (config) {
         return bundleTasks;
     };
 
+    self.globConversions = function (paths) {
+        var pathArray = (paths.constructor === Array) ? paths : [paths],
+            result = [];
+
+        for (var i = 0, length = pathArray.length; i < length; i++) {
+            var path = pathArray[i];
+
+            if (path.substring(0, 1) === '!') {
+                continue;
+            }
+
+            result.push([
+                path,
+                globParent(path)
+            ]);
+        }
+
+        return result;
+    };
+
+    self.globConvert = function (conversions, path) {
+        for (var i = 0, length = conversions.length; i < length; i++) {
+            if (conversions[i][1] === path.substring(0, conversions[i][1].length)) {
+                return path.substring(conversions[i][1].length);
+            }
+        }
+
+        return path;
+    };
+
+    self.globWithBases = function (paths) {
+        var pathConversions = self.globConversions(paths),
+            files = globAll.sync(paths, { nosort: true, nonull: false }),
+            result = {};
+
+        for (var i = 0, length = files.length; i < length; i++) {
+            var file = files[i];
+
+            result[file] = {
+                file: self.globConvert(pathConversions, file),
+                content: fs.readFileSync(file, 'utf8')
+            };
+        }
+
+        return result;
+    };
+
+    self.createDestFile = function (path, content) {
+        var buffer = [
+            [path, true, content]
+        ];
+
+        while (buffer.length > 0) {
+            var item = buffer[0];
+
+            try {
+                if (item[1]) {
+                    fs.writeFileSync(item[0], item[2]);
+                } else {
+                    fs.mkdirSync(item[0]);
+                }
+
+                buffer.shift();
+            } catch (ex) {
+                if (ex.code === 'ENOENT') {
+                    buffer.unshift([pathlib.dirname(item[0]), false]);
+                } else {
+                    throw ex;
+                }
+            }
+        }
+    };
+
     self.doBundleTasks = function (bundle) {
         self.context.bundle = bundle;
         self.context.bundleConfig = self.getBundleConfig(bundle);
@@ -135,34 +210,40 @@ var rogue = function (config) {
 
         for (var opName in self.context.bundleOps) {
             var op = self.context.bundleOps[opName],
-                files = globby.sync(op.from, { nosort: true }),
-                fileContents = {};
+                files = self.globWithBases(op.from);
 
-            for (var i = 0, length = files.length; i < length; i++) {
-                var file = files[i];
+            if (files === null) {
+                files = [];
+            }
 
-                console.log('[' + opName + '] processFile: ' + file);
-                fileContents[file] = fs.readFileSync(file, 'utf8');
+            for (var fileKey in files) {
+                console.log('[' + opName + '] processFile: ' + fileKey);
 
                 if (op.tasks !== undefined && op.tasks !== null) {
-                    fileContents[file] = self.execChainTaskMethod(
+                    files[fileKey] = self.execChainTaskMethod(
                         op.tasks,
                         'processFile',
-                        [file, fileContents[file]]
+                        [fileKey, files[fileKey]]
                     );
                 }
             }
 
             console.log('[' + opName + '] processBundle');
-            fileContents = self.execChainTaskMethod(
-                op.tasks,
-                'processBundle',
-                [fileContents]
-            );
+            if (op.tasks !== undefined && op.tasks !== null) {
+                files = self.execChainTaskMethod(
+                    op.tasks,
+                    'processBundle',
+                    [files]
+                );
+            }
 
-            for (var fileKey in fileContents) {
-                console.log('writing: ' + fileKey);
-                // fs.writeSync(fileKey, fileContents[fileKey]);
+            for (var fileKey2 in files) {
+                var file = files[fileKey2],
+                    dest = op.to.replace(/\/+$/, '') + file.file,
+                    destDir = pathlib.dirname(dest);
+
+                console.log('writing: ' + dest);
+                self.createDestFile(dest, file.content);
             }
         }
 

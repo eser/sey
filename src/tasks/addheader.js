@@ -4,8 +4,8 @@ var addheader = function (context) {
     self.bundleStart = function (bundle) {
     };
 
-    self.processFile = function (filename, content) {
-        return content;
+    self.processFile = function (srcPath, file) {
+        return file;
     };
 
     self.processBundle = function (files) {

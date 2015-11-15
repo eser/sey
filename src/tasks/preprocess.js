@@ -1,8 +1,8 @@
 var preprocess = function (context) {
     var self = this;
 
-    self.processFile = function (filename, content) {
-        return content;
+    self.processFile = function (srcPath, file) {
+        return file;
     };
 };
 
