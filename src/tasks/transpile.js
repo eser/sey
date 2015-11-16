@@ -2,19 +2,23 @@ var transpile = function (context) {
     var self = this,
         babel = null;
 
-    // self.processBundle = function (files) {
-    //     if (babel === null) {
-    //         babel = require('babel-core');
-    //     }
+    self.processBundle = function (files) {
+        if (babel === null) {
+            babel = require('babel-core');
+        }
 
-    //     var options = {};
+        for (var file in files) {
+            var options = {
+                filename: files[file].file,
+                ast: false,
+                presets: ['es2015']
+            };
 
-    //     for (var file in files) {
-    //         files[file].content = babel.transform(files[file].content, options);
-    //     }
+            files[file].content = babel.transform(files[file].content, options).code;
+        }
 
-    //     return files;
-    // };
+        return files;
+    };
 };
 
 module.exports = transpile;
