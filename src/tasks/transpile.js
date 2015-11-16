@@ -1,18 +1,20 @@
 var transpile = function (context) {
     var self = this,
-    	babel = null;
+        babel = null;
 
-    self.processFile = function (srcPath, file) {
-        if (babel === null) {
-        	babel = require('babel-core');
-        }
+    // self.processBundle = function (files) {
+    //     if (babel === null) {
+    //         babel = require('babel-core');
+    //     }
 
-        var options = {};
+    //     var options = {};
 
-        file.content = babel.transform(file.content, options);
+    //     for (var file in files) {
+    //         files[file].content = babel.transform(files[file].content, options);
+    //     }
 
-        return file;
-    };
+    //     return files;
+    // };
 };
 
 module.exports = transpile;

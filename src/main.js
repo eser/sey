@@ -218,18 +218,6 @@ var rogue = function (config) {
                 files = [];
             }
 
-            for (var fileKey in files) {
-                console.log('[' + opName + '] processFile: ' + fileKey);
-
-                if (op.tasks !== undefined && op.tasks !== null) {
-                    files[fileKey] = self.execChainTaskMethod(
-                        op.tasks,
-                        'processFile',
-                        [fileKey, files[fileKey]]
-                    );
-                }
-            }
-
             console.log('[' + opName + '] processBundle');
             if (op.tasks !== undefined && op.tasks !== null) {
                 files = self.execChainTaskMethod(

@@ -38,6 +38,7 @@
     "eslint": "^1.9.0",
     "glob-all": "^3.0.1",
     "glob-parent": "^2.0.0",
+    "preprocess": "^3.0.2",
     "update-notifier": "^0.5.0"
   },
   "scripts": {

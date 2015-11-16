@@ -1,18 +1,16 @@
 var addheader = function (context) {
     var self = this;
 
-    self.bundleStart = function (bundle) {
-    };
-
-    self.processFile = function (srcPath, file) {
-        return file;
-    };
-
     self.processBundle = function (files) {
-        return files;
-    };
+        if (context.bundleConfig.banner === undefined || context.bundleConfig.banner === null) {
+            return files;
+        }
 
-    self.bundleEnd = function (bundle) {
+        for (var file in files) {
+            files[file].content = context.bundleConfig.banner + files[file].content;
+        }
+
+        return files;
     };
 };
 

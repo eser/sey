@@ -1,5 +1,5 @@
 // var rogue = require('rogue');
-var rogue = require('./src/main.js');
+var rogue = require('../rogue/src/main.js');
 
 var config = {
     global: {
@@ -39,12 +39,12 @@ var config = {
         ops: [
             {
                 from: ['./src/**/*.js'],
-                // tasks: ['eolfix', 'preprocess', 'lint', 'transpile', 'addheader'],
+                tasks: ['eolfix', 'preprocess', 'lint', 'transpile', 'addheader'],
                 to: './dist/'
             },
             {
                 from: ['./etc/config/**/*.js'],
-                // tasks: ['eolfix', 'preprocess', 'lint', 'transpile', 'concat', 'addheader'],
+                tasks: ['eolfix', 'preprocess', 'lint', 'transpile', 'concat', 'addheader'],
                 to: './dist/config.js'
             },
             {

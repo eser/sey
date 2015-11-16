@@ -2,18 +2,18 @@ var lint = function (context) {
     var self = this,
         eslint = null;
 
-    self.processFile = function (srcPath, file) {
-        if (eslint === null) {
-            eslint = require('eslint');
-        }
+    // self.processBundle = function (files) {
+    //     if (eslint === null) {
+    //         eslint = require('eslint');
+    //     }
 
-        var options = {};
+    //     var options = {};
 
-        var linter = new eslint.CLIEngine(options);
-        // var report = linter.executeOnFiles(['./main.js']);
+    //     var linter = new eslint.CLIEngine(options);
+    //     var report = linter.executeOnFiles(['./main.js']);
 
-        return file;
-    };
+    //     return files;
+    // };
 };
 
 module.exports = lint;

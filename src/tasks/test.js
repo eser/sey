@@ -1,9 +1,9 @@
 var test = function (context) {
     var self = this;
 
-    self.processFile = function (srcPath, file) {
-        return file;
-    };
+    // self.processBundle = function (files) {
+    //     return files;
+    // };
 };
 
 module.exports = test;

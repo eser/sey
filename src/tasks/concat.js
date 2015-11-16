@@ -1,8 +1,16 @@
 var concat = function (context) {
     var self = this;
 
-    self.processFile = function (srcPath, file) {
-        return file;
+    self.processBundle = function (files) {
+        var content = '';
+
+        for (var file in files) {
+            content += files[file].content;
+        }
+
+        return [
+            { file: 'concat', content: content }
+        ];
     };
 };
 
