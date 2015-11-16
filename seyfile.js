@@ -1,5 +1,4 @@
-// var rogue = require('rogue');
-var rogue = require('../rogue/src/main.js');
+var sey = require('sey');
 
 var config = {
     global: {
@@ -55,7 +54,7 @@ var config = {
     }
 };
 
-var instance = new rogue(config);
+var instance = new sey(config);
 instance.doTasks();
 
 module.exports = instance;

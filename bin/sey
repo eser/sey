@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var rogue = require('../src/main.js'),
+var sey = require('../src/main.js'),
     path = require('path'),
     commander = require('commander'),
     updateNotifier = require('update-notifier'),
@@ -14,8 +14,8 @@ commander
     .version(pkg.version)
     .description(pkg.description)
     .usage('[options]')
-    .option('-i, --init', 'initializes a rogue file')
-    .option('-f, --file <roguefile.js>', 'loads specified rogue file');
+    .option('-i, --init', 'initializes a sey file')
+    .option('-f, --file <seyfile.js>', 'loads specified sey file');
 
 commander.parse(process.argv);
 commander.cli = true;
@@ -29,20 +29,20 @@ process.on('exit', function () {
     process.exit(exitCode);
 });
 
-var roguefile;
+var seyfile;
 
 if (commander.file === undefined) {
-    roguefile = path.join(process.cwd(), 'roguefile.js');
+    seyfile = path.join(process.cwd(), 'seyfile.js');
 } else {
     if (!path.isAbsolute(commander.file)) {
-        roguefile = path.join(process.cwd(), commander.file);
+        seyfile = path.join(process.cwd(), commander.file);
     } else {
-        roguefile = commander.file;
+        seyfile = commander.file;
     }
 }
 
 if (commander.init) {
-    // copy __dirname + '/roguefile.sample.js' -> process.cwd() . '/roguefile.js'
+    // copy __dirname + '/seyfile.sample.js' -> process.cwd() . '/seyfile.js'
 } else {
-    var result = require(roguefile);
+    var result = require(seyfile);
 }

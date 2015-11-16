@@ -4,10 +4,10 @@ var fs = require('fs'),
     globAll = require('glob-all'),
     globParent = require('glob-parent');
 
-var rogue = function (config) {
+var sey = function (config) {
     var self = this;
 
-    if (rogue === self) {
+    if (sey === self) {
         return;
     }
 
@@ -262,4 +262,4 @@ var rogue = function (config) {
     };
 };
 
-module.exports = rogue;
+module.exports = sey;

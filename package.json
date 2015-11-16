@@ -1,5 +1,5 @@
 {
-  "name": "rogue",
+  "name": "sey",
   "version": "0.1.0",
   "description": "Simply does specific tasks without any extension",
   "keywords": [
@@ -10,9 +10,9 @@
     "node": ">=0.8.0"
   },
   "author": "Eser Ozvataf",
-  "homepage": "https://eserozvataf.github.io/rogue",
+  "homepage": "https://eserozvataf.github.io/sey",
   "bugs": {
-    "url": "https://github.com/eserozvataf/rogue/issues",
+    "url": "https://github.com/eserozvataf/sey/issues",
     "email": "eser@ozvataf.com"
   },
   "license": "Apache-2.0",
@@ -27,7 +27,7 @@
   "preferGlobal": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/eserozvataf/rogue.git"
+    "url": "https://github.com/eserozvataf/sey.git"
   },
   "devDependencies": {},
   "dependencies": {
@@ -42,7 +42,7 @@
     "update-notifier": "^0.5.0"
   },
   "scripts": {
-    "start": "./bin/rogue",
+    "start": "./bin/sey",
     "test": "echo \"Error: no test specified\" && exit 1"
   }
 }
