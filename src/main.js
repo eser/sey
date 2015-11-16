@@ -210,7 +210,9 @@ var rogue = function (config) {
 
         for (var opName in self.context.bundleOps) {
             var op = self.context.bundleOps[opName],
-                files = self.globWithBases(op.from);
+                files = self.globWithBases(op.from),
+                destExists = (op.to !== undefined && op.to !== null),
+                destIsDir = destExists && (op.to.charAt(op.to.length - 1) === '/');
 
             if (files === null) {
                 files = [];
@@ -237,13 +239,20 @@ var rogue = function (config) {
                 );
             }
 
-            for (var fileKey2 in files) {
-                var file = files[fileKey2],
-                    dest = op.to.replace(/\/+$/, '') + file.file,
-                    destDir = pathlib.dirname(dest);
+            if (destExists) {
+                for (var fileKey2 in files) {
+                    var file = files[fileKey2],
+                        dest;
 
-                console.log('writing: ' + dest);
-                self.createDestFile(dest, file.content);
+                    if (destIsDir) {
+                        dest = op.to.replace(/\/+$/, '') + file.file;
+                    } else {
+                        dest = op.to;
+                    }
+
+                    console.log('writing: ' + dest);
+                    self.createDestFile(dest, file.content);
+                }
             }
         }
 
