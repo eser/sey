@@ -1,6 +1,6 @@
 {
   "name": "sey",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Simply does specific tasks without any extension",
   "keywords": [
     "tasks",
@@ -44,5 +44,12 @@
   "scripts": {
     "start": "./bin/sey",
     "test": "echo \"Error: no test specified\" && exit 1"
-  }
+  },
+  "files": [
+    "src",
+    "bin"
+  ],
+  "bin": {
+    "sey": "./bin/sey"
+  },
 }
