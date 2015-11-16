@@ -205,6 +205,7 @@ var rogue = function (config) {
 
         self.loadTask(self.context.bundleTasks);
 
+        var startTime = Date.now();
         console.log('bundleStart: ' + bundle);
         self.execTaskMethod(self.context.bundleTasks, 'bundleStart', [bundle]);
 
@@ -244,7 +245,7 @@ var rogue = function (config) {
             }
         }
 
-        console.log('bundleEnd: ' + bundle);
+        console.log('bundleEnd: ' + bundle + ' (in ' + ((Date.now() - startTime) / 1000) + ' secs.)');
         self.execTaskMethod(self.context.bundleTasks, 'bundleEnd', [bundle]);
     };
 
