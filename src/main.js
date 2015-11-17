@@ -1,5 +1,6 @@
 var fs = require('fs'),
     pathlib = require('path'),
+    chalk = require('chalk'),
     deepmerge = require('deepmerge'),
     globAll = require('glob-all'),
     globParent = require('glob-parent');
@@ -29,6 +30,22 @@ var _createDestFile = function (path, content) {
             }
         }
     }
+};
+
+var _file = function (file) {
+    var self = this;
+
+    self.file = file;
+    self.stat = fs.stat(file);
+    self.content = null;
+
+    self.read = function () {
+        if (self.content === null) {
+            self.content = fs.readFileSync(self.file, 'utf8');
+        }
+
+        return self.content;
+    };
 };
 
 // public
@@ -222,7 +239,8 @@ var sey = function (config) {
         self.loadTask(self.context.bundleTasks);
 
         var startTime = Date.now();
-        console.log('bundleStart: ' + bundle);
+
+        console.log(chalk.green('bundleStart') + chalk.white(': ' + bundle));
         self.execTaskMethod(self.context.bundleTasks, 'bundleStart', [bundle]);
 
         for (var opName in self.context.bundleOps) {
@@ -235,7 +253,7 @@ var sey = function (config) {
                 files = [];
             }
 
-            console.log('[' + opName + '] processBundle');
+            console.log(chalk.gray('[' + opName + '] ') + chalk.yellow('processBundle'));
             var tasks = self.unfoldTasks(op);
             if (tasks.length > 0) {
                 files = self.execChainTaskMethod(
@@ -256,13 +274,13 @@ var sey = function (config) {
                         dest = op.dest;
                     }
 
-                    console.log('writing: ' + dest);
+                    console.log(chalk.black('\twriting: ' + dest));
                     _createDestFile(dest, file.content);
                 }
             }
         }
 
-        console.log('bundleEnd: ' + bundle + ' (in ' + ((Date.now() - startTime) / 1000) + ' secs.)');
+        console.log(chalk.green('bundleEnd') + chalk.white(': ' + bundle + ' (in ' + ((Date.now() - startTime) / 1000) + ' secs.)'));
         self.execTaskMethod(self.context.bundleTasks, 'bundleEnd', [bundle]);
     };
 
@@ -273,15 +291,17 @@ var sey = function (config) {
             }
         }
     };
-
-    self.selfCheck = function () {
-
-    };
 };
 
 sey.initFile = function (file) {
     var content = fs.readFileSync(__dirname + '/../seyfile.sample.js', 'utf8')
     _createDestFile(file, content);
+
+    console.log(chalk.green(file) + chalk.white(' is written successfully.'));
+};
+
+sey.selfCheck = function () {
+    console.log(chalk.white('self-check is successful.'));
 };
 
 module.exports = sey;

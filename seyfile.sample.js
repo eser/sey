@@ -31,7 +31,6 @@ var config = {
                 src: ['./src/**/*.js'],
                 dest: './dist/',
 
-                // tasks: ['eolfix', 'preprocess', 'lint', 'transpile', 'addheader'],
                 eolfix: true,
                 preprocess: true,
                 lint: true,
@@ -42,7 +41,6 @@ var config = {
                 src: ['./etc/config/**/*.js'],
                 dest: './dist/config.js',
 
-                // tasks: ['eolfix', 'preprocess', 'lint', 'transpile', 'concat', 'addheader'],
                 eolfix: true,
                 preprocess: true,
                 lint: true,
@@ -53,7 +51,6 @@ var config = {
             {
                 src: './test/**/*.js',
 
-                // tasks: ['test'],
                 test: true
             }
         ]

@@ -13,8 +13,9 @@ updateNotifier({ pkg: pkg })
 commander
     .version(pkg.version)
     .description(pkg.description)
-    .command('init').description('initializes a sey file')
-    .command('build').description('starts build')
+    .command('init', 'initializes a sey file')
+    .command('build', 'starts build')
+    .command('self-check', 'checks sey\'s self integrity.')
     .option('-f, --file <seyfile.js>', 'loads specified sey file')
     .option('-np, --nopartial', 'disables partial building');
 
@@ -49,12 +50,15 @@ var command = commander.args.shift() || 'build';
 switch (command) {
     case 'init':
         sey.initFile(seyfile);
-        // copy __dirname + '/seyfile.sample.js' -> process.cwd() . '/seyfile.js'
         break;
 
     case 'build':
         global.sey = sey;
         var result = require(seyfile);
+        break;
+
+    case 'self-check':
+        sey.selfCheck();
         break;
 
     default:
