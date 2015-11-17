@@ -1,7 +1,7 @@
 {
   "name": "sey",
-  "version": "0.1.1",
-  "description": "Simply does specific tasks without any extension",
+  "version": "0.1.2",
+  "description": "Simple javascript build tool with declarative configuration",
   "keywords": [
     "tasks",
     "taskmaster"

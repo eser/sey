@@ -13,12 +13,13 @@ updateNotifier({ pkg: pkg })
 commander
     .version(pkg.version)
     .description(pkg.description)
-    .usage('[options]')
-    .option('-i, --init', 'initializes a sey file')
-    .option('-f, --file <seyfile.js>', 'loads specified sey file');
+    .command('init').description('initializes a sey file')
+    .command('build').description('starts build')
+    .option('-f, --file <seyfile.js>', 'loads specified sey file')
+    .option('-np, --nopartial', 'disables partial building');
 
-commander.parse(process.argv);
 commander.cli = true;
+commander.parse(process.argv);
 
 process.on('uncaughtException', function (err) {
     console.error(err.stack);
@@ -29,6 +30,7 @@ process.on('exit', function () {
     process.exit(exitCode);
 });
 
+// --file option
 var seyfile;
 
 if (commander.file === undefined) {
@@ -41,8 +43,21 @@ if (commander.file === undefined) {
     }
 }
 
-if (commander.init) {
-    // copy __dirname + '/seyfile.sample.js' -> process.cwd() . '/seyfile.js'
-} else {
-    var result = require(seyfile);
+// command
+var command = commander.args.shift();
+
+switch (command) {
+    case 'init':
+        console.log('init');
+        // copy __dirname + '/seyfile.sample.js' -> process.cwd() . '/seyfile.js'
+        break;
+
+    case 'build':
+    case undefined:
+        var result = require(seyfile);
+        break;
+
+    default:
+        console.log('unknown command -', command);
+        break;
 }
