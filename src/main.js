@@ -102,15 +102,29 @@ var sey = function (config) {
         return bundleOps;
     };
 
+    self.unfoldTasks = function (node) {
+        var tasks = [];
+
+        for (var item in node) {
+            if (item === 'src' || item === 'dest') {
+                continue;
+            }
+
+            if (node[item] === undefined || node[item] === null || node[item] === false) {
+                continue;
+            }
+
+            tasks.push(item);
+        }
+
+        return tasks;
+    };
+
     self.getBundleTasks = function (ops) {
         var bundleTasks = [];
 
         for (var op in ops) {
-            var tasks = ops[op].tasks;
-
-            if (tasks === undefined || tasks === null) {
-                continue;
-            }
+            var tasks = self.unfoldTasks(ops[op]);
 
             for (var i = 0, length = tasks.length; i < length; i++) {
                 var task = tasks[i];
@@ -220,9 +234,10 @@ var sey = function (config) {
             }
 
             console.log('[' + opName + '] processBundle');
-            if (op.tasks !== undefined && op.tasks !== null) {
+            var tasks = self.unfoldTasks(op);
+            if (tasks.length > 0) {
                 files = self.execChainTaskMethod(
-                    op.tasks,
+                    tasks,
                     'processBundle',
                     [files]
                 );

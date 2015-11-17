@@ -1,5 +1,3 @@
-var sey = require('sey');
-
 var config = {
     global: {
         babelConfig: {
@@ -33,7 +31,7 @@ var config = {
                 src: ['./src/**/*.js'],
                 dest: './dist/',
 
-                tasks: ['eolfix', 'preprocess', 'lint', 'transpile', 'addheader'],
+                // tasks: ['eolfix', 'preprocess', 'lint', 'transpile', 'addheader'],
                 eolfix: true,
                 preprocess: true,
                 lint: true,
@@ -44,25 +42,25 @@ var config = {
                 src: ['./etc/config/**/*.js'],
                 dest: './dist/config.js',
 
-                tasks: ['eolfix', 'preprocess', 'lint', 'transpile', 'concat', 'addheader'],
+                // tasks: ['eolfix', 'preprocess', 'lint', 'transpile', 'concat', 'addheader'],
                 eolfix: true,
                 preprocess: true,
                 lint: true,
-                transpile: true
+                transpile: true,
                 concat: true,
-                addheaader: true
+                addheader: true
             },
             {
                 src: './test/**/*.js',
 
-                tasks: ['test'],
+                // tasks: ['test'],
                 test: true
             }
         ]
     }
 };
 
-var instance = new sey(config);
+var instance = new global.sey(config);
 instance.doTasks();
 // instance.bundle('main').src('./test/**/*.js').test(); // returns Promise
 

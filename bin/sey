@@ -44,7 +44,7 @@ if (commander.file === undefined) {
 }
 
 // command
-var command = commander.args.shift();
+var command = commander.args.shift() || 'build';
 
 switch (command) {
     case 'init':
@@ -53,7 +53,7 @@ switch (command) {
         break;
 
     case 'build':
-    case undefined:
+        global.sey = sey;
         var result = require(seyfile);
         break;
 
