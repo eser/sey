@@ -4,6 +4,34 @@ var fs = require('fs'),
     globAll = require('glob-all'),
     globParent = require('glob-parent');
 
+// private
+var _createDestFile = function (path, content) {
+    var buffer = [
+        [path, true, content]
+    ];
+
+    while (buffer.length > 0) {
+        var item = buffer[0];
+
+        try {
+            if (item[1]) {
+                fs.writeFileSync(item[0], item[2]);
+            } else {
+                fs.mkdirSync(item[0]);
+            }
+
+            buffer.shift();
+        } catch (ex) {
+            if (ex.code === 'ENOENT') {
+                buffer.unshift([pathlib.dirname(item[0]), false]);
+            } else {
+                throw ex;
+            }
+        }
+    }
+};
+
+// public
 var sey = function (config) {
     var self = this;
 
@@ -185,32 +213,6 @@ var sey = function (config) {
         return result;
     };
 
-    self.createDestFile = function (path, content) {
-        var buffer = [
-            [path, true, content]
-        ];
-
-        while (buffer.length > 0) {
-            var item = buffer[0];
-
-            try {
-                if (item[1]) {
-                    fs.writeFileSync(item[0], item[2]);
-                } else {
-                    fs.mkdirSync(item[0]);
-                }
-
-                buffer.shift();
-            } catch (ex) {
-                if (ex.code === 'ENOENT') {
-                    buffer.unshift([pathlib.dirname(item[0]), false]);
-                } else {
-                    throw ex;
-                }
-            }
-        }
-    };
-
     self.doBundleTasks = function (bundle) {
         self.context.bundle = bundle;
         self.context.bundleConfig = self.getBundleConfig(bundle);
@@ -255,7 +257,7 @@ var sey = function (config) {
                     }
 
                     console.log('writing: ' + dest);
-                    self.createDestFile(dest, file.content);
+                    _createDestFile(dest, file.content);
                 }
             }
         }
@@ -275,6 +277,11 @@ var sey = function (config) {
     self.selfCheck = function () {
 
     };
+};
+
+sey.initFile = function (file) {
+    var content = fs.readFileSync(__dirname + '/../seyfile.sample.js', 'utf8')
+    _createDestFile(file, content);
 };
 
 module.exports = sey;

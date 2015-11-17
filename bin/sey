@@ -48,7 +48,7 @@ var command = commander.args.shift() || 'build';
 
 switch (command) {
     case 'init':
-        console.log('init');
+        sey.initFile(seyfile);
         // copy __dirname + '/seyfile.sample.js' -> process.cwd() . '/seyfile.js'
         break;
 
