@@ -211,9 +211,9 @@ var sey = function (config) {
 
         for (var opName in self.context.bundleOps) {
             var op = self.context.bundleOps[opName],
-                files = self.globWithBases(op.from),
-                destExists = (op.to !== undefined && op.to !== null),
-                destIsDir = destExists && (op.to.charAt(op.to.length - 1) === '/');
+                files = self.globWithBases(op.src),
+                destExists = (op.dest !== undefined && op.dest !== null),
+                destIsDir = destExists && (op.dest.charAt(op.dest.length - 1) === '/');
 
             if (files === null) {
                 files = [];
@@ -234,9 +234,9 @@ var sey = function (config) {
                         dest;
 
                     if (destIsDir) {
-                        dest = op.to.replace(/\/+$/, '') + file.file;
+                        dest = op.dest.replace(/\/+$/, '') + file.file;
                     } else {
-                        dest = op.to;
+                        dest = op.dest;
                     }
 
                     console.log('writing: ' + dest);

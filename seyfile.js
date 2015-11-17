@@ -2,17 +2,6 @@ var sey = require('sey');
 
 var config = {
     global: {
-        banner: [
-            '/**',
-            ' * <%= pkg.name %> - <%= pkg.description %>',
-            ' *',
-            ' * @version v<%= pkg.version %>',
-            ' * @link <%= pkg.link %>',
-            ' * @license <%= pkg.license %>',
-            ' */',
-            ''
-        ].join('\n'),
-
         babelConfig: {
 
         },
@@ -20,35 +9,54 @@ var config = {
         eslintConfig: {
             useEslintrc: false,
             configFile: './etc/tasks/config/eslint.json'
-        },
-
-        cleanFiles: [
-            '~/**/*',
-            '!~/.gitkeep'
-        ]
+        }
     },
 
     main: {
+        banner: [
+            '/**',
+            ' * laroux.js',
+            ' *',
+            ' * @version v1.5.0',
+            ' * @link https://eserozvataf.github.io/laroux.js',
+            ' * @license Apache-2.0',
+            ' */',
+            ''
+        ].join('\n'),
+
         preprocessVars: {
-            BUNDLE: 'base',
-            ENV: 'base',
-            COMPAT: false
+            BUNDLE: 'main'
         },
 
         ops: [
             {
-                from: ['./src/**/*.js'],
+                src: ['./src/**/*.js'],
+                dest: './dist/',
+
                 tasks: ['eolfix', 'preprocess', 'lint', 'transpile', 'addheader'],
-                to: './dist/'
+                eolfix: true,
+                preprocess: true,
+                lint: true,
+                transpile: true,
+                addheader: true
             },
             {
-                from: ['./etc/config/**/*.js'],
+                src: ['./etc/config/**/*.js'],
+                dest: './dist/config.js',
+
                 tasks: ['eolfix', 'preprocess', 'lint', 'transpile', 'concat', 'addheader'],
-                to: './dist/config.js'
+                eolfix: true,
+                preprocess: true,
+                lint: true,
+                transpile: true
+                concat: true,
+                addheaader: true
             },
             {
-                from: './test/**/*.js',
-                tasks: ['test']
+                src: './test/**/*.js',
+
+                tasks: ['test'],
+                test: true
             }
         ]
     }
@@ -56,5 +64,6 @@ var config = {
 
 var instance = new sey(config);
 instance.doTasks();
+// instance.bundle('main').src('./test/**/*.js').test(); // returns Promise
 
 module.exports = instance;

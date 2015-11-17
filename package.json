@@ -33,6 +33,7 @@
   "dependencies": {
     "babel-core": "^6.1.20",
     "babel-eslint": "^4.1.5",
+    "chalk": "^1.1.1",
     "commander": "^2.9.0",
     "deepmerge": "^0.2.10",
     "eslint": "^1.9.0",
