@@ -31,17 +31,6 @@ and sey,
 ```js
 var config = {
     main: {
-        banner: [
-            '/**',
-            ' * laroux.js',
-            ' *',
-            ' * @version v1.5.0',
-            ' * @link https://eserozvataf.github.io/laroux.js',
-            ' * @license Apache-2.0',
-            ' */',
-            ''
-        ].join('\n'),
-
         eslintConfig: {
             useEslintrc: false,
             configFile: './etc/tasks/config/eslint.json'
@@ -53,14 +42,11 @@ var config = {
                 dest: './dist/',
 
                 eolfix: true,
-                preprocess: true,
                 lint: true,
-                transpile: true,
-                addheader: true
+                transpile: true
             },
             {
                 src: './test/**/*.js',
-
                 test: true
             }
         ]
