@@ -7,7 +7,7 @@ var addheader = function (context) {
         }
 
         for (var file in files) {
-            files[file].content = context.bundleConfig.banner + files[file].content;
+            files[file].content = context.bundleConfig.banner + files[file].read();
         }
 
         return files;

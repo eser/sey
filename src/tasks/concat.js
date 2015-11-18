@@ -5,7 +5,7 @@ var concat = function (context) {
         var content = '';
 
         for (var file in files) {
-            content += files[file].content;
+            content += files[file].read();
         }
 
         return [

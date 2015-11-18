@@ -3,7 +3,7 @@ var eolfix = function (context) {
 
     self.processBundle = function (files) {
         for (var file in files) {
-            files[file].content = files[file].content.replace(/(?:\r\n|\r)/g, '\n');
+            files[file].content = files[file].read().replace(/(?:\r\n|\r)/g, '\n');
         }
 
         return files;

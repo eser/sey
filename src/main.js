@@ -32,16 +32,30 @@ var _createDestFile = function (path, content) {
     }
 };
 
-var _file = function (file) {
+var _file = function (path, relativeFile, cacheTag) {
     var self = this;
 
-    self.file = file;
-    self.stat = fs.stat(file);
+    self.file = relativeFile;
+    self.stat = fs.statSync(path);
+
+    self.cachefile = './.sey/cache/' + cacheTag + relativeFile;
+    try {
+        self.cachestat = fs.statSync(self.cachefile);
+        self.invalidated = (self.stat.getTime() > self.cachestat.getTime());
+    } catch (ex) {
+        if (ex.code === 'ENOENT') {
+            self.cachestat = null;
+            self.invalidated = true;
+        } else {
+            throw ex;
+        }
+    }
+
     self.content = null;
 
     self.read = function () {
         if (self.content === null) {
-            self.content = fs.readFileSync(self.file, 'utf8');
+            self.content = fs.readFileSync(path, 'utf8');
         }
 
         return self.content;
@@ -213,18 +227,22 @@ var sey = function (config) {
         return path;
     };
 
-    self.globWithBases = function (paths) {
+    self.globFiles = function (paths, cacheTag) {
         var pathConversions = self.globConversions(paths),
             files = globAll.sync(paths, { nosort: true, nonull: false }),
             result = {};
 
-        for (var i = 0, length = files.length; i < length; i++) {
-            var file = files[i];
+        if (files !== null) {
+            for (var i = 0, length = files.length; i < length; i++) {
+                var file = files[i],
+                    fileobj = new _file(file, self.globConvert(pathConversions, file), cacheTag);
 
-            result[file] = {
-                file: self.globConvert(pathConversions, file),
-                content: fs.readFileSync(file, 'utf8')
-            };
+                if (fileobj.invalidated) {
+                    result[file] = fileobj;
+                } else {
+                    console.log('cache miss ' + file);
+                }
+            }
         }
 
         return result;
@@ -245,16 +263,13 @@ var sey = function (config) {
 
         for (var opName in self.context.bundleOps) {
             var op = self.context.bundleOps[opName],
-                files = self.globWithBases(op.src),
+                tasks = self.unfoldTasks(op),
+                cacheTag = opName + '/' + tasks.join('_'),
+                files = self.globFiles(op.src, cacheTag),
                 destExists = (op.dest !== undefined && op.dest !== null),
                 destIsDir = destExists && (op.dest.charAt(op.dest.length - 1) === '/');
 
-            if (files === null) {
-                files = [];
-            }
-
             console.log(chalk.gray('[' + opName + '] ') + chalk.yellow('processBundle'));
-            var tasks = self.unfoldTasks(op);
             if (tasks.length > 0) {
                 files = self.execChainTaskMethod(
                     tasks,
@@ -264,8 +279,8 @@ var sey = function (config) {
             }
 
             if (destExists) {
-                for (var fileKey2 in files) {
-                    var file = files[fileKey2],
+                for (var fileKey in files) {
+                    var file = files[fileKey],
                         dest;
 
                     if (destIsDir) {
@@ -274,10 +289,11 @@ var sey = function (config) {
                         dest = op.dest;
                     }
 
-                    console.log(chalk.black('\twriting: ' + dest));
-                    _createDestFile(dest, file.content);
+                    console.log(chalk.gray('\twriting: ' + dest));
+                    _createDestFile(dest, file.read());
                 }
             }
+            _createDestFile(file.cachefile, file.read());
         }
 
         console.log(chalk.green('bundleEnd') + chalk.white(': ' + bundle + ' (in ' + ((Date.now() - startTime) / 1000) + ' secs.)'));

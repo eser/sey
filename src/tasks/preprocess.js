@@ -17,7 +17,7 @@ var preprocess = function (context) {
         }
 
         for (var file in files) {
-            files[file].content = preprocess.preprocess(files[file].content, env);
+            files[file].content = preprocess.preprocess(files[file].read(), env);
         }
 
         return files;

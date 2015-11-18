@@ -17,7 +17,7 @@ var lint = function (context) {
         var linter = new eslint.CLIEngine(config);
 
         for (var file in files) {
-            var report = linter.executeOnText(files[file].content, files[file].file);
+            var report = linter.executeOnText(files[file].read(), files[file].file);
 
             for (var i = 0, length = report.results.length; i < length; i++) {
                 var result = report.results[i];

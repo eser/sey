@@ -24,7 +24,7 @@ var transpile = function (context) {
         for (var file in files) {
             options.filename = files[file].file;
 
-            files[file].content = babel.transform(files[file].content, options).code;
+            files[file].content = babel.transform(files[file].read(), options).code;
         }
 
         return files;
