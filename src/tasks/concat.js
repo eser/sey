@@ -1,3 +1,5 @@
+var opfile = require('../opfile.js');
+
 var concat = function (context) {
     var self = this;
 
@@ -9,7 +11,7 @@ var concat = function (context) {
         }
 
         return [
-            { file: 'concat', content: content }
+            new opfile('concat', 'concat', null, content)
         ];
     };
 };
