@@ -5,8 +5,8 @@ var config = {
         },
 
         eslintConfig: {
-            useEslintrc: false,
-            configFile: './etc/tasks/config/eslint.json'
+//            useEslintrc: false,
+//            configFile: './etc/tasks/config/eslint.json'
         }
     },
 

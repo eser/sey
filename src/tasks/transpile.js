@@ -1,16 +1,16 @@
 var deepmerge = require('deepmerge');
 
-var transpile = function (context) {
+var transpile = function () {
     var self = this,
         babel = null,
         config = null;
 
-    self.processBundle = function (files) {
+    self.processBundle = function (bundle, files) {
         if (babel === null) {
             babel = require('babel-core');
 
-            if (context.bundleConfig.babelConfig !== undefined && context.bundleConfig.babelConfig !== null) {
-                config = context.bundleConfig.babelConfig;
+            if (bundle.config.babelConfig !== undefined && bundle.config.babelConfig !== null) {
+                config = bundle.config.babelConfig;
             } else {
                 config = {};
             }
@@ -21,10 +21,20 @@ var transpile = function (context) {
                 presets: ['es2015']
             });
 
-        for (var file in files) {
-            options.filename = files[file].file;
+        for (var fileKey in files) {
+            var file = files[fileKey],
+                token = file.addTask('preprocess');
 
-            files[file].content = babel.transform(files[file].read(), options).code;
+            if (token.cached) {
+                continue;
+            }
+
+            options.filename = file.relativeFile;
+
+            var content = file.getPreviousContent(),
+                result = babel.transform(content, options);
+
+            file.updateContent(result.code);
         }
 
         return files;

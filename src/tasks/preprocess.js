@@ -1,23 +1,31 @@
 var deepmerge = require('deepmerge');
 
-var preprocess = function (context) {
+var preprocess = function () {
     var self = this,
         preprocess = null,
         env = null;
 
-    self.processBundle = function (files) {
+    self.processBundle = function (bundle, files) {
         if (preprocess === null) {
             preprocess = require('preprocess');
 
-            if (context.bundleConfig.preprocessVars !== undefined && context.bundleConfig.preprocessVars !== null) {
-                env = deepmerge(process.env, context.bundleConfig.preprocessVars);
+            if (bundle.config.preprocessVars !== undefined && bundle.config.preprocessVars !== null) {
+                env = deepmerge(process.env, bundle.config.preprocessVars);
             } else {
                 env = process.env;
             }
         }
 
-        for (var file in files) {
-            files[file].content = preprocess.preprocess(files[file].read(), env);
+        for (var fileKey in files) {
+            var file = files[fileKey],
+                token = file.addTask('preprocess');
+
+            if (token.cached) {
+                continue;
+            }
+
+            var content = file.getPreviousContent();
+            file.updateContent(preprocess.preprocess(content, env));
         }
 
         return files;

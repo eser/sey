@@ -1,39 +1,12 @@
-var opfile = require('./opfile.js'),
-    fs = require('fs'),
+var fs = require('fs'),
     pathlib = require('path'),
     chalk = require('chalk'),
     deepmerge = require('deepmerge'),
-    globAll = require('glob-all'),
-    globParent = require('glob-parent');
+    glob = require('./glob.js'),
+    opfile = require('./opfile.js'),
+    fileutils = require('./fileutils.js'),
+    bundle = require('./bundle.js');
 
-// private
-var _createDestFile = function (path, content) {
-    var buffer = [
-        [path, true, content]
-    ];
-
-    while (buffer.length > 0) {
-        var item = buffer[0];
-
-        try {
-            if (item[1]) {
-                fs.writeFileSync(item[0], item[2]);
-            } else {
-                fs.mkdirSync(item[0]);
-            }
-
-            buffer.shift();
-        } catch (ex) {
-            if (ex.code === 'ENOENT') {
-                buffer.unshift([pathlib.dirname(item[0]), false]);
-            } else {
-                throw ex;
-            }
-        }
-    }
-};
-
-// public
 var sey = function (config) {
     var self = this;
 
@@ -41,206 +14,84 @@ var sey = function (config) {
         return;
     }
 
-    self.tasks = {};
-    self.context = {
-        config: config,
-        bundle: null,
-        bundleConfig: null,
-        bundleOps: null,
-        bundleTasks: null
-    };
+    self.ignoreTaskKeys = [ 'src', 'dest' ];
 
     self.defineTask = function (name, taskObject) {
         if (name in self.tasks) {
             return;
         }
 
-        self.tasks[name] = new taskObject(self.context);
+        self.tasks[name] = new taskObject();
+        bundle.addTask(name);
     };
 
-    self.loadTask = function (names) {
-        var nameArray;
+    self.loadTasks = function () {
+        var normalizedPath = pathlib.join(__dirname, './tasks'),
+            files = fs.readdirSync(normalizedPath);
 
-        if (names.constructor === Array) {
-            nameArray = names;
-        } else {
-            nameArray = [names];
-        }
+        for (var i = 0, length = files.length; i < length; i++) {
+            var basename = pathlib.basename(files[i], '.js'),
+                taskObject = require('./tasks/' + files[i]);
 
-        for (var i = 0, length = nameArray.length; i < length; i++) {
-            var name = nameArray[i];
-
-            if (name in self.tasks) {
-                return;
-            }
-
-            var taskObject = require('./tasks/' + name + '.js');
-            self.tasks[name] = new taskObject(self.context);
+            self.defineTask(basename, taskObject);
         }
     };
 
-    self.getBundleConfig = function (bundle) {
-        if (self.context.config.global !== undefined) {
-            if (self.context.config[bundle] !== undefined) {
-                return deepmerge(self.context.config.global, self.context.config[bundle]);
-            }
-
-            return self.context.config.global;
-        }
-
-        if (self.context.config[bundle] !== undefined) {
-            return self.context.config[bundle];
+    self.getBundleConfig = function (name) {
+        if (name in config && config[name] !== null && config[name] !== undefined && config[name].constructor === Object) {
+            return config[name];
         }
 
         return {};
     };
 
-    self.execTaskMethod = function (taskArray, method, parameters) {
-        for (var i = 0, length = taskArray.length; i < length; i++) {
-            var task = self.tasks[taskArray[i]];
-
-            if (task[method] !== undefined && task[method] !== null && task[method].constructor === Function) {
-                task[method].apply(task, parameters);
-            }
-        }
-    };
-
-    self.execChainTaskMethod = function (taskArray, method, parameters) {
-        var lastParameterKey = parameters.length - 1;
-
-        for (var i = 0, length = taskArray.length; i < length; i++) {
-            var task = self.tasks[taskArray[i]];
-
-            if (task[method] !== undefined && task[method] !== null && task[method].constructor === Function) {
-                parameters[lastParameterKey] = task[method].apply(task, parameters);
-            }
+    self.bundle = function (name) {
+        if (!(name in self.bundles)) {
+            var config = deepmerge(self.globalConfig, self.getBundleConfig(name));
+            self.bundles[name] = new bundle(config);
         }
 
-        return parameters[lastParameterKey];
+        return self.bundles[name];
     };
 
-    self.getBundleOpsFromConfig = function (bundleConfig) {
-        var bundleOps = [];
+    self.startBundle = function (bundleName) {
+        var bundle = self.bundles[bundleName],
+            startTime = Date.now();
 
-        var ops = bundleConfig.ops;
-        if (ops !== undefined && ops !== null) {
-            for (var op in ops) {
-                bundleOps.push(ops[op]);
-            }
+        if (bundle === undefined) {
+            throw new Error('bundle not found - ' + bundleName);
         }
 
-        return bundleOps;
-    };
+        console.log(chalk.green('bundleStart') + chalk.white(': ' + bundleName));
 
-    self.unfoldTasks = function (node) {
-        var tasks = [];
-
-        for (var item in node) {
-            if (item === 'src' || item === 'dest') {
-                continue;
-            }
-
-            if (node[item] === undefined || node[item] === null || node[item] === false) {
-                continue;
-            }
-
-            tasks.push(item);
-        }
-
-        return tasks;
-    };
-
-    self.getBundleTasks = function (ops) {
-        var bundleTasks = [];
-
-        for (var op in ops) {
-            var tasks = self.unfoldTasks(ops[op]);
-
-            for (var i = 0, length = tasks.length; i < length; i++) {
-                var task = tasks[i];
-
-                if (bundleTasks.indexOf(task) === -1) {
-                    bundleTasks.push(task);
-                }
-            }
-        }
-
-        return bundleTasks;
-    };
-
-    self.globConversions = function (paths) {
-        var pathArray = (paths.constructor === Array) ? paths : [paths],
-            result = [];
-
-        for (var i = 0, length = pathArray.length; i < length; i++) {
-            var path = pathArray[i];
-
-            if (path.substring(0, 1) === '!') {
-                continue;
-            }
-
-            result.push([
-                path,
-                globParent(path)
-            ]);
-        }
-
-        return result;
-    };
-
-    self.globConvert = function (conversions, path) {
-        for (var i = 0, length = conversions.length; i < length; i++) {
-            if (conversions[i][1] === path.substring(0, conversions[i][1].length)) {
-                return path.substring(conversions[i][1].length);
-            }
-        }
-
-        return path;
-    };
-
-    self.globFiles = function (paths, opTag) {
-        var pathConversions = self.globConversions(paths),
-            files = globAll.sync(paths, { nosort: true, nonull: false }),
-            result = {};
-
-        if (files !== null) {
-            for (var i = 0, length = files.length; i < length; i++) {
-                var file = files[i];
-
-                result[file] = new opfile(file, self.globConvert(pathConversions, file), opTag);
-            }
-        }
-
-        return result;
-    };
-
-    self.doBundleTasks = function (bundle) {
-        self.context.bundle = bundle;
-        self.context.bundleConfig = self.getBundleConfig(bundle);
-        self.context.bundleOps = self.getBundleOpsFromConfig(self.context.bundleConfig);
-        self.context.bundleTasks = self.getBundleTasks(self.context.bundleOps);
-
-        self.loadTask(self.context.bundleTasks);
-
-        var startTime = Date.now();
-
-        console.log(chalk.green('bundleStart') + chalk.white(': ' + bundle));
-        self.execTaskMethod(self.context.bundleTasks, 'bundleStart', [bundle]);
-
-        for (var opName in self.context.bundleOps) {
-            var op = self.context.bundleOps[opName],
-                tasks = self.unfoldTasks(op),
-                files = self.globFiles(op.src, opName),
+        for (var opName in bundle.ops) {
+            var op = bundle.ops[opName],
+                files = glob(op.src, opName),
                 destExists = (op.dest !== undefined && op.dest !== null),
                 destIsDir = destExists && (op.dest.charAt(op.dest.length - 1) === '/');
 
             console.log(chalk.gray('[' + opName + '] ') + chalk.yellow('processBundle'));
-            if (tasks.length > 0) {
-                files = self.execChainTaskMethod(
-                    tasks,
-                    'processBundle',
-                    [files]
-                );
+
+            for (var taskName in op) {
+                if (self.ignoreTaskKeys.indexOf(taskName) > -1) {
+                    continue;
+                }
+
+                if (self.tasks[taskName] === undefined) {
+                    throw new Error('task not found - ' + taskName);
+                }
+
+                var task = op[taskName];
+                if (task === undefined || task === null || task === false) {
+                    continue;
+                }
+
+                if (self.tasks[taskName].processBundle === undefined) {
+                    continue;
+                }
+
+                console.log(chalk.gray('\op: ' + taskName));
+                files = self.tasks[taskName].processBundle(bundle, files);
             }
 
             if (destExists) {
@@ -249,34 +100,42 @@ var sey = function (config) {
                         dest;
 
                     if (destIsDir) {
-                        dest = op.dest.replace(/\/+$/, '') + file.file;
+                        dest = op.dest.replace(/\/+$/, '') + file.relativeFile;
                     } else {
                         dest = op.dest;
                     }
 
                     console.log(chalk.gray('\twriting: ' + dest));
-                    _createDestFile(dest, file.read());
+                    fileutils.writeFile(dest, file.getContent());
                 }
             }
-            // _createDestFile(file.cachefile, file.read());
         }
 
-        console.log(chalk.green('bundleEnd') + chalk.white(': ' + bundle + ' (in ' + ((Date.now() - startTime) / 1000) + ' secs.)'));
-        self.execTaskMethod(self.context.bundleTasks, 'bundleEnd', [bundle]);
+        console.log(chalk.green('bundleEnd') + chalk.white(': ' + bundleName + ' (in ' + ((Date.now() - startTime) / 1000) + ' secs.)'));
     };
 
-    self.doTasks = function () {
-        for (var bundle in self.context.config) {
-            if (bundle !== 'global') {
-                self.doBundleTasks(bundle);
-            }
+    self.start = function () {
+        for (var bundleName in self.bundles) {
+            self.startBundle(bundleName);
         }
     };
+    
+    self.globalConfig = self.getBundleConfig('global');
+    self.bundles = {};
+    self.tasks = {};
+
+    self.loadTasks();
+
+    for (var bundleName in config) {
+        if (bundleName !== 'global') {
+            self.bundle(bundleName);
+        }
+    }
 };
 
 sey.initFile = function (file) {
     var content = fs.readFileSync(__dirname + '/../seyfile.sample.js', 'utf8')
-    _createDestFile(file, content);
+    fileutils.writeFile(file, content);
 
     console.log(chalk.green(file) + chalk.white(' is written successfully.'));
 };

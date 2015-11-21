@@ -1,13 +1,16 @@
 var opfile = require('../opfile.js');
 
-var concat = function (context) {
+var concat = function () {
     var self = this;
 
-    self.processBundle = function (files) {
+    self.processBundle = function (bundle, files) {
         var content = '';
 
-        for (var file in files) {
-            content += files[file].read();
+        for (var fileKey in files) {
+            var file = files[fileKey],
+                token = file.addTask('concat');
+
+            content += file.getPreviousContent();
         }
 
         return [

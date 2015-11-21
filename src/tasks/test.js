@@ -1,7 +1,7 @@
-var test = function (context) {
+var test = function () {
     var self = this;
 
-    // self.processBundle = function (files) {
+    // self.processBundle = function (bundle, files) {
     //     return files;
     // };
 };

@@ -1,13 +1,21 @@
-var addheader = function (context) {
+var addheader = function () {
     var self = this;
 
-    self.processBundle = function (files) {
-        if (context.bundleConfig.banner === undefined || context.bundleConfig.banner === null) {
+    self.processBundle = function (bundle, files) {
+        if (bundle.config.banner === undefined || bundle.config.banner === null) {
             return files;
         }
 
-        for (var file in files) {
-            files[file].content = context.bundleConfig.banner + files[file].read();
+        for (var fileKey in files) {
+            var file = files[fileKey],
+                token = file.addTask('addheader');
+
+            if (token.cached) {
+                continue;
+            }
+
+            var content = file.getPreviousContent();
+            file.updateContent(bundle.config.banner + content);
         }
 
         return files;
