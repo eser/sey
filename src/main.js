@@ -47,8 +47,8 @@ var sey = function (config) {
 
     self.bundle = function (name) {
         if (!(name in self.bundles)) {
-            var config = deepmerge(self.globalConfig, self.getBundleConfig(name));
-            self.bundles[name] = new bundle(config);
+            var bundleConfig = deepmerge(self.globalConfig, self.getBundleConfig(name));
+            self.bundles[name] = new bundle(bundleConfig);
         }
 
         return self.bundles[name];
@@ -120,6 +120,10 @@ var sey = function (config) {
         }
     };
     
+    if (config === undefined) {
+        config = {};
+    }
+
     self.globalConfig = self.getBundleConfig('global');
     self.bundles = {};
     self.tasks = {};

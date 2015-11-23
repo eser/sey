@@ -13,7 +13,7 @@ As we know, there is grunt and gulp for running some tasks to make your web proj
 - do all tasks by starting over everytime,
 - mostly need redudant disk i/o during tasks,
 - have no specialisation for bundling and building,
-- support both configuration and api at the same time,
+- don't support mixing configuration file and api,
 - are slow,
 
 and sey,
@@ -27,6 +27,8 @@ and sey,
 
 
 ### Examples
+
+Configuration:
 
 ```js
 var config = {
@@ -54,10 +56,20 @@ var config = {
 };
 
 var instance = new global.sey(config);
-instance.doTasks();
+instance.start();
 
 module.exports = instance;
 
+```
+
+API:
+
+```js
+var instance = new global.sey();
+instance.bundle('main').src('./test/**/*.js').test().exec();
+instance.start();
+
+module.exports = instance;
 ```
 
 
