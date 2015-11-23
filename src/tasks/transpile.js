@@ -35,12 +35,10 @@ var transpile = function () {
                 });
             }
 
-var now = Date.now();
             options.filename = file.relativeFile;
 
             var content = file.getPreviousContent(),
                 result = babel.transform(content, options);
-console.log('transform', Date.now() - now);
 
             file.updateContent(result.code);
         }
