@@ -100,7 +100,7 @@ var sey = function (config) {
                         dest;
 
                     if (destIsDir) {
-                        dest = op.dest.replace(/\/+$/, '') + file.relativeFile;
+                        dest = op.dest + file.relativeFile;
                     } else {
                         dest = op.dest;
                     }

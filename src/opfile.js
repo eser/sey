@@ -4,7 +4,7 @@ var fs = require('fs'),
 var opfile = function (path, relativeFile, opTag, content) {
     var self = this;
 
-    self.relativeFile = relativeFile;
+    self.relativeFile = relativeFile.replace(/^\/+/, '');
 
     self.history = [
         {

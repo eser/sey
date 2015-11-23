@@ -11,7 +11,7 @@ var transpile = function () {
         for (var fileKey in files) {
             var file = files[fileKey],
                 token = file.addTask('preprocess');
-console.log(token);
+
             if (token.cached) {
                 continue;
             }
