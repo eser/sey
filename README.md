@@ -28,7 +28,7 @@ and sey,
 
 ### Examples
 
-Configuration:
+Configuration Based:
 
 ```js
 var config = {
@@ -62,19 +62,43 @@ module.exports = instance;
 
 ```
 
-API:
+API Based:
 
 ```js
 var instance = new global.sey();
-instance.bundle('main').src('./test/**/*.js').test().exec();
+
+instance.bundle('main')
+    .src('./src/**/*.js')
+    .eolfix()
+    .lint()
+    .transpile()
+    .dest('./dist/')
+    .exec();
+
+instance.bundle('main')
+    .src('./test/**/*.js')
+    .test()
+    .exec();
+
 instance.start();
 
 module.exports = instance;
 ```
 
 
+### Todo List
+
+- Deploy Task
+- Browserify, CSSMin, JSMin Tasks
+- Fancy output including line counts, lint and test results
+- Code optimizations
+
+See [GitHub Issues](https://github.com/eserozvataf/sey/issues).
+
+
 ### Requirements
 
+* Node (https://nodejs.org/)
 * NPM (https://npmjs.org)
 
 
