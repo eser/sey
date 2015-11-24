@@ -2,11 +2,20 @@ var deepmerge = require('deepmerge');
 
 var transpile = function () {
     var self = this,
-        babel = null,
-        config = null;
+        babel = null;
 
     self.processBundle = function (bundle, files) {
-        var options;
+        var options = {
+            ast: false,
+            presets: ['es2015'],
+
+            ignore: /(bower_components)|(node_modules)/,
+            only: null
+        };
+        
+        if (bundle.config.babelConfig !== undefined && bundle.config.babelConfig !== null) {
+            options = deepmerge(bundle.config.babelConfig, options);
+        }
 
         for (var fileKey in files) {
             var file = files[fileKey],
@@ -19,20 +28,6 @@ var transpile = function () {
             // load on demand
             if (babel === null) {
                 babel = require('babel-core');
-    
-                if (bundle.config.babelConfig !== undefined && bundle.config.babelConfig !== null) {
-                    config = bundle.config.babelConfig;
-                } else {
-                    config = {};
-                }
-
-                options = deepmerge(config, {
-                    ast: false,
-                    presets: ['es2015'],
-    
-                    ignore: /(bower_components)|(node_modules)/,
-                    only: null
-                });
             }
 
             options.filename = file.relativeFile;

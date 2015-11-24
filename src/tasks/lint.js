@@ -1,17 +1,14 @@
 var lint = function () {
     var self = this,
-        eslint = null,
-        config = null;
+        eslint = null;
 
     self.processBundle = function (bundle, files) {
-        if (eslint === null) {
-            eslint = require('eslint');
+        var config;
 
-            if (bundle.config.eslintConfig !== undefined && bundle.config.eslintConfig !== null) {
-                config = bundle.config.eslintConfig;
-            } else {
-                config = {};
-            }
+        if (bundle.config.eslintConfig !== undefined && bundle.config.eslintConfig !== null) {
+            config = bundle.config.eslintConfig;
+        } else {
+            config = {};
         }
 
         var linter = new eslint.CLIEngine(config);
@@ -22,6 +19,11 @@ var lint = function () {
 
             if (token.cached) {
                 continue;
+            }
+
+            // load on demand
+            if (eslint === null) {
+                eslint = require('eslint');
             }
 
             var content = file.getPreviousContent(),
