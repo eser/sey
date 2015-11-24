@@ -15,6 +15,7 @@ commander
     .description(pkg.description)
     .command('init', 'initializes a sey file')
     .command('build', 'starts build')
+    .command('clean', 'cleans temporary files in working directory')
     .command('self-check', 'checks sey\'s self integrity.')
     .option('-f, --file <seyfile.js>', 'loads specified sey file')
     .option('-np, --nopartial', 'disables partial building');
