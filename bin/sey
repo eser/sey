@@ -57,6 +57,10 @@ switch (command) {
         var result = require(seyfile);
         break;
 
+    case 'clean':
+        sey.clean();
+        break;
+
     case 'self-check':
         sey.selfCheck();
         break;

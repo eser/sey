@@ -144,6 +144,14 @@ sey.initFile = function (file) {
     console.log(chalk.green(file) + chalk.white(' is written successfully.'));
 };
 
+sey.clean = function () {
+    var path = pathlib.join(process.cwd(), '.sey');
+
+    fileutils.rmdir(path);
+    
+    console.log(chalk.white('clean is successful.'));
+};
+
 sey.selfCheck = function () {
     console.log(chalk.white('self-check is successful.'));
 };

@@ -1,6 +1,6 @@
 var lint = function () {
     var self = this,
-        eslint = null;
+        linter = null;
 
     self.processBundle = function (bundle, files) {
         var config;
@@ -11,8 +11,6 @@ var lint = function () {
             config = {};
         }
 
-        var linter = new eslint.CLIEngine(config);
-
         for (var fileKey in files) {
             var file = files[fileKey],
                 token = file.addTask('lint');
@@ -22,8 +20,9 @@ var lint = function () {
             }
 
             // load on demand
-            if (eslint === null) {
-                eslint = require('eslint');
+            if (linter === null) {
+                var eslint = require('eslint');
+                linter = new eslint.CLIEngine(config);
             }
 
             var content = file.getPreviousContent(),

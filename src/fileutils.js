@@ -43,6 +43,28 @@ var fileutils = {
         }
 
         return 0;
+    },
+
+    rmdir: function (path) {
+        var list = fs.readdirSync(path);
+
+        for (var i = 0, length = list.length; i < length; i++) {
+            var filename = pathlib.join(path, list[i]),
+                stat = fs.statSync(filename);
+
+            if (filename === '.' || filename === '..') {
+                continue;
+            }
+
+            if (stat.isDirectory()) {
+                fileutils.rmdir(filename);
+                continue;
+            }
+
+            fs.unlinkSync(filename);
+        }
+
+        fs.rmdirSync(path);
     }
 };
 
