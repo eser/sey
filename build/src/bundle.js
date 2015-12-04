@@ -1,4 +1,6 @@
-var bundle = function (config) {
+"use strict";
+
+var bundle = function bundle(config) {
     var self = this;
 
     self.config = config;
@@ -39,7 +41,7 @@ var bundle = function (config) {
 
         self.ops.push(op);
     };
-    
+
     self.reset();
 };
 

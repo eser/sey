@@ -4,7 +4,7 @@ var preprocess = function () {
     var self = this,
         preprocess = null;
 
-    self.processBundle = function (bundle, files) {
+    self.processBundle = async function (bundle, files) {
         var env = process.env;
 
         if (bundle.config.preprocessVars !== undefined && bundle.config.preprocessVars !== null) {

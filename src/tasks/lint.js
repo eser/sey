@@ -2,7 +2,7 @@ var lint = function () {
     var self = this,
         linter = null;
 
-    self.processBundle = function (bundle, files) {
+    self.processBundle = async function (bundle, files) {
         var config;
 
         if (bundle.config.eslintConfig !== undefined && bundle.config.eslintConfig !== null) {
@@ -35,13 +35,15 @@ var lint = function () {
                     continue;
                 }
 
-                console.log(result);
-                process.exit(0);
+                reject(result);
+                // console.log(result);
+                // process.exit(0);
+                return;
             }
 
             file.updateContent(content);
         }
-
+    
         return files;
     };
 };

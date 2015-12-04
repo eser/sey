@@ -1,3 +1,5 @@
+require('babel-polyfill');
+
 var fs = require('fs'),
     pathlib = require('path'),
     chalk = require('chalk'),
@@ -54,72 +56,82 @@ var sey = function (config) {
         return self.bundles[name];
     };
 
-    self.startBundle = function (bundleName) {
+    self.startBundleOp = async function (opTag, op) {
+        console.log(chalk.gray('[' + opTag + '] ') + chalk.yellow('processBundle'));
+
+        var files = glob(op.src, opTag);
+
+        for (var taskName in op) {
+            var task = op[taskName];
+
+            if (self.ignoreTaskKeys.indexOf(taskName) > -1) {
+                return;
+            }
+
+            if (self.tasks[taskName] === undefined) {
+                throw new Error('task not found - ' + taskName);
+            }
+
+            // var task = op[taskName];
+            if (task === undefined || task === null || task === false) {
+                return;
+            }
+
+            if (self.tasks[taskName].processBundle === undefined) {
+                return;
+            }
+
+            console.log(chalk.gray('\op: ' + taskName));
+
+            files = await self.tasks[taskName].processBundle(bundle, files);
+        }
+
+        var destExists = (op.dest !== undefined && op.dest !== null);
+
+        if (destExists) {
+            var destIsDir = (op.dest.charAt(op.dest.length - 1) === '/');
+
+            for (var fileKey in files) {
+                var file = files[fileKey],
+                    dest;
+
+                if (destIsDir) {
+                    dest = op.dest + file.relativeFile;
+                } else {
+                    dest = op.dest;
+                }
+
+                console.log(chalk.gray('\twriting: ' + dest));
+                fileutils.writeFile(dest, file.getContent());
+            }
+        }
+    };
+
+    self.startBundle = async function (bundleName) {
         var bundle = self.bundles[bundleName],
             startTime = Date.now();
 
         if (bundle === undefined) {
             throw new Error('bundle not found - ' + bundleName);
         }
-
+    
         console.log(chalk.green('bundleStart') + chalk.white(': ' + bundleName));
 
-        for (var opName in bundle.ops) {
-            var op = bundle.ops[opName],
-                files = glob(op.src, opName),
-                destExists = (op.dest !== undefined && op.dest !== null),
-                destIsDir = destExists && (op.dest.charAt(op.dest.length - 1) === '/');
+        for (var opTag in bundle.ops) {
+            var op = bundle.ops[opTag];    
 
-            console.log(chalk.gray('[' + opName + '] ') + chalk.yellow('processBundle'));
-
-            for (var taskName in op) {
-                if (self.ignoreTaskKeys.indexOf(taskName) > -1) {
-                    continue;
-                }
-
-                if (self.tasks[taskName] === undefined) {
-                    throw new Error('task not found - ' + taskName);
-                }
-
-                var task = op[taskName];
-                if (task === undefined || task === null || task === false) {
-                    continue;
-                }
-
-                if (self.tasks[taskName].processBundle === undefined) {
-                    continue;
-                }
-
-                console.log(chalk.gray('\op: ' + taskName));
-                files = self.tasks[taskName].processBundle(bundle, files);
-            }
-
-            if (destExists) {
-                for (var fileKey in files) {
-                    var file = files[fileKey],
-                        dest;
-
-                    if (destIsDir) {
-                        dest = op.dest + file.relativeFile;
-                    } else {
-                        dest = op.dest;
-                    }
-
-                    console.log(chalk.gray('\twriting: ' + dest));
-                    fileutils.writeFile(dest, file.getContent());
-                }
-            }
+            await self.startBundleOp(opTag, op);
         }
 
         console.log(chalk.green('bundleEnd') + chalk.white(': ' + bundleName + ' (in ' + ((Date.now() - startTime) / 1000) + ' secs.)'));
     };
 
-    self.start = function () {
+    self.start = async function () {
         for (var bundleName in self.bundles) {
-            self.startBundle(bundleName);
+            await self.startBundle(bundleName);
         }
     };
-    
+
     if (config === undefined) {
         config = {};
     }
@@ -138,7 +150,7 @@ var sey = function (config) {
 };
 
 sey.initFile = function (file) {
-    var content = fs.readFileSync(__dirname + '/../seyfile.sample.js', 'utf8')
+    var content = fs.readFileSync(__dirname + '/../seyfile.sample.js', 'utf8');
     fileutils.writeFile(file, content);
 
     console.log(chalk.green(file) + chalk.white(' is written successfully.'));

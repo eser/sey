@@ -1,4 +1,6 @@
-var test = function () {
+"use strict";
+
+var test = function test() {
     var self = this;
 
     // self.processBundle = async function (bundle, files) {

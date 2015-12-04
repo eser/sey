@@ -4,7 +4,7 @@ var transpile = function () {
     var self = this,
         babel = null;
 
-    self.processBundle = function (bundle, files) {
+    self.processBundle = async function (bundle, files) {
         var options = {
             ast: false,
             presets: ['es2015'],

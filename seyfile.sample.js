@@ -7,6 +7,13 @@ var config = {
         eslintConfig: {
             useEslintrc: false,
             configFile: './etc/tasks/config/eslint.json'
+        },
+        
+        lessConfig: {
+            strictMath: true,
+            compress: false,
+            yuicompress: false,
+            optimization: 0
         }
     },
 

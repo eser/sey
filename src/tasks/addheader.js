@@ -1,7 +1,7 @@
 var addheader = function () {
     var self = this;
 
-    self.processBundle = function (bundle, files) {
+    self.processBundle = async function (bundle, files) {
         if (bundle.config.banner === undefined || bundle.config.banner === null) {
             return files;
         }
@@ -17,7 +17,7 @@ var addheader = function () {
             var content = file.getPreviousContent();
             file.updateContent(bundle.config.banner + content);
         }
-
+    
         return files;
     };
 };

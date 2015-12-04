@@ -1,7 +1,7 @@
 var eolfix = function () {
     var self = this;
 
-    self.processBundle = function (bundle, files) {
+    self.processBundle = async function (bundle, files) {
         for (var fileKey in files) {
             var file = files[fileKey],
                 token = file.addTask('eolfix');

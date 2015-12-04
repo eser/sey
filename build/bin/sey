@@ -1,0 +1,57 @@
+#!/usr/bin/env node
+'use strict';
+
+var sey = require('../src/'),
+    path = require('path'),
+    commander = require('commander'),
+    updateNotifier = require('update-notifier'),
+    pkg = require('../package.json'),
+    exitCode = 0;
+
+process.on('uncaughtException', function (err) {
+    console.error(err.stack);
+    exitCode = 1;
+});
+
+process.on('exit', function () {
+    process.exit(exitCode);
+});
+
+updateNotifier({ pkg: pkg }).notify({ defer: false });
+
+var locateSeyFile = function locateSeyFile(options) {
+    if (options.file === undefined) {
+        return path.join(process.cwd(), 'seyfile.js');
+    }
+
+    if (!path.isAbsolute(options.file)) {
+        return path.join(process.cwd(), options.file);
+    }
+
+    return options.file;
+};
+
+commander.version(pkg.version).description(pkg.description);
+
+commander.command('init').description('initializes a sey file').option('-f, --file <seyfile.js>', 'loads specified sey file').action(function (options) {
+    var seyfile = locateSeyFile(options);
+    sey.initFile(seyfile);
+});
+
+commander.command('clean').description('cleans temporary files in working directory').action(function () {
+    sey.clean();
+});
+
+commander.command('self-check').description('checks sey\'s self integrity.').action(function () {
+    sey.selfCheck();
+});
+
+commander.command('build').description('starts build').option('-np, --nopartial', 'disables partial building').option('-f, --file <seyfile.js>', 'loads specified sey file').action(function (options) {
+    var seyfile = locateSeyFile(options);
+
+    global.sey = sey;
+    require(seyfile);
+});
+
+commander.cli = true;
+commander.parse(process.argv);

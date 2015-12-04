@@ -3,7 +3,7 @@ var opfile = require('../opfile.js');
 var concat = function () {
     var self = this;
 
-    self.processBundle = function (bundle, files) {
+    self.processBundle = async function (bundle, files) {
         var content = '';
 
         for (var fileKey in files) {

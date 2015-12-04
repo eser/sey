@@ -1,12 +1,12 @@
+'use strict';
+
 var fs = require('fs'),
     pathlib = require('path');
 
 var fileutils = {
-    writeFile: function (path, content) {
-        var buffer = [
-            [path, true, content]
-        ];
-    
+    writeFile: function writeFile(path, content) {
+        var buffer = [[path, true, content]];
+
         while (buffer.length > 0) {
             var item = buffer[0];
 
@@ -24,7 +24,7 @@ var fileutils = {
                     do {
                         newpath = pathlib.dirname(newpath);
                     } while (pathlib.basename(newpath) === '.');
-                    
+
                     buffer.unshift([newpath, false]);
                 } else {
                     throw ex;
@@ -33,7 +33,7 @@ var fileutils = {
         }
     },
 
-    getLastMod: function (path) {
+    getLastMod: function getLastMod(path) {
         try {
             return fs.statSync(path).mtime.getTime();
         } catch (ex) {
@@ -45,7 +45,7 @@ var fileutils = {
         return 0;
     },
 
-    rmdir: function (path) {
+    rmdir: function rmdir(path) {
         var list = fs.readdirSync(path);
 
         for (var i = 0, length = list.length; i < length; i++) {
