@@ -1,8 +1,16 @@
 'use strict';
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { var callNext = step.bind(null, "next"); var callThrow = step.bind(null, "throw"); function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(callNext, callThrow); } } callNext(); }); }; }
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
-var deepmerge = require('deepmerge');
+var _deepmerge = require('deepmerge');
+
+var _deepmerge2 = _interopRequireDefault(_deepmerge);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { var callNext = step.bind(null, "next"); var callThrow = step.bind(null, "throw"); function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(callNext, callThrow); } } callNext(); }); }; }
 
 var less = function less() {
     var self = this,
@@ -18,7 +26,7 @@ var less = function less() {
                             options = {};
 
                             if (bundle.config.lessConfig !== undefined && bundle.config.lessConfig !== null) {
-                                options = deepmerge(bundle.config.lessConfig, options);
+                                options = (0, _deepmerge2.default)(bundle.config.lessConfig, options);
                             }
 
                             _context.t0 = regeneratorRuntime.keys(files);
@@ -76,4 +84,4 @@ var less = function less() {
     })();
 };
 
-module.exports = less;
+exports.default = less;

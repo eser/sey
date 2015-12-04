@@ -1,5 +1,8 @@
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 var test = function test() {
     var self = this;
 
@@ -8,4 +11,4 @@ var test = function test() {
     // };
 };
 
-module.exports = test;
+exports.default = test;

@@ -1,13 +1,13 @@
-var opfile = require('../opfile.js');
+import opfile from '../opfile.js';
 
-var concat = function () {
-    var self = this;
+let concat = function () {
+    let self = this;
 
     self.processBundle = async function (bundle, files) {
-        var content = '';
+        let content = '';
 
-        for (var fileKey in files) {
-            var file = files[fileKey],
+        for (let fileKey in files) {
+            let file = files[fileKey],
                 token = file.addTask('concat');
 
             content += file.getPreviousContent();
@@ -19,4 +19,4 @@ var concat = function () {
     };
 };
 
-module.exports = concat;
+export default concat;

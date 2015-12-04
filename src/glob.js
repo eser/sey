@@ -1,14 +1,14 @@
-var globAll = require('glob-all'),
-    globParent = require('glob-parent'),
-    opfile = require('./opfile.js');
+import globAll from 'glob-all';
+import globParent from 'glob-parent';
+import opfile from './opfile.js';
 
 // private
-var globConversions = function (paths) {
-    var pathArray = (paths.constructor === Array) ? paths : [paths],
+let globConversions = function (paths) {
+    let pathArray = (paths.constructor === Array) ? paths : [paths],
         result = [];
 
-    for (var i = 0, length = pathArray.length; i < length; i++) {
-        var path = pathArray[i];
+    for (let i = 0, length = pathArray.length; i < length; i++) {
+        let path = pathArray[i];
 
         if (path.substring(0, 1) === '!') {
             continue;
@@ -23,8 +23,8 @@ var globConversions = function (paths) {
     return result;
 };
 
-var globConvert = function (conversions, path) {
-    for (var i = 0, length = conversions.length; i < length; i++) {
+let globConvert = function (conversions, path) {
+    for (let i = 0, length = conversions.length; i < length; i++) {
         if (conversions[i][1] === path.substring(0, conversions[i][1].length)) {
             return path.substring(conversions[i][1].length);
         }
@@ -34,14 +34,14 @@ var globConvert = function (conversions, path) {
 };
 
 // public
-var globFiles = function (paths, opTag) {
-    var pathConversions = globConversions(paths),
+let globFiles = function (paths, opTag) {
+    let pathConversions = globConversions(paths),
         files = globAll.sync(paths, { nosort: true, nonull: false }),
         result = {};
 
     if (files !== null) {
-        for (var i = 0, length = files.length; i < length; i++) {
-            var file = files[i];
+        for (let i = 0, length = files.length; i < length; i++) {
+            let file = files[i];
 
             result[file] = new opfile(file, globConvert(pathConversions, file), opTag, null);
         }
@@ -50,4 +50,4 @@ var globFiles = function (paths, opTag) {
     return result;
 };
 
-module.exports = globFiles;
+export default globFiles;

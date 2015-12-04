@@ -1,9 +1,9 @@
-var lint = function () {
-    var self = this,
+let lint = function () {
+    let self = this,
         linter = null;
 
     self.processBundle = async function (bundle, files) {
-        var config;
+        let config;
 
         if (bundle.config.eslintConfig !== undefined && bundle.config.eslintConfig !== null) {
             config = bundle.config.eslintConfig;
@@ -11,8 +11,8 @@ var lint = function () {
             config = {};
         }
 
-        for (var fileKey in files) {
-            var file = files[fileKey],
+        for (let fileKey in files) {
+            let file = files[fileKey],
                 token = file.addTask('lint');
 
             if (token.cached) {
@@ -21,15 +21,15 @@ var lint = function () {
 
             // load on demand
             if (linter === null) {
-                var eslint = require('eslint');
+                let eslint = require('eslint');
                 linter = new eslint.CLIEngine(config);
             }
 
-            var content = file.getPreviousContent(),
+            let content = file.getPreviousContent(),
                 report = linter.executeOnText(content, file.relativeFile);
 
-            for (var i = 0, length = report.results.length; i < length; i++) {
-                var result = report.results[i];
+            for (let i = 0, length = report.results.length; i < length; i++) {
+                let result = report.results[i];
 
                 if (result.errorCount === 0 && result.warningCount === 0) {
                     continue;
@@ -48,4 +48,4 @@ var lint = function () {
     };
 };
 
-module.exports = lint;
+export default lint;

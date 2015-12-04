@@ -1,8 +1,8 @@
-var fs = require('fs'),
-    fileutils = require('./fileutils.js');
+import fs from 'fs';
+import fileutils from './fileutils.js';
 
-var opfile = function (path, relativeFile, opTag, content) {
-    var self = this;
+let opfile = function (path, relativeFile, opTag, content) {
+    let self = this;
 
     self.relativeFile = relativeFile.replace(/^\/+/, '');
 
@@ -27,7 +27,7 @@ var opfile = function (path, relativeFile, opTag, content) {
     };
 
     self.addTask = function (task, cacheable) {
-        var previousItem = self.getRecent(),
+        let previousItem = self.getRecent(),
             item = {
                 task: task,
                 tags: previousItem.tags.concat([task]),
@@ -56,7 +56,7 @@ var opfile = function (path, relativeFile, opTag, content) {
     };
 
     self.updateContent = function (content) {
-        var currentItem = self.getRecent();
+        let currentItem = self.getRecent();
 
         currentItem.content = content;
         currentItem.lastmod = Date.now();
@@ -67,10 +67,10 @@ var opfile = function (path, relativeFile, opTag, content) {
     };
 
     self.getPreviousContent = function () {
-        var i = self.history.length - 2;
+        let i = self.history.length - 2;
 
         if (i >= 0) {
-            var item = self.history[i];
+            let item = self.history[i];
 
             if (item.content !== null) {
                 return item.content;
@@ -86,4 +86,4 @@ var opfile = function (path, relativeFile, opTag, content) {
     };
 };
 
-module.exports = opfile;
+export default opfile;

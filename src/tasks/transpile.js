@@ -1,11 +1,11 @@
-var deepmerge = require('deepmerge');
+import deepmerge from 'deepmerge';
 
-var transpile = function () {
-    var self = this,
+let transpile = function () {
+    let self = this,
         babel = null;
 
     self.processBundle = async function (bundle, files) {
-        var options = {
+        let options = {
             ast: false,
             presets: ['es2015'],
 
@@ -17,8 +17,8 @@ var transpile = function () {
             options = deepmerge(bundle.config.babelConfig, options);
         }
 
-        for (var fileKey in files) {
-            var file = files[fileKey],
+        for (let fileKey in files) {
+            let file = files[fileKey],
                 token = file.addTask('preprocess');
 
             if (token.cached) {
@@ -32,7 +32,7 @@ var transpile = function () {
 
             options.filename = file.relativeFile;
 
-            var content = file.getPreviousContent(),
+            let content = file.getPreviousContent(),
                 result = babel.transform(content, options);
 
             file.updateContent(result.code);
@@ -42,4 +42,4 @@ var transpile = function () {
     };
 };
 
-module.exports = transpile;
+export default transpile;

@@ -1,7 +1,18 @@
 'use strict';
 
-var fs = require('fs'),
-    fileutils = require('./fileutils.js');
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _fs = require('fs');
+
+var _fs2 = _interopRequireDefault(_fs);
+
+var _fileutils = require('./fileutils.js');
+
+var _fileutils2 = _interopRequireDefault(_fileutils);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var opfile = function opfile(path, relativeFile, opTag, content) {
     var self = this;
@@ -12,7 +23,7 @@ var opfile = function opfile(path, relativeFile, opTag, content) {
         task: null,
         tags: [],
         path: path,
-        lastmod: fileutils.getLastMod(path),
+        lastmod: _fileutils2.default.getLastMod(path),
         cached: true,
         cache: false,
         content: content // || null
@@ -43,7 +54,7 @@ var opfile = function opfile(path, relativeFile, opTag, content) {
             item.cache = true;
 
             if (previousItem.cached !== false) {
-                item.lastmod = fileutils.getLastMod(item.path);
+                item.lastmod = _fileutils2.default.getLastMod(item.path);
                 if (previousItem.lastmod <= item.lastmod) {
                     item.cached = true;
                     item.cache = false;
@@ -61,7 +72,7 @@ var opfile = function opfile(path, relativeFile, opTag, content) {
         currentItem.content = content;
         currentItem.lastmod = Date.now();
         if (currentItem.cache) {
-            fileutils.writeFile(currentItem.path, currentItem.content);
+            _fileutils2.default.writeFile(currentItem.path, currentItem.content);
             currentItem.cached = true;
         }
     };
@@ -77,7 +88,7 @@ var opfile = function opfile(path, relativeFile, opTag, content) {
             }
 
             if (item.cached !== false) {
-                item.content = fs.readFileSync(item.path, 'utf8');
+                item.content = _fs2.default.readFileSync(item.path, 'utf8');
                 return item.content;
             }
         }
@@ -86,4 +97,4 @@ var opfile = function opfile(path, relativeFile, opTag, content) {
     };
 };
 
-module.exports = opfile;
+exports.default = opfile;

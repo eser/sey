@@ -1,16 +1,16 @@
-var eolfix = function () {
-    var self = this;
+let eolfix = function () {
+    let self = this;
 
     self.processBundle = async function (bundle, files) {
-        for (var fileKey in files) {
-            var file = files[fileKey],
+        for (let fileKey in files) {
+            let file = files[fileKey],
                 token = file.addTask('eolfix');
 
             if (token.cached) {
                 continue;
             }
 
-            var content = file.getPreviousContent();
+            let content = file.getPreviousContent();
             file.updateContent(content.replace(/(?:\r\n|\r)/g, '\n'));
         }
 
@@ -18,4 +18,4 @@ var eolfix = function () {
     };
 };
 
-module.exports = eolfix;
+export default eolfix;

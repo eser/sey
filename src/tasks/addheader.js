@@ -1,20 +1,20 @@
-var addheader = function () {
-    var self = this;
+let addheader = function () {
+    let self = this;
 
     self.processBundle = async function (bundle, files) {
         if (bundle.config.banner === undefined || bundle.config.banner === null) {
             return files;
         }
 
-        for (var fileKey in files) {
-            var file = files[fileKey],
+        for (let fileKey in files) {
+            let file = files[fileKey],
                 token = file.addTask('addheader');
 
             if (token.cached) {
                 continue;
             }
 
-            var content = file.getPreviousContent();
+            let content = file.getPreviousContent();
             file.updateContent(bundle.config.banner + content);
         }
     
@@ -22,4 +22,4 @@ var addheader = function () {
     };
 };
 
-module.exports = addheader;
+export default addheader;

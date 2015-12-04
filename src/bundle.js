@@ -1,5 +1,5 @@
-var bundle = function (config) {
-    var self = this;
+let bundle = function (config) {
+    let self = this;
 
     self.config = config;
     self.ops = self.config.ops || [];
@@ -28,12 +28,12 @@ var bundle = function (config) {
     };
 
     self.exec = function () {
-        var op = {
+        let op = {
             src: self._src,
             dest: self._dest
         };
 
-        for (var i = 0, length = self._tasks.length; i < length; i++) {
+        for (let i = 0, length = self._tasks.length; i < length; i++) {
             op[self._tasks[i]] = true;
         }
 
@@ -44,11 +44,11 @@ var bundle = function (config) {
 };
 
 bundle.addTask = function (name) {
-    var self = this;
+    let self = this;
 
     bundle.prototype[name] = function () {
         return self.task(name);
     };
 };
 
-module.exports = bundle;
+export default bundle;

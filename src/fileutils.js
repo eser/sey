@@ -1,14 +1,14 @@
-var fs = require('fs'),
-    pathlib = require('path');
+import fs from 'fs';
+import pathlib from 'path';
 
-var fileutils = {
+let fileutils = {
     writeFile: function (path, content) {
-        var buffer = [
+        let buffer = [
             [path, true, content]
         ];
     
         while (buffer.length > 0) {
-            var item = buffer[0];
+            let item = buffer[0];
 
             try {
                 if (item[1]) {
@@ -20,7 +20,7 @@ var fileutils = {
                 buffer.shift();
             } catch (ex) {
                 if (ex.code === 'ENOENT') {
-                    var newpath = item[0];
+                    let newpath = item[0];
                     do {
                         newpath = pathlib.dirname(newpath);
                     } while (pathlib.basename(newpath) === '.');
@@ -46,10 +46,10 @@ var fileutils = {
     },
 
     rmdir: function (path) {
-        var list = fs.readdirSync(path);
+        let list = fs.readdirSync(path);
 
-        for (var i = 0, length = list.length; i < length; i++) {
-            var filename = pathlib.join(path, list[i]),
+        for (let i = 0, length = list.length; i < length; i++) {
+            let filename = pathlib.join(path, list[i]),
                 stat = fs.statSync(filename);
 
             if (filename === '.' || filename === '..') {
@@ -68,4 +68,4 @@ var fileutils = {
     }
 };
 
-module.exports = fileutils;
+export default fileutils;

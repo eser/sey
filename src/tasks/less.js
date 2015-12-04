@@ -1,19 +1,19 @@
-var deepmerge = require('deepmerge');
+import deepmerge from 'deepmerge';
 
-var less = function () {
-    var self = this,
+let less = function () {
+    let self = this,
         lessLib = null;
 
     self.processBundle = async function (bundle, files) {
-        var options = {
+        let options = {
         };
         
         if (bundle.config.lessConfig !== undefined && bundle.config.lessConfig !== null) {
             options = deepmerge(bundle.config.lessConfig, options);
         }
 
-        for (var fileKey in files) {
-            var file = files[fileKey],
+        for (let fileKey in files) {
+            let file = files[fileKey],
                 token = file.addTask('less');
 
             if (token.cached) {
@@ -27,9 +27,9 @@ var less = function () {
 
             options.filename = file.relativeFile;
 
-            var content = file.getPreviousContent();
+            let content = file.getPreviousContent();
 
-            var result = await lessLib.parse(options, content);
+            let result = await lessLib.parse(options, content);
             file.updateContent(result.css);
         }
 
@@ -37,4 +37,4 @@ var less = function () {
     };
 };
 
-module.exports = less;
+export default less;

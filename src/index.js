@@ -1,16 +1,16 @@
 require('babel-polyfill');
 
-var fs = require('fs'),
-    pathlib = require('path'),
-    chalk = require('chalk'),
-    deepmerge = require('deepmerge'),
-    glob = require('./glob.js'),
-    opfile = require('./opfile.js'),
-    fileutils = require('./fileutils.js'),
-    bundle = require('./bundle.js');
+import fs from 'fs';
+import pathlib from 'path';
+import chalk from 'chalk';
+import deepmerge from 'deepmerge';
+import glob from './glob.js';
+import opfile from './opfile.js';
+import fileutils from './fileutils.js';
+import bundle from './bundle.js';
 
-var sey = function (config) {
-    var self = this;
+let sey = function (config) {
+    let self = this;
 
     if (sey === self) {
         return;
@@ -28,12 +28,12 @@ var sey = function (config) {
     };
 
     self.loadTasks = function () {
-        var normalizedPath = pathlib.join(__dirname, './tasks'),
+        let normalizedPath = pathlib.join(__dirname, './tasks'),
             files = fs.readdirSync(normalizedPath);
 
-        for (var i = 0, length = files.length; i < length; i++) {
-            var basename = pathlib.basename(files[i], '.js'),
-                taskObject = require('./tasks/' + files[i]);
+        for (let i = 0, length = files.length; i < length; i++) {
+            let basename = pathlib.basename(files[i], '.js'),
+                taskObject = require('./tasks/' + files[i]).default;
 
             self.defineTask(basename, taskObject);
         }
@@ -49,7 +49,7 @@ var sey = function (config) {
 
     self.bundle = function (name) {
         if (!(name in self.bundles)) {
-            var bundleConfig = deepmerge(self.globalConfig, self.getBundleConfig(name));
+            let bundleConfig = deepmerge(self.globalConfig, self.getBundleConfig(name));
             self.bundles[name] = new bundle(bundleConfig);
         }
 
@@ -59,10 +59,10 @@ var sey = function (config) {
     self.startBundleOp = async function (opTag, op) {
         console.log(chalk.gray('[' + opTag + '] ') + chalk.yellow('processBundle'));
 
-        var files = glob(op.src, opTag);
+        let files = glob(op.src, opTag);
 
-        for (var taskName in op) {
-            var task = op[taskName];
+        for (let taskName in op) {
+            let task = op[taskName];
 
             if (self.ignoreTaskKeys.indexOf(taskName) > -1) {
                 return;
@@ -72,7 +72,7 @@ var sey = function (config) {
                 throw new Error('task not found - ' + taskName);
             }
 
-            // var task = op[taskName];
+            // let task = op[taskName];
             if (task === undefined || task === null || task === false) {
                 return;
             }
@@ -86,13 +86,13 @@ var sey = function (config) {
             files = await self.tasks[taskName].processBundle(bundle, files);
         }
 
-        var destExists = (op.dest !== undefined && op.dest !== null);
+        let destExists = (op.dest !== undefined && op.dest !== null);
 
         if (destExists) {
-            var destIsDir = (op.dest.charAt(op.dest.length - 1) === '/');
+            let destIsDir = (op.dest.charAt(op.dest.length - 1) === '/');
 
-            for (var fileKey in files) {
-                var file = files[fileKey],
+            for (let fileKey in files) {
+                let file = files[fileKey],
                     dest;
 
                 if (destIsDir) {
@@ -108,7 +108,7 @@ var sey = function (config) {
     };
 
     self.startBundle = async function (bundleName) {
-        var bundle = self.bundles[bundleName],
+        let bundle = self.bundles[bundleName],
             startTime = Date.now();
 
         if (bundle === undefined) {
@@ -117,8 +117,8 @@ var sey = function (config) {
     
         console.log(chalk.green('bundleStart') + chalk.white(': ' + bundleName));
 
-        for (var opTag in bundle.ops) {
-            var op = bundle.ops[opTag];    
+        for (let opTag in bundle.ops) {
+            let op = bundle.ops[opTag];    
 
             await self.startBundleOp(opTag, op);
         }
@@ -127,7 +127,7 @@ var sey = function (config) {
     };
 
     self.start = async function () {
-        for (var bundleName in self.bundles) {
+        for (let bundleName in self.bundles) {
             await self.startBundle(bundleName);
         }
     };
@@ -142,7 +142,7 @@ var sey = function (config) {
 
     self.loadTasks();
 
-    for (var bundleName in config) {
+    for (let bundleName in config) {
         if (bundleName !== 'global') {
             self.bundle(bundleName);
         }
@@ -150,14 +150,14 @@ var sey = function (config) {
 };
 
 sey.initFile = function (file) {
-    var content = fs.readFileSync(__dirname + '/../seyfile.sample.js', 'utf8');
+    let content = fs.readFileSync(__dirname + '/../seyfile.sample.js', 'utf8');
     fileutils.writeFile(file, content);
 
     console.log(chalk.green(file) + chalk.white(' is written successfully.'));
 };
 
 sey.clean = function () {
-    var path = pathlib.join(process.cwd(), '.sey');
+    let path = pathlib.join(process.cwd(), '.sey');
 
     fileutils.rmdir(path);
     
@@ -168,4 +168,4 @@ sey.selfCheck = function () {
     console.log(chalk.white('self-check is successful.'));
 };
 
-module.exports = sey;
+export default sey;

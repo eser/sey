@@ -1,7 +1,18 @@
 'use strict';
 
-var fs = require('fs'),
-    pathlib = require('path');
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _fs = require('fs');
+
+var _fs2 = _interopRequireDefault(_fs);
+
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var fileutils = {
     writeFile: function writeFile(path, content) {
@@ -12,9 +23,9 @@ var fileutils = {
 
             try {
                 if (item[1]) {
-                    fs.writeFileSync(item[0], item[2]);
+                    _fs2.default.writeFileSync(item[0], item[2]);
                 } else {
-                    fs.mkdirSync(item[0]);
+                    _fs2.default.mkdirSync(item[0]);
                 }
 
                 buffer.shift();
@@ -22,8 +33,8 @@ var fileutils = {
                 if (ex.code === 'ENOENT') {
                     var newpath = item[0];
                     do {
-                        newpath = pathlib.dirname(newpath);
-                    } while (pathlib.basename(newpath) === '.');
+                        newpath = _path2.default.dirname(newpath);
+                    } while (_path2.default.basename(newpath) === '.');
 
                     buffer.unshift([newpath, false]);
                 } else {
@@ -35,7 +46,7 @@ var fileutils = {
 
     getLastMod: function getLastMod(path) {
         try {
-            return fs.statSync(path).mtime.getTime();
+            return _fs2.default.statSync(path).mtime.getTime();
         } catch (ex) {
             if (ex.code !== 'ENOENT') {
                 throw ex;
@@ -46,11 +57,11 @@ var fileutils = {
     },
 
     rmdir: function rmdir(path) {
-        var list = fs.readdirSync(path);
+        var list = _fs2.default.readdirSync(path);
 
         for (var i = 0, length = list.length; i < length; i++) {
-            var filename = pathlib.join(path, list[i]),
-                stat = fs.statSync(filename);
+            var filename = _path2.default.join(path, list[i]),
+                stat = _fs2.default.statSync(filename);
 
             if (filename === '.' || filename === '..') {
                 continue;
@@ -61,11 +72,11 @@ var fileutils = {
                 continue;
             }
 
-            fs.unlinkSync(filename);
+            _fs2.default.unlinkSync(filename);
         }
 
-        fs.rmdirSync(path);
+        _fs2.default.rmdirSync(path);
     }
 };
 
-module.exports = fileutils;
+exports.default = fileutils;

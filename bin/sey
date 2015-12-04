@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
-var sey = require('../src/'),
-    path = require('path'),
-    commander = require('commander'),
-    updateNotifier = require('update-notifier'),
-    pkg = require('../package.json'),
-    exitCode = 0;
+import sey from '../src/';
+import path from 'path';
+import commander from 'commander';
+import updateNotifier from 'update-notifier';
+import pkg from '../package.json';
+
+let exitCode = 0;
 
 process.on('uncaughtException', function (err) {
     console.error(err.stack);
@@ -19,7 +20,7 @@ process.on('exit', function () {
 updateNotifier({ pkg: pkg })
     .notify({ defer: false });
 
-var locateSeyFile = function (options) {
+let locateSeyFile = function (options) {
     if (options.file === undefined) {
         return path.join(process.cwd(), 'seyfile.js');
     }
@@ -40,7 +41,7 @@ commander
     .description('initializes a sey file')
     .option('-f, --file <seyfile.js>', 'loads specified sey file')
     .action(function (options) {
-        var seyfile = locateSeyFile(options);
+        let seyfile = locateSeyFile(options);
         sey.initFile(seyfile);
     });
 
@@ -64,7 +65,7 @@ commander
     .option('-np, --nopartial', 'disables partial building')
     .option('-f, --file <seyfile.js>', 'loads specified sey file')
     .action(function (options) {
-        var seyfile = locateSeyFile(options);
+        let seyfile = locateSeyFile(options);
 
         global.sey = sey;
         require(seyfile);

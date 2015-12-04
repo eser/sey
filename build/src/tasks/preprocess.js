@@ -1,8 +1,16 @@
 'use strict';
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { var callNext = step.bind(null, "next"); var callThrow = step.bind(null, "throw"); function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(callNext, callThrow); } } callNext(); }); }; }
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
-var deepmerge = require('deepmerge');
+var _deepmerge = require('deepmerge');
+
+var _deepmerge2 = _interopRequireDefault(_deepmerge);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { var callNext = step.bind(null, "next"); var callThrow = step.bind(null, "throw"); function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(callNext, callThrow); } } callNext(); }); }; }
 
 var preprocess = function preprocess() {
     var self = this,
@@ -18,7 +26,7 @@ var preprocess = function preprocess() {
                             env = process.env;
 
                             if (bundle.config.preprocessVars !== undefined && bundle.config.preprocessVars !== null) {
-                                env = deepmerge(env, bundle.config.preprocessVars);
+                                env = (0, _deepmerge2.default)(env, bundle.config.preprocessVars);
                             }
 
                             _context.t0 = regeneratorRuntime.keys(files);
@@ -69,4 +77,4 @@ var preprocess = function preprocess() {
     })();
 };
 
-module.exports = preprocess;
+exports.default = preprocess;

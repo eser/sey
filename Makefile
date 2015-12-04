@@ -6,7 +6,7 @@ test: lint
 		--slow 600 --timeout 2000 \
 		--grep '$(TEST)'
 
-compile: dependencies
+compile: # dependencies
 	@$(NPM)/babel --presets es2015,stage-3 ./bin/sey --out-file ./build/bin/sey
 	@$(NPM)/babel --presets es2015,stage-3 ./src/ --out-dir ./build/src/
 	@$(NPM)/babel --presets es2015,stage-3 ./tests/ --out-dir ./build/tests/
@@ -34,5 +34,8 @@ clean:
 
 distclean: clean
 	@rm -rf ./node_modules
+
+run:
+	node ./build/bin/sey build
 
 check: test

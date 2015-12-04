@@ -1,17 +1,46 @@
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _fs = require('fs');
+
+var _fs2 = _interopRequireDefault(_fs);
+
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
+var _chalk = require('chalk');
+
+var _chalk2 = _interopRequireDefault(_chalk);
+
+var _deepmerge = require('deepmerge');
+
+var _deepmerge2 = _interopRequireDefault(_deepmerge);
+
+var _glob = require('./glob.js');
+
+var _glob2 = _interopRequireDefault(_glob);
+
+var _opfile = require('./opfile.js');
+
+var _opfile2 = _interopRequireDefault(_opfile);
+
+var _fileutils = require('./fileutils.js');
+
+var _fileutils2 = _interopRequireDefault(_fileutils);
+
+var _bundle = require('./bundle.js');
+
+var _bundle2 = _interopRequireDefault(_bundle);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { var callNext = step.bind(null, "next"); var callThrow = step.bind(null, "throw"); function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(callNext, callThrow); } } callNext(); }); }; }
 
 require('babel-polyfill');
-
-var fs = require('fs'),
-    pathlib = require('path'),
-    chalk = require('chalk'),
-    deepmerge = require('deepmerge'),
-    glob = require('./glob.js'),
-    opfile = require('./opfile.js'),
-    fileutils = require('./fileutils.js'),
-    bundle = require('./bundle.js');
 
 var sey = function sey(config) {
     var self = this;
@@ -28,16 +57,16 @@ var sey = function sey(config) {
         }
 
         self.tasks[name] = new taskObject();
-        bundle.addTask(name);
+        _bundle2.default.addTask(name);
     };
 
     self.loadTasks = function () {
-        var normalizedPath = pathlib.join(__dirname, './tasks'),
-            files = fs.readdirSync(normalizedPath);
+        var normalizedPath = _path2.default.join(__dirname, './tasks'),
+            files = _fs2.default.readdirSync(normalizedPath);
 
         for (var i = 0, length = files.length; i < length; i++) {
-            var basename = pathlib.basename(files[i], '.js'),
-                taskObject = require('./tasks/' + files[i]);
+            var basename = _path2.default.basename(files[i], '.js'),
+                taskObject = require('./tasks/' + files[i]).default;
 
             self.defineTask(basename, taskObject);
         }
@@ -53,8 +82,8 @@ var sey = function sey(config) {
 
     self.bundle = function (name) {
         if (!(name in self.bundles)) {
-            var bundleConfig = deepmerge(self.globalConfig, self.getBundleConfig(name));
-            self.bundles[name] = new bundle(bundleConfig);
+            var bundleConfig = (0, _deepmerge2.default)(self.globalConfig, self.getBundleConfig(name));
+            self.bundles[name] = new _bundle2.default(bundleConfig);
         }
 
         return self.bundles[name];
@@ -67,9 +96,9 @@ var sey = function sey(config) {
                 while (1) {
                     switch (_context.prev = _context.next) {
                         case 0:
-                            console.log(chalk.gray('[' + opTag + '] ') + chalk.yellow('processBundle'));
+                            console.log(_chalk2.default.gray('[' + opTag + '] ') + _chalk2.default.yellow('processBundle'));
 
-                            files = glob(op.src, opTag);
+                            files = (0, _glob2.default)(op.src, opTag);
                             _context.t0 = regeneratorRuntime.keys(op);
 
                         case 3:
@@ -114,10 +143,10 @@ var sey = function sey(config) {
 
                         case 14:
 
-                            console.log(chalk.gray('\op: ' + taskName));
+                            console.log(_chalk2.default.gray('\op: ' + taskName));
 
                             _context.next = 17;
-                            return self.tasks[taskName].processBundle(bundle, files);
+                            return self.tasks[taskName].processBundle(_bundle2.default, files);
 
                         case 17:
                             files = _context.sent;
@@ -131,7 +160,7 @@ var sey = function sey(config) {
                                 destIsDir = op.dest.charAt(op.dest.length - 1) === '/';
 
                                 for (fileKey in files) {
-                                    file = files[fileKey];
+                                    file = files[fileKey], dest = undefined;
 
                                     if (destIsDir) {
                                         dest = op.dest + file.relativeFile;
@@ -139,8 +168,8 @@ var sey = function sey(config) {
                                         dest = op.dest;
                                     }
 
-                                    console.log(chalk.gray('\twriting: ' + dest));
-                                    fileutils.writeFile(dest, file.getContent());
+                                    console.log(_chalk2.default.gray('\twriting: ' + dest));
+                                    _fileutils2.default.writeFile(dest, file.getContent());
                                 }
                             }
 
@@ -175,7 +204,7 @@ var sey = function sey(config) {
 
                         case 3:
 
-                            console.log(chalk.green('bundleStart') + chalk.white(': ' + bundleName));
+                            console.log(_chalk2.default.green('bundleStart') + _chalk2.default.white(': ' + bundleName));
 
                             _context2.t0 = regeneratorRuntime.keys(bundle.ops);
 
@@ -196,7 +225,7 @@ var sey = function sey(config) {
 
                         case 12:
 
-                            console.log(chalk.green('bundleEnd') + chalk.white(': ' + bundleName + ' (in ' + (Date.now() - startTime) / 1000 + ' secs.)'));
+                            console.log(_chalk2.default.green('bundleEnd') + _chalk2.default.white(': ' + bundleName + ' (in ' + (Date.now() - startTime) / 1000 + ' secs.)'));
 
                         case 13:
                         case 'end':
@@ -251,30 +280,30 @@ var sey = function sey(config) {
 
     self.loadTasks();
 
-    for (var bundleName in config) {
-        if (bundleName !== 'global') {
-            self.bundle(bundleName);
+    for (var _bundleName in config) {
+        if (_bundleName !== 'global') {
+            self.bundle(_bundleName);
         }
     }
 };
 
 sey.initFile = function (file) {
-    var content = fs.readFileSync(__dirname + '/../seyfile.sample.js', 'utf8');
-    fileutils.writeFile(file, content);
+    var content = _fs2.default.readFileSync(__dirname + '/../seyfile.sample.js', 'utf8');
+    _fileutils2.default.writeFile(file, content);
 
-    console.log(chalk.green(file) + chalk.white(' is written successfully.'));
+    console.log(_chalk2.default.green(file) + _chalk2.default.white(' is written successfully.'));
 };
 
 sey.clean = function () {
-    var path = pathlib.join(process.cwd(), '.sey');
+    var path = _path2.default.join(process.cwd(), '.sey');
 
-    fileutils.rmdir(path);
+    _fileutils2.default.rmdir(path);
 
-    console.log(chalk.white('clean is successful.'));
+    console.log(_chalk2.default.white('clean is successful.'));
 };
 
 sey.selfCheck = function () {
-    console.log(chalk.white('self-check is successful.'));
+    console.log(_chalk2.default.white('self-check is successful.'));
 };
 
-module.exports = sey;
+exports.default = sey;

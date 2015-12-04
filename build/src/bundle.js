@@ -1,5 +1,8 @@
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 var bundle = function bundle(config) {
     var self = this;
 
@@ -53,4 +56,4 @@ bundle.addTask = function (name) {
     };
 };
 
-module.exports = bundle;
+exports.default = bundle;
