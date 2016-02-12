@@ -1,7 +1,5 @@
 let test = function () {
-    let self = this;
-
-    // self.processBundle = async function (bundle, files) {
+    // this.processBundle = async (bundle, files) => {
     //     return files;
     // };
 };

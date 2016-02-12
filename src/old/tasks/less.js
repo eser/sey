@@ -1,10 +1,9 @@
 import deepmerge from 'deepmerge';
 
 let less = function () {
-    let self = this,
-        lessLib = null;
+    let lessLib = null;
 
-    self.processBundle = async function (bundle, files) {
+    this.processBundle = async (bundle, files) => {
         let options = {
         };
         

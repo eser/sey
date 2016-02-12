@@ -1,8 +1,7 @@
 let lint = function () {
-    let self = this,
-        linter = null;
+    let linter = null;
 
-    self.processBundle = async function (bundle, files) {
+    this.processBundle = async (bundle, files) => {
         let config;
 
         if (bundle.config.eslintConfig !== undefined && bundle.config.eslintConfig !== null) {

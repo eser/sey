@@ -1,10 +1,9 @@
 import deepmerge from 'deepmerge';
 
 let transpile = function () {
-    let self = this,
-        babel = null;
+    let babel = null;
 
-    self.processBundle = async function (bundle, files) {
+    this.processBundle = async (bundle, files) => {
         let options = {
             ast: false,
             presets: ['es2015'],

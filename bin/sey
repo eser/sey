@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 
-import sey from '../src/';
-import path from 'path';
-import commander from 'commander';
-import updateNotifier from 'update-notifier';
-import pkg from '../package.json';
+'use strict';
+
+const path = require('path'),
+    yargs = require('yargs'),
+    updateNotifier = require('update-notifier'),
+    sey = require('../src/'),
+    pkg = require('../package.json');
 
 let exitCode = 0;
 
@@ -20,56 +22,100 @@ process.on('exit', function () {
 updateNotifier({ pkg: pkg })
     .notify({ defer: false });
 
-let locateSeyFile = function (options) {
-    if (options.file === undefined) {
+const locateSeyFile = function (file) {
+    if (file === undefined) {
         return path.join(process.cwd(), 'seyfile.js');
     }
 
-    if (!path.isAbsolute(options.file)) {
-        return path.join(process.cwd(), options.file);
+    if (!path.isAbsolute(file)) {
+        return path.join(process.cwd(), file);
     }
 
-    return options.file;
+    return file;
 };
 
-commander
+const initCmd = function (args) {
+    const argv = args
+        .usage('Usage: $0 init [options]')
+        .option(
+            'f',
+            {
+                alias: 'file',
+                demand: true,
+                default: 'seyfile.js',
+                describe: 'loads specified sey file',
+                type: 'string'
+            }
+        )
+        .help('h')
+        .alias('h', 'help')
+        .argv;
+
+    const seyfile = locateSeyFile(argv.f);
+    sey.initFile(seyfile);
+};
+
+const cleanCmd = function (args) {
+    const argv = args
+        .usage('Usage: $0 clean')
+        .help('h')
+        .alias('h', 'help')
+        .argv;
+
+    sey.clean();
+};
+
+const selfCheckCmd = function (args) {
+    const argv = args
+        .usage('Usage: $0 self-check')
+        .help('h')
+        .alias('h', 'help')
+        .argv;
+
+    sey.selfCheck();
+};
+
+const buildCmd = function (args) {
+    const argv = args
+        .usage('Usage: $0 build [options]')
+        .option(
+            'f',
+            {
+                alias: 'file',
+                demand: true,
+                default: 'seyfile.js',
+                describe: 'loads specified sey file',
+                type: 'string'
+            }
+        )
+        .help('h')
+        .alias('h', 'help')
+        .argv;
+
+    const seyfile = locateSeyFile(argv.f);
+
+    global.sey = sey;
+    require(seyfile);
+};
+
+const completionCmd = function (args) {
+    args.showCompletionScript();
+};
+
+yargs
+    .usage('Usage: $0 <command> [options]')
     .version(pkg.version)
-    .description(pkg.description);
-
-commander
-    .command('init')
-    .description('initializes a sey file')
-    .option('-f, --file <seyfile.js>', 'loads specified sey file')
-    .action(function (options) {
-        let seyfile = locateSeyFile(options);
-        sey.initFile(seyfile);
-    });
-
-commander
-    .command('clean')
-    .description('cleans temporary files in working directory')
-    .action(function () {
-        sey.clean();
-    });
-
-commander
-    .command('self-check')
-    .description('checks sey\'s self integrity.')
-    .action(function () {
-        sey.selfCheck();
-    });
-
-commander
-    .command('build')
-    .description('starts build')
-    .option('-np, --nopartial', 'disables partial building')
-    .option('-f, --file <seyfile.js>', 'loads specified sey file')
-    .action(function (options) {
-        let seyfile = locateSeyFile(options);
-
-        global.sey = sey;
-        require(seyfile);
-    });
-
-commander.cli = true;
-commander.parse(process.argv);
+    .command('init', 'initializes a sey file', initCmd)
+    .command('clean', 'cleans temporary files in working directory', cleanCmd)
+    .command('self-check', 'checks sey\'s self integrity.', selfCheckCmd)
+    .command('build', 'starts build', buildCmd)
+    .command('completion', 'generates a bash completion script', completionCmd)
+    .demand(1, 'must provide a valid command')
+    .alias('v', 'version')
+    .help('h')
+    .alias('h', 'help')
+    .example('$0 build', 'Start a build')
+    // .completion('completion', function (current, argv) {
+    //     return [ 'init', 'clean', 'self-check', 'build' ];
+    // })
+    .argv;

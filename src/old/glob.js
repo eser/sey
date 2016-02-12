@@ -1,6 +1,6 @@
-import globAll from 'glob-all';
-import globParent from 'glob-parent';
-import opfile from './opfile.js';
+const globAll = require('glob-all'),
+    globParent = require('glob-parent'),
+    opfile = require('./opfile.js');
 
 // private
 let globConversions = function (paths) {
@@ -50,4 +50,4 @@ let globFiles = function (paths, opTag) {
     return result;
 };
 
-export default globFiles;
+module.exports = globFiles;

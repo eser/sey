@@ -1,9 +1,7 @@
 import opfile from '../opfile.js';
 
 let concat = function () {
-    let self = this;
-
-    self.processBundle = async function (bundle, files) {
+    this.processBundle = async (bundle, files) => {
         let content = '';
 
         for (let fileKey in files) {

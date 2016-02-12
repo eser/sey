@@ -1,7 +1,5 @@
 let eolfix = function () {
-    let self = this;
-
-    self.processBundle = async function (bundle, files) {
+    this.processBundle = async (bundle, files) => {
         for (let fileKey in files) {
             let file = files[fileKey],
                 token = file.addTask('eolfix');

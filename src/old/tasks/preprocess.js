@@ -1,10 +1,9 @@
 import deepmerge from 'deepmerge';
 
 let preprocess = function () {
-    let self = this,
-        preprocess = null;
+    let preprocess = null;
 
-    self.processBundle = async function (bundle, files) {
+    this.processBundle = async (bundle, files) => {
         let env = process.env;
 
         if (bundle.config.preprocessVars !== undefined && bundle.config.preprocessVars !== null) {

@@ -1,4 +1,6 @@
-var config = {
+'use strict';
+
+let config = new sey.config({
     global: {
         babelConfig: {
 
@@ -8,7 +10,7 @@ var config = {
             useEslintrc: false,
             configFile: './etc/tasks/config/eslint.json'
         },
-        
+
         lessConfig: {
             strictMath: true,
             compress: false,
@@ -62,10 +64,6 @@ var config = {
             }
         ]
     }
-};
+});
 
-var instance = new global.sey(config);
-instance.start();
-// instance.bundle('main').src('./test/**/*.js').test().exec();
-
-module.exports = instance;
+sey.run(config);

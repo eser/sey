@@ -1,12 +1,12 @@
-import fs from 'fs';
-import pathlib from 'path';
+const fs = require('fs'),
+    pathlib = require('path');
 
 let fileutils = {
-    writeFile: function (path, content) {
+    writeFile: (path, content) => {
         let buffer = [
             [path, true, content]
         ];
-    
+
         while (buffer.length > 0) {
             let item = buffer[0];
 
@@ -24,7 +24,7 @@ let fileutils = {
                     do {
                         newpath = pathlib.dirname(newpath);
                     } while (pathlib.basename(newpath) === '.');
-                    
+
                     buffer.unshift([newpath, false]);
                 } else {
                     throw ex;
@@ -33,7 +33,7 @@ let fileutils = {
         }
     },
 
-    getLastMod: function (path) {
+    getLastMod: (path) => {
         try {
             return fs.statSync(path).mtime.getTime();
         } catch (ex) {
@@ -45,7 +45,7 @@ let fileutils = {
         return 0;
     },
 
-    rmdir: function (path) {
+    rmdir: (path) => {
         let list = fs.readdirSync(path);
 
         for (let i = 0, length = list.length; i < length; i++) {
@@ -68,4 +68,4 @@ let fileutils = {
     }
 };
 
-export default fileutils;
+module.exports = fileutils;

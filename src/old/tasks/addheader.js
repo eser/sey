@@ -1,7 +1,5 @@
 let addheader = function () {
-    let self = this;
-
-    self.processBundle = async function (bundle, files) {
+    this.processBundle = async (bundle, files) => {
         if (bundle.config.banner === undefined || bundle.config.banner === null) {
             return files;
         }

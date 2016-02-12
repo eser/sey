@@ -1,12 +1,10 @@
-import fs from 'fs';
-import fileutils from './fileutils.js';
+const fs = require('fs'),
+    fileutils = require('./fileutils.js');
 
 let opfile = function (path, relativeFile, opTag, content) {
-    let self = this;
+    this.relativeFile = relativeFile.replace(/^\/+/, '');
 
-    self.relativeFile = relativeFile.replace(/^\/+/, '');
-
-    self.history = [
+    this.history = [
         {
             task: null,
             tags: [],
@@ -18,16 +16,16 @@ let opfile = function (path, relativeFile, opTag, content) {
         }
     ];
 
-    self.getRecent = function () {
-        return self.history[self.history.length - 1];
+    this.getRecent = () => {
+        return this.history[this.history.length - 1];
     };
 
-    self.getContent = function () {
-        return self.getRecent().content;
+    this.getContent = () => {
+        return this.getRecent().content;
     };
 
-    self.addTask = function (task, cacheable) {
-        let previousItem = self.getRecent(),
+    this.addTask = (task, cacheable) => {
+        let previousItem = this.getRecent(),
             item = {
                 task: task,
                 tags: previousItem.tags.concat([task]),
@@ -38,8 +36,8 @@ let opfile = function (path, relativeFile, opTag, content) {
                 content: null
             };
 
-        if (self.opTag !== null && cacheable !== false && (previousItem.task === null || previousItem.path !== null)) {
-            item.path = './.sey/cache/' + opTag + '/' + item.tags.join('_') + '/' + self.relativeFile;
+        if (this.opTag !== null && cacheable !== false && (previousItem.task === null || previousItem.path !== null)) {
+            item.path = './.sey/cache/' + opTag + '/' + item.tags.join('_') + '/' + this.relativeFile;
             item.cache = true;
 
             if (previousItem.cached !== false) {
@@ -51,12 +49,12 @@ let opfile = function (path, relativeFile, opTag, content) {
             }
         }
 
-        self.history.push(item);
+        this.history.push(item);
         return item;
     };
 
-    self.updateContent = function (content) {
-        let currentItem = self.getRecent();
+    this.updateContent = (content) => {
+        let currentItem = this.getRecent();
 
         currentItem.content = content;
         currentItem.lastmod = Date.now();
@@ -66,11 +64,11 @@ let opfile = function (path, relativeFile, opTag, content) {
         }
     };
 
-    self.getPreviousContent = function () {
-        let i = self.history.length - 2;
+    this.getPreviousContent = () => {
+        let i = this.history.length - 2;
 
         if (i >= 0) {
-            let item = self.history[i];
+            let item = this.history[i];
 
             if (item.content !== null) {
                 return item.content;
@@ -86,4 +84,4 @@ let opfile = function (path, relativeFile, opTag, content) {
     };
 };
 
-export default opfile;
+module.exports = opfile;
