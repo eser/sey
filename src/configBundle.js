@@ -67,46 +67,6 @@ class configBundle {
 
         return this;
     }
-/*
-    const file = require('./file.js'),
-        fsManager = require('./fsManager.js');
-
-    addFiles(files) {
-        for (let item of files) {
-            const filepath = item,
-                lastMod = fsManager.getLastMod(filepath);
-
-            files.push(new file(filepath, lastMod));
-        }
-
-        return this;
-    }
-
-    combineFile(newFilename) {
-        let mightBeCached = true,
-            newest = 0;
-
-        for (let item of files) {
-            if (!item.cached) {
-                mightBeCached = false;
-                break;
-            }
-
-            if (newest < item.modified) {
-                newest = item.modified;
-            }
-        }
-
-        let newFile = new file(newFilename, mightBeCached ? newest : null);
-        this.files.forEach((index, item) => {
-            newFile.addHash(item.getHash());
-        });
-
-        this.files = [newFile];
-
-        return this;
-    }
-*/
 }
 
 module.exports = configBundle;

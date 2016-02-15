@@ -4,9 +4,9 @@ const crc = require('crc'),
     fsManager = require('./utils/fsManager.js');
 
 class runnerOpFile {
-    constructor(filepath, content) {
-        this.filepath = filepath;
-        this.hash = crc.crc32(filepath);
+    constructor(file, content) {
+        this.file = file;
+        this.hash = crc.crc32(file.fullpath);
         this.cachedFilepath = null;
         this.cachedFileMod = -1;
 
@@ -14,7 +14,7 @@ class runnerOpFile {
             this.setContent(content);
         } else {
             this.content = null;
-            this.modified = fsManager.getLastMod(this.filepath);
+            this.modified = fsManager.getLastMod(this.file.fullpath);
         }
     }
 
@@ -25,7 +25,7 @@ class runnerOpFile {
 
     addHash(tag) {
         this.hash = crc.crc32(tag, this.hash);
-        this.cachedFilepath = this.cacheFilename(this.hash, this.filepath);
+        this.cachedFilepath = this.cacheFilename(this.hash, this.file.fullpath);
         this.cachedFileMod = fsManager.getLastMod(this.cachedFilepath);
     }
 
