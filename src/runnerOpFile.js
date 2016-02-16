@@ -6,42 +6,51 @@ const crc = require('crc'),
 class runnerOpFile {
     constructor(file, content) {
         this.file = file;
-        this.hash = crc.crc32(file.fullpath);
-        this.cachedFilepath = null;
-        this.cachedFileMod = -1;
-
-        if (content !== undefined) {
-            this.setContent(content);
-        } else {
-            this.content = null;
-            this.modified = fsManager.getLastMod(this.file.fullpath);
-        }
+        this.hash = crc.crc32(
+            String(fsManager.getLastMod(file.fullpath)),
+            crc.crc32(file.fullpath)
+        );
+        this._content = content;
     }
 
-    setContent(content) {
-        this.content = content;
-        this.modified = Date.now();
+    cacheFilename() {
+        return sey.workingPath + '/' + this.hash.toString(16) /* + '_' + this.file.path */;
     }
 
     addHash(tag) {
         this.hash = crc.crc32(tag, this.hash);
-        this.cachedFilepath = this.cacheFilename(this.hash, this.file.fullpath);
-        this.cachedFileMod = fsManager.getLastMod(this.cachedFilepath);
+        this.hashFilePath = this.cacheFilename();
+
+        return this.checkCacheValidity();
     }
 
-    isModified() {
-        return (this.modified > this.cachedFileMod);
+    checkCacheValidity() {
+        const fileModified = fsManager.getLastMod(this.hashFilePath);
+
+        // if file does not exist
+        if (fileModified === -1) {
+            return false;
+        }
+
+        return true;
     }
 
     getHash() {
         return this.hash.toString(16);
     }
 
-    write() {
+    getContent() {
+        if (this._content === undefined) {
+            this._content = ''; // TODO read cache or regular file
+        }
+
+        return this._content;
     }
 
-    static cacheFilename(hash, filepath) {
-        return hash.toString(16) /* + '_' + filepath */;
+    setContent(content) {
+        this._content = content;
+
+        // TODO write cache file
     }
 }
 

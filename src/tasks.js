@@ -29,6 +29,16 @@ class tasks {
         this.items[name] = new taskObject();
         configBundle.addTask(name);
     }
+
+    exec(name, runnerOp, files) {
+        console.log(name, files.length);
+
+        if (this.items[name] === undefined) {
+            throw Error('undefined task - ' + name);
+        }
+
+        return this.items[name].exec(runnerOp, files);
+    }
 }
 
 module.exports = tasks;

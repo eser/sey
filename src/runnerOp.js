@@ -19,18 +19,37 @@ class runnerOp {
         }
     }
 
-    combineFiles() {
+    combineFiles(filename) {
+        let newFile = new runnerOpFile(filename, 'new content');
+
         for (let opFile of this._opFiles) {
             // combine + sum hash
+            newFile.addHash(opFile.getHash());
         }
 
-        this._opFiles = [
-            new runnerOpFile('combined.xxx', 'new content')
-        ];
+        this._opFiles = [newFile];
+    }
+
+    startOp(task) {
+        let invalidatedFiles = [];
+
+        for (let opFile of this._opFiles) {
+            if (!opFile.addHash(task)) {
+                invalidatedFiles.push(opFile);
+            }
+        }
+
+        sey.tasks.exec(task, this, invalidatedFiles);
     }
 
     start() {
         this.loadFiles();
+
+        for (let task in this.op) {
+            if (task !== 'src' && task !== 'dest') {
+                this.startOp(task);
+            }
+        }
     }
 
 /*
