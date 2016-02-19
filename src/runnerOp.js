@@ -1,6 +1,7 @@
 'use strict';
 
-const globManager = require('./utils/globManager.js'),
+const fsManager = require('./utils/fsManager.js'),
+    globManager = require('./utils/globManager.js'),
     runnerOpFile = require('./runnerOpFile.js');
 
 class runnerOp {
@@ -22,17 +23,28 @@ class runnerOp {
     startOp(task) {
         let modifiedFiles = [];
 
+        console.log('  task:', task);
         for (let opFile of this.opFiles) {
             opFile.addHash(task);
             if (opFile.cached) {
                 continue;
             }
 
-            console.log(task + ':', opFile.file.path);
+            console.log('    ' + opFile.file.path);
             modifiedFiles.push(opFile);
         }
+        console.log('    done.');
 
         sey.tasks.exec(task, this, modifiedFiles);
+
+        if (this.op.dest !== undefined) {
+            const destPath = this.op.dest + '/';
+
+            for (let opFile of this.opFiles) {
+                const filePath = destPath + opFile.file.path;
+                fsManager.writeFile(filePath, opFile.getContent());
+            }
+        }
     }
 
     start() {
