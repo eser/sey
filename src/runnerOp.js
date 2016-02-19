@@ -13,33 +13,26 @@ class runnerOp {
     loadFiles() {
         const files = globManager.glob(this.op.src);
 
-        this._opFiles = [];
+        this.opFiles = [];
         for (let file of files) {
-            this._opFiles.push(new runnerOpFile(file));
+            this.opFiles.push(new runnerOpFile(file));
         }
-    }
-
-    combineFiles(filename) {
-        let newFile = new runnerOpFile(filename, 'new content');
-
-        for (let opFile of this._opFiles) {
-            // combine + sum hash
-            newFile.addHash(opFile.getHash());
-        }
-
-        this._opFiles = [newFile];
     }
 
     startOp(task) {
-        let invalidatedFiles = [];
+        let modifiedFiles = [];
 
-        for (let opFile of this._opFiles) {
-            if (!opFile.addHash(task)) {
-                invalidatedFiles.push(opFile);
+        for (let opFile of this.opFiles) {
+            opFile.addHash(task);
+            if (opFile.cached) {
+                continue;
             }
+
+            console.log(task + ':', opFile.file.path);
+            modifiedFiles.push(opFile);
         }
 
-        sey.tasks.exec(task, this, invalidatedFiles);
+        sey.tasks.exec(task, this, modifiedFiles);
     }
 
     start() {
@@ -82,12 +75,13 @@ class runnerOp {
             }
         }
 
-        let newFile = new file(newFilename, mightBeCached ? newest : null);
-        this.files.forEach((index, item) => {
-            newFile.addHash(item.getHash());
-        });
+        let newFile = new runnerOpFile(newFilename, mightBeCached ? newest : null);
+        for (let opFile of this.opFiles) {
+            // combine + sum hash
+            newFile.addHash(opFile.getHash());
+        }
 
-        this.files = [newFile];
+        this.opFiles = [newFile];
 
         return this;
     }

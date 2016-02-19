@@ -4,13 +4,25 @@ const crc = require('crc'),
     fsManager = require('./utils/fsManager.js');
 
 class runnerOpFile {
-    constructor(file, content) {
+    constructor(file, hash, content) {
         this.file = file;
-        this.hash = crc.crc32(
-            String(fsManager.getLastMod(file.fullpath)),
-            crc.crc32(file.fullpath)
-        );
-        this._content = content;
+
+        if (hash === undefined) {
+            this.hash = crc.crc32(
+                String(fsManager.getLastMod(file.fullpath)),
+                crc.crc32(file.fullpath)
+            );
+        } else {
+            this.hash = hash;
+        }
+
+        if (content === undefined) {
+            this.contentFile = this.file.fullpath;
+            this.cached = true;
+        } else {
+            this.content = content;
+            this.cached = false;
+        }
     }
 
     cacheFilename() {
@@ -19,20 +31,19 @@ class runnerOpFile {
 
     addHash(tag) {
         this.hash = crc.crc32(tag, this.hash);
-        this.hashFilePath = this.cacheFilename();
+        this.hashFile = this.cacheFilename();
 
-        return this.checkCacheValidity();
-    }
+        if (this.cached) {
+            const fileModified = fsManager.getLastMod(this.hashFile);
 
-    checkCacheValidity() {
-        const fileModified = fsManager.getLastMod(this.hashFilePath);
+            // if file does not exist
+            if (fileModified === -1) {
+                this.cached = false;
+                return;
+            }
 
-        // if file does not exist
-        if (fileModified === -1) {
-            return false;
+            this.contentFile = this.hashFile;
         }
-
-        return true;
     }
 
     getHash() {
@@ -40,17 +51,17 @@ class runnerOpFile {
     }
 
     getContent() {
-        if (this._content === undefined) {
-            this._content = ''; // TODO read cache or regular file
+        if (this.content === undefined) {
+            this.content = fsManager.readFile(this.contentFile);
         }
 
-        return this._content;
+        return this.content;
     }
 
     setContent(content) {
-        this._content = content;
+        this.content = content;
 
-        // TODO write cache file
+        fsManager.writeFile(this.hashFile, this.content);
     }
 }
 
