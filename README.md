@@ -31,9 +31,9 @@ and sey,
 Configuration Based:
 
 ```js
-var config = {
+let config = {
     main: {
-        eslintConfig: {
+        eslint: {
             useEslintrc: false,
             configFile: './etc/tasks/config/eslint.json'
         }
@@ -41,55 +41,51 @@ var config = {
         ops: [
             {
                 src: ['./src/**/*.js'],
-                dest: './dist/',
+                dest: './dist/js/',
 
                 eolfix: true,
                 lint: true,
-                transpile: true
+                babel: true
             },
             {
-                src: './test/**/*.js',
-                test: true
+                src: './test/**/*.less',
+                dest: './dist/css/',
+                less: true
             }
         ]
     }
 };
 
-var instance = new global.sey(config);
-instance.start();
-
-module.exports = instance;
-
+sey.run(config);
 ```
 
 API Based:
 
 ```js
-var instance = new global.sey();
+let config = new sey.config();
 
-instance.bundle('main')
+config.bundle('main')
     .src('./src/**/*.js')
     .eolfix()
     .lint()
-    .transpile()
-    .dest('./dist/')
+    .babel()
+    .dest('./dist/js/')
     .exec();
 
-instance.bundle('main')
-    .src('./test/**/*.js')
-    .test()
+config.bundle('main')
+    .src('./test/**/*.css')
+    .less()
+    .dest('./dist/css/')
     .exec();
 
-instance.start();
-
-module.exports = instance;
+sey.run(config);
 ```
 
 
 ### Todo List
 
 - Deploy Task
-- Browserify, CSSMin, JSMin Tasks
+- JSX, Browserify, TypeScript, CSSMin, JSMin Tasks
 - Fancy output including line counts, lint and test results
 - Code optimizations
 

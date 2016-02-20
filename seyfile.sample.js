@@ -2,16 +2,16 @@
 
 let config = new sey.config({
     global: {
-        babelConfig: {
+        babel: {
 
         },
 
-        eslintConfig: {
+        eslint: {
             useEslintrc: false,
             configFile: './etc/tasks/config/eslint.json'
         },
 
-        lessConfig: {
+        less: {
             strictMath: true,
             compress: false,
             yuicompress: false,
@@ -43,7 +43,7 @@ let config = new sey.config({
                 eolfix: true,
                 preprocess: true,
                 lint: true,
-                transpile: true,
+                babel: true,
                 addheader: true
             },
             {
@@ -53,7 +53,7 @@ let config = new sey.config({
                 eolfix: true,
                 preprocess: true,
                 lint: true,
-                transpile: true,
+                babel: true,
                 concat: true,
                 addheader: true
             },
