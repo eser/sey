@@ -36,15 +36,6 @@ class runnerOp {
         console.log('    done.');
 
         sey.tasks.exec(task, this, modifiedFiles);
-
-        if (this.op.dest !== undefined) {
-            const destPath = this.op.dest + '/';
-
-            for (let opFile of this.opFiles) {
-                const filePath = destPath + opFile.file.path;
-                fsManager.writeFile(filePath, opFile.getContent());
-            }
-        }
     }
 
     start() {
@@ -53,6 +44,15 @@ class runnerOp {
         for (let task in this.op) {
             if (task !== 'src' && task !== 'dest') {
                 this.startOp(task);
+            }
+        }
+
+        if (this.op.dest !== undefined) {
+            const destPath = this.op.dest + '/';
+
+            for (let opFile of this.opFiles) {
+                const filePath = destPath + opFile.file.path;
+                fsManager.writeFile(filePath, opFile.getContent());
             }
         }
     }
