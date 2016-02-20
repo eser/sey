@@ -32,6 +32,7 @@ class runnerOpFile {
     addHash(tag) {
         this.hash = crc.crc32(tag, this.hash);
         this.hashFile = this.cacheFilename();
+        this.content = undefined;
 
         if (this.cached) {
             const fileModified = fsManager.getLastMod(this.hashFile);
