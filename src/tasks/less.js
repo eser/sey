@@ -1,8 +1,13 @@
 'use strict';
 
+const deepmerge = require('../utils/deepmerge.js');
+
 class less {
     exec(runnerOp, files) {
-        let options = runnerOp.config.less || {};
+        let options = {};
+        if (runnerOp.config.less !== undefined) {
+            deepmerge(options, runnerOp.config.less);
+        }
 
         for (let file of files) {
             let content = file.getContent();

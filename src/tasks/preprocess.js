@@ -1,9 +1,13 @@
 'use strict';
 
+const deepmerge = require('../utils/deepmerge.js');
+
 class preprocess {
     exec(runnerOp, files) {
         let vars = process.env;
-        // deepmerge(runnerOp.config.preprocessVars)
+        if (runnerOp.config.preprocessVars !== undefined) {
+            deepmerge(vars, runnerOp.config.preprocessVars);
+        }
 
         for (let file of files) {
             const content = file.getContent();
