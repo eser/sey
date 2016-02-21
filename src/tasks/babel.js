@@ -6,9 +6,8 @@ class babel {
     exec(runnerOp, files) {
         let options = {
             ast: false,
-            presets: ['es2015'],
-
-            ignore: /(bower_components)|(node_modules)/,
+            presets: ['es2015', 'stage-3'],
+            ignore: ['bower_components/', 'node_modules/'],
             only: null
         };
         if (runnerOp.config.babel !== undefined) {

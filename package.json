@@ -1,13 +1,13 @@
 {
   "name": "sey",
-  "version": "0.1.5",
+  "version": "0.1.7",
   "description": "Simple javascript build tool with declarative configuration",
   "keywords": [
     "tasks",
     "taskmaster"
   ],
   "engines": {
-    "node": ">=5.5.0"
+    "node": ">=5.2.0"
   },
   "author": "Eser Ozvataf",
   "homepage": "https://eserozvataf.github.io/sey",
@@ -30,28 +30,29 @@
     "url": "https://github.com/eserozvataf/sey.git"
   },
   "devDependencies": {
-    "babel-cli": "^6.4.5",
-    "babel-polyfill": "^6.3.14",
-    "babel-preset-stage-3": "^6.3.13"
+    "babel-cli": "^6.5.1",
+    "babel-polyfill": "^6.5.0"
   },
   "dependencies": {
-    "babel-core": "^6.4.5",
-    "babel-eslint": "^4.1.8",
-    "babel-preset-es2015": "^6.3.13",
+    "babel-core": "^6.5.2",
+    "babel-eslint": "^5.0.0",
+    "babel-preset-es2015": "^6.5.0",
+    "babel-preset-stage-3": "^6.5.0",
     "browserify": "^13.0.0",
     "chalk": "^1.1.1",
     "clean-css": "^3.4.9",
     "crc": "^3.4.0",
     "csscomb": "^3.1.8",
     "deepmerge": "^0.2.10",
-    "eslint": "^1.10.3",
+    "eslint": "^2.2.0",
     "glob-all": "^3.0.1",
     "glob-parent": "^2.0.0",
     "less": "^2.6.0",
     "preprocess": "^3.0.2",
+    "typescript": "^1.7.5",
     "uglify-js": "^2.6.1",
     "update-notifier": "^0.6.0",
-    "yargs": "^3.32.0"
+    "yargs": "^4.1.0"
   },
   "scripts": {
     "start": "./bin/sey",
@@ -59,7 +60,8 @@
   },
   "files": [
     "src",
-    "bin"
+    "bin",
+    "seyfile.sample.js"
   ],
   "bin": {
     "sey": "./bin/sey"
