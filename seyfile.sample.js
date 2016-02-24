@@ -7,8 +7,8 @@ let config = new sey.config({
         },
 
         eslint: {
-            useEslintrc: false,
-            configFile: './etc/tasks/config/eslint.json'
+            useEslintrc: true // ,
+            // configFile: './etc/tasks/config/eslint.json'
         },
 
         less: {
@@ -54,13 +54,13 @@ let config = new sey.config({
                 preprocess: true,
                 lint: true,
                 babel: true,
-                concat: true,
+                // concat: true,
                 addheader: true
             },
             {
-                src: './test/**/*.js',
+                src: './test/**/*.js' // ,
 
-                test: true
+                // test: true
             }
         ]
     }

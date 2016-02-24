@@ -38,6 +38,7 @@
     "babel-eslint": "^5.0.0",
     "babel-preset-es2015": "^6.5.0",
     "babel-preset-stage-3": "^6.5.0",
+    "babel-preset-react": "^6.5.0",
     "browserify": "^13.0.0",
     "chalk": "^1.1.1",
     "clean-css": "^3.4.9",
@@ -49,8 +50,8 @@
     "glob-parent": "^2.0.0",
     "less": "^2.6.0",
     "preprocess": "^3.0.2",
-    "typescript": "^1.7.5",
-    "uglify-js": "^2.6.1",
+    "typescript": "^1.8.2",
+    "uglify-js": "^2.6.2",
     "update-notifier": "^0.6.0",
     "yargs": "^4.1.0"
   },
