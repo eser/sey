@@ -8,6 +8,7 @@ class babel {
             ast: false,
             code: true,
             sourceMaps: false,
+            npmpath: __dirname,
 
             // presets: ['es2015', 'stage-3'],
             plugins: [
