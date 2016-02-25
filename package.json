@@ -1,6 +1,6 @@
 {
   "name": "sey",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Simple javascript build tool with declarative configuration",
   "keywords": [
     "tasks",
