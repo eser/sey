@@ -1,6 +1,6 @@
 # sey
 
-Simple javascript build tool with declarative configuration.
+Simple JavaScript build tool with declarative and easy configuration. It also has incremental build support which only rebuilds changed files to pace up the build process.
 
 
 ## Why sey
@@ -28,7 +28,7 @@ in other words, sey...
 - has declarative configuration which only needs the input of what user expect. say goodbye to planning directives such as copy, concat, etc.
 - supports partial building on changed files. it never starts over doing all tasks.
 - specialized for create bundles and building projects,
-- supports both configuration and api at the same time,
+- supports both configuration and API at the same time,
 - as fast as it can be.
 
 ### Usage
@@ -69,9 +69,13 @@ let config = {
                 babel: true
             },
             {
-                src: './test/**/*.less',
+                src: './src/**/*.less',
                 dest: './dist/css/',
                 less: true
+            },
+            {
+                src: './test/*.js',
+                test: true
             }
         ]
     }
@@ -85,7 +89,7 @@ API Based:
 ```js
 let config = new sey.config();
 
-config.bundle('scripts')
+config.bundle('main')
     .src('./src/**/*.js')
     .eolfix()
     .lint()
@@ -93,10 +97,15 @@ config.bundle('scripts')
     .dest('./dist/js/')
     .exec();
 
-config.bundle('styles')
-    .src('./test/**/*.less')
+config.bundle('main')
+    .src('./src/**/*.less')
     .less()
     .dest('./dist/css/')
+    .exec();
+
+config.bundle('main')
+    .src('./test/*.js')
+    .test()
     .exec();
 
 sey.run(config);
@@ -108,6 +117,7 @@ sey.run(config);
 - Deploy Task
 - Watch Task (Refresh Friendliness)
 - JSX, Browserify, TypeScript, CSSMin, JSMin, Closure, PostCSS Tasks
+- Sourcemaps
 - Fancy output including line counts, lint and test results
 - Code optimizations
 
