@@ -28,8 +28,9 @@ class runner {
 
         console.log(chalk.green('bundle:'), chalk.bold.white(name));
         if (config.ops !== undefined) {
-            for (let item of config.ops) {
-                const op = new runnerOp(name, item, config);
+            for (let key in config.ops) {
+                console.log(chalk.green('  op #' + key));
+                const op = new runnerOp(name, config.ops[key], config);
                 await op.start();
             }
         }

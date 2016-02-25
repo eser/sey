@@ -34,6 +34,11 @@ const locateSeyFile = function (file) {
     return file;
 };
 
+const initCmdR = function (argv) {
+    const seyfile = locateSeyFile(argv.f);
+    sey.initFile(seyfile);
+};
+
 const initCmd = function (args) {
     const argv = args
         .usage('Usage: $0 init [options]')
@@ -51,8 +56,11 @@ const initCmd = function (args) {
         .alias('h', 'help')
         .argv;
 
-    const seyfile = locateSeyFile(argv.f);
-    sey.initFile(seyfile);
+    initCmdR(argv);
+};
+
+const cleanCmdR = function (argv) {
+    sey.clean();
 };
 
 const cleanCmd = function (args) {
@@ -62,7 +70,11 @@ const cleanCmd = function (args) {
         .alias('h', 'help')
         .argv;
 
-    sey.clean();
+    cleanCmdR(argv);
+};
+
+const selfCheckCmdR = function (argv) {
+    sey.selfCheck();
 };
 
 const selfCheckCmd = function (args) {
@@ -72,7 +84,14 @@ const selfCheckCmd = function (args) {
         .alias('h', 'help')
         .argv;
 
-    sey.selfCheck();
+    selfCheckCmdR(argv);
+};
+
+const buildCmdR = function (argv) {
+    const seyfile = locateSeyFile(argv.f);
+
+    global.sey = sey;
+    require(seyfile);
 };
 
 const buildCmd = function (args) {
@@ -92,10 +111,28 @@ const buildCmd = function (args) {
         .alias('h', 'help')
         .argv;
 
-    const seyfile = locateSeyFile(argv.f);
+    buildCmdR(argv);
+};
 
-    global.sey = sey;
-    require(seyfile);
+const rebuildCmd = function (args) {
+    const argv = args
+        .usage('Usage: $0 rebuild [options]')
+        .option(
+            'f',
+            {
+                alias: 'file',
+                demand: true,
+                default: 'seyfile.js',
+                describe: 'loads specified sey file',
+                type: 'string'
+            }
+        )
+        .help('h')
+        .alias('h', 'help')
+        .argv;
+
+    cleanCmdR(argv);
+    buildCmdR(argv);
 };
 
 const completionCmd = function (args) {
@@ -109,6 +146,7 @@ yargs
     .command('clean', 'cleans temporary files in working directory', cleanCmd)
     .command('self-check', 'checks sey\'s self integrity.', selfCheckCmd)
     .command('build', 'starts build', buildCmd)
+    .command('rebuild', 'restarts build', rebuildCmd)
     .command('completion', 'generates a bash completion script', completionCmd)
     .demand(1, 'must provide a valid command')
     .alias('v', 'version')

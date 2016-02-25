@@ -25,17 +25,17 @@ class runnerOp {
     async startOp(task) {
         let modifiedFiles = [];
 
-        console.log(chalk.yellow('  task:'), chalk.white(task));
+        console.log(chalk.yellow('    task:'), chalk.white(task));
         for (let opFile of this.opFiles) {
             opFile.addHash(task);
             if (opFile.cached) {
                 continue;
             }
 
-            console.log(chalk.gray('    ' + opFile.file.path));
+            console.log(chalk.gray('      ' + opFile.file.path));
             modifiedFiles.push(opFile);
         }
-        console.log(chalk.gray('    done.'));
+        console.log(chalk.gray('      done.'));
 
         await sey.tasks.exec(task, this, modifiedFiles);
     }
