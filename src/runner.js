@@ -1,6 +1,7 @@
 'use strict';
 
-const deepmerge = require('./utils/deepmerge.js'),
+const chalk = require('chalk'),
+    deepmerge = require('./utils/deepmerge.js'),
     runnerOp = require('./runnerOp.js');
 
 class runner {
@@ -25,7 +26,7 @@ class runner {
     runBundle(name) {
         const config = this.getBundleConfig(name);
 
-        console.log('bundle: ', name);
+        console.log(chalk.green('bundle:'), chalk.bold.white(name));
         if (config.ops !== undefined) {
             for (let item of config.ops) {
                 const op = new runnerOp(name, item, config);

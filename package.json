@@ -23,7 +23,7 @@
       "url": "http://eser.ozvataf.com/"
     }
   ],
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "preferGlobal": true,
   "repository": {
     "type": "git",
@@ -31,7 +31,9 @@
   },
   "devDependencies": {
     "babel-cli": "^6.5.1",
-    "babel-polyfill": "^6.5.0"
+    "babel-polyfill": "^6.5.0",
+    "isparta": "^4.0.0",
+    "mocha": "^2.4.5"
   },
   "dependencies": {
     "babel-core": "^6.5.2",
@@ -61,7 +63,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "files": [
-    "src",
+    "lib",
     "bin",
     "seyfile.sample.js"
   ],

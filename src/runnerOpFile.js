@@ -1,3 +1,4 @@
+/*global sey */
 'use strict';
 
 const crc = require('crc'),

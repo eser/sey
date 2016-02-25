@@ -1,41 +1,46 @@
 NPM=./node_modules/.bin
-
-test: lint
-	@node $(NPM)/_mocha \
-		--reporter $(if $(or $(TEST),$(V)),spec,dot) \
-		--slow 600 --timeout 2000 \
-		--grep '$(TEST)'
-
-compile: # dependencies
-	@$(NPM)/babel --presets es2015,stage-3 ./bin/sey --out-file ./build/bin/sey
-	@$(NPM)/babel --presets es2015,stage-3 ./src/ --out-dir ./build/src/
-	@$(NPM)/babel --presets es2015,stage-3 ./tests/ --out-dir ./build/tests/
-	@cp ./package.json ./build/
-
-lint: dependencies
-	@$(NPM)/eslint --config ./.eslintrc ./bin/*.js ./src/*.js ./tests/*.js
-
-dependencies: node_modules
+ISPARTA=./node_modules/isparta/bin/isparta
 
 node_modules:
 	@echo "Installing dependencies..."
 	@npm install
 
-coverage: dependencies
-	@$(NPM)/istanbul cover $(NPM)/_mocha -- --reporter spec
-	@open ./coverage/lcov-report/sey/sey.html
+.PHONY: lint
+lint: node_modules
+	@$(NPM)/eslint --config ./.eslintrc ./bin/ ./src/ ./test/
 
-clean:
+.PHONY: test
+test: build
+	@$(NPM)/babel-node $(NPM)/_mocha \
+		--reporter spec \
+		--slow 600 --timeout 5000 \
+        --recursive \
+		./test/
+
+.PHONY: coverage
+coverage: build
 	@rm -rf ./coverage
-	@rm -rf ./build/bin/*
-	@rm -rf ./build/src/*
-	@rm -rf ./build/tests/*
-	@rm ./build/package.json
+	@$(NPM)/babel-node $(ISPARTA) cover --report html $(NPM)/_mocha -- \
+        --reporter spec \
+        --recursive \
+        ./test/
+	# @open ./coverage/index.html
 
+.PHONY: build
+build: node_modules
+	@$(NPM)/babel ./src/ --out-dir ./lib/
+
+.PHONY: rebuild
+rebuild: clean build
+
+.PHONY: clean
+clean:
+	@rm -rf ./lib/*
+
+.PHONY: distclean
 distclean: clean
 	@rm -rf ./node_modules
 
-run:
-	node ./build/bin/sey build
-
-check: test
+.PHONY: repl
+repl:
+	@$(NPM)/babel-node

@@ -1,6 +1,8 @@
+/*global sey */
 'use strict';
 
-const fsManager = require('./utils/fsManager.js'),
+const chalk = require('chalk'),
+    fsManager = require('./utils/fsManager.js'),
     globManager = require('./utils/globManager.js'),
     runnerOpFile = require('./runnerOpFile.js');
 
@@ -23,17 +25,17 @@ class runnerOp {
     startOp(task) {
         let modifiedFiles = [];
 
-        console.log('  task:', task);
+        console.log(chalk.yellow('  task:'), chalk.white(task));
         for (let opFile of this.opFiles) {
             opFile.addHash(task);
             if (opFile.cached) {
                 continue;
             }
 
-            console.log('    ' + opFile.file.path);
+            console.log(chalk.gray('    ' + opFile.file.path));
             modifiedFiles.push(opFile);
         }
-        console.log('    done.');
+        console.log(chalk.gray('    done.'));
 
         sey.tasks.exec(task, this, modifiedFiles);
     }

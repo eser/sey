@@ -1,0 +1,18 @@
+{
+    "presets": [
+    ],
+    "plugins": [
+        "transform-es2015-destructuring",
+        "transform-es2015-function-name",
+        "transform-es2015-parameters",
+        "transform-es2015-sticky-regex",
+        "transform-es2015-unicode-regex",
+        "transform-es2015-modules-commonjs",
+        "transform-async-to-generator",
+        "transform-exponentiation-operator"
+    ],
+    "ignore": [
+        "bower_components/",
+        "node_modules/"
+    ]
+}
