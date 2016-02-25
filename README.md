@@ -1,5 +1,10 @@
 # sey
 
+[![npm version][npm-image]][npm-url]
+[![npm download][download-image]][npm-url]
+[![dependencies][dep-image]][dep-url]
+[![license][license-image]][license-url]
+
 Simple JavaScript build tool with declarative and easy configuration. It also has incremental build support which only rebuilds changed files to pace up the build process.
 
 
@@ -142,3 +147,11 @@ It is publicly open for any contribution. Bugfixes and suggestions are welcome.
 
 * Fork the repo, push your changes to your fork, and submit a pull request.
 * If something does not work, please report it using GitHub issues.
+
+[npm-image]: https://img.shields.io/npm/v/sey.svg?style=flat-square
+[npm-url]: https://www.npmjs.com/package/sey
+[download-image]: https://img.shields.io/npm/dt/sey.svg?style=flat-square
+[dep-image]: https://img.shields.io/david/eserozvataf/sey.svg?style=flat-square
+[dep-url]: https://github.com/eserozvataf/sey
+[license-image]: https://img.shields.io/npm/l/sey.svg?style=flat-square
+[license-url]: https://github.com/eserozvataf/sey/blob/master/LICENSE
