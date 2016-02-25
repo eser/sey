@@ -136,7 +136,7 @@ See [GitHub Issues](https://github.com/eserozvataf/sey/issues).
 
 ## License
 
-See [LICENSE](LICENSE)
+Apache 2.0, for further details, please see [LICENSE](LICENSE) file
 
 
 ## Contributing
