@@ -94,7 +94,7 @@ config.bundle('scripts')
     .exec();
 
 config.bundle('styles')
-    .src('./test/**/*.css')
+    .src('./test/**/*.less')
     .less()
     .dest('./dist/css/')
     .exec();
