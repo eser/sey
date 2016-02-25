@@ -36,7 +36,7 @@ const locateSeyFile = function (file) {
 
 const initCmdR = function (argv) {
     const seyfile = locateSeyFile(argv.f);
-    sey.initFile(seyfile);
+    sey.initFile(seyfile, argv.o);
 };
 
 const initCmd = function (args) {
@@ -48,8 +48,16 @@ const initCmd = function (args) {
                 alias: 'file',
                 demand: true,
                 default: 'seyfile.js',
-                describe: 'loads specified sey file',
+                describe: 'loads specified seyfile',
                 type: 'string'
+            }
+        )
+        .option(
+            'o',
+            {
+                alias: 'override',
+                describe: 'overwrites existing files',
+                type: 'boolean'
             }
         )
         .help('h')
@@ -103,7 +111,7 @@ const buildCmd = function (args) {
                 alias: 'file',
                 demand: true,
                 default: 'seyfile.js',
-                describe: 'loads specified sey file',
+                describe: 'loads specified seyfile',
                 type: 'string'
             }
         )
@@ -123,7 +131,7 @@ const rebuildCmd = function (args) {
                 alias: 'file',
                 demand: true,
                 default: 'seyfile.js',
-                describe: 'loads specified sey file',
+                describe: 'loads specified seyfile',
                 type: 'string'
             }
         )
@@ -142,11 +150,11 @@ const completionCmd = function (args) {
 yargs
     .usage('Usage: $0 <command> [options]')
     .version(pkg.version)
-    .command('init', 'initializes a sey file', initCmd)
+    .command('init', 'initializes a seyfile', initCmd)
     .command('clean', 'cleans temporary files in working directory', cleanCmd)
     .command('self-check', 'checks sey\'s self integrity.', selfCheckCmd)
-    .command('build', 'starts build', buildCmd)
-    .command('rebuild', 'restarts build', rebuildCmd)
+    .command('build', 'starts a build', buildCmd)
+    .command('rebuild', 'starts over a build', rebuildCmd)
     .command('completion', 'generates a bash completion script', completionCmd)
     .demand(1, 'must provide a valid command')
     .alias('v', 'version')
@@ -154,6 +162,6 @@ yargs
     .alias('h', 'help')
     .example('$0 build', 'Start a build')
     // .completion('completion', function (current, argv) {
-    //     return [ 'init', 'clean', 'self-check', 'build' ];
+    //     return [ 'init', 'clean', 'self-check', 'build', 'rebuild' ];
     // })
     .argv;

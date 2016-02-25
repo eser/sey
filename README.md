@@ -32,9 +32,9 @@ in other words, sey...
 - has built-in tasks, which does not need extra maintenance cost due to expiration of concepts and methods. all you need is updating to keep up to date,
 - has declarative configuration which only needs the input of what user expect. say goodbye to planning directives such as copy, concat, etc.
 - supports partial building on changed files. it never starts over doing all tasks.
-- specialized for create bundles and building projects,
 - supports both configuration and API at the same time,
-- as fast as it can be.
+- is specialized for create bundles and building projects,
+- is as fast as it can be.
 
 ### Usage
 

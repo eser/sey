@@ -47,7 +47,17 @@ class fsManager {
     }
 
     static rmdir(pathstr) {
-        let list = fs.readdirSync(pathstr);
+        let list;
+
+        try {
+            list = fs.readdirSync(pathstr);
+        } catch (ex) {
+            if (ex.code === 'ENOENT') {
+                return;
+            }
+
+            throw ex;
+        }
 
         for (let item of list) {
             const filename = path.join(pathstr, item),

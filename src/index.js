@@ -1,6 +1,7 @@
 'use strict';
 
 const path = require('path'),
+    chalk = require('chalk'),
     fsManager = require('./utils/fsManager.js'),
     config = require('./config.js'),
     tasks = require('./tasks.js'),
@@ -16,13 +17,22 @@ class sey {
         this.workingPath = path.join(process.cwd(), '.sey');
     }
 
-    static initFile(file) {
+    static initFile(file, override) {
+        if (fsManager.exists(file) && !override) {
+            console.log(chalk.red('Aborted. File already exists:'), chalk.gray(file));
+            return;
+        }
+
         const content = fsManager.readFile(__dirname + '/../seyfile.sample.js');
         fsManager.writeFile(file, content);
+
+        console.log(chalk.white('File created:'), chalk.gray(file));
     }
 
     static clean() {
         fsManager.rmdir(this.workingPath);
+
+        console.log(chalk.white('Working path is cleaned.'));
     }
 
     static selfCheck() {
