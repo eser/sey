@@ -1,32 +1,54 @@
 # sey
 
-Simple javascript build tool with declarative configuration
+Simple javascript build tool with declarative configuration.
 
 
 ## Why sey
 
-As we know, there is grunt and gulp for running some tasks to make your web project production-ready. But they weren't satify my needs in development since they:
+As we know, there is grunt and gulp for running some tasks to make your web project production-ready. 
 
-- don't target node.js projects,
-- work with external components which needs extra maintenance due to expiration of concepts and methods,
-- have imperative configuration/api which needs detailed instruction input of what to do,
-- do all tasks by starting over everytime,
-- mostly need redudant disk i/o during tasks,
-- have no specialisation for bundling and building,
-- don't support mixing configuration file and api,
-- are slow,
+They also brought extra learning curve and maintenance cost for learning own configuration and packages with them.
 
-and sey,
+This is where sey comes into play and offers alternative build system:
 
-- does target node.js projects as well as web browser projects,
-- all tasks bundled internally. all you need is updating to keep up to date,
-- has declarative configuration which only needs the input of what user expect,
-- supports partial running of tasks on changed files,
+| Feature                 | sey          | Grunt        | Gulp         |
+| ----------------------- |:------------:|:------------:|:------------:|
+| Configuration Approach  | Descriptive  | Imperative   | Imperative   |
+| Configuration Type      | API and JSON | JSON         | API          |
+| Platform targeting      | node and web | Agnostic     | Agnostic     |
+| Incremental builds      | ✓            |              |              |
+| Built-in tasks          | ✓            |              |              |
+| No disk IO during tasks | ✓            |              |              |
+| No maintainance cost    | ✓            |              |              |
+
+plus:
+
+- has ability to target node.js projects as well as web browser projects,
+- has built-in tasks, which does not need extra maintenance cost due to expiration of concepts and methods. all you need is updating to keep up to date,
+- has declarative configuration which only needs the input of what user expect. say goodbye to planning directives such as copy, concat, etc.
+- supports partial building on changed files. it never starts over doing all tasks.
 - specialized for create bundles and building projects,
-- supports both configuration and api at the same time.
+- supports both configuration and api at the same time,
+- as fast as it can be.
 
+### Usage
 
-### Examples
+To Install:   
+`npm install -g sey`
+
+To create the seyfile in current directory:   
+`sey init`
+
+To edit seyfile created:   
+`vim seyfile.js` (or open **seyfile.js** with your favorite text editor)
+
+To build:   
+`sey build`
+
+To clean working directory:   
+`sey clean`
+
+### Configuration (seyfile) Examples
 
 Configuration Based:
 
@@ -85,7 +107,8 @@ sey.run(config);
 ### Todo List
 
 - Deploy Task
-- JSX, Browserify, TypeScript, CSSMin, JSMin Tasks
+- Watch Task (Refresh Friendliness)
+- JSX, Browserify, TypeScript, CSSMin, JSMin, Closure, PostCSS Tasks
 - Fancy output including line counts, lint and test results
 - Code optimizations
 

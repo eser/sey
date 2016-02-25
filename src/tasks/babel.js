@@ -8,18 +8,21 @@ class babel {
             ast: false,
             code: true,
             sourceMaps: false,
-            npmpath: __dirname,
+            // npmpath: __dirname,
 
-            // presets: ['es2015', 'stage-3'],
+            // presets: [
+            //    require('babel-preset-es2015'),
+            //    require('babel-preset-stage-3')
+            // ],
             plugins: [
-                'transform-es2015-destructuring',
-                'transform-es2015-function-name',
-                'transform-es2015-parameters',
-                'transform-es2015-sticky-regex',
-                'transform-es2015-unicode-regex',
-                'transform-es2015-modules-commonjs',
-                'transform-async-to-generator',
-                'transform-exponentiation-operator'
+                require('babel-plugin-transform-es2015-destructuring'),
+                require('babel-plugin-transform-es2015-function-name'),
+                require('babel-plugin-transform-es2015-parameters'),
+                require('babel-plugin-transform-es2015-sticky-regex'),
+                require('babel-plugin-transform-es2015-unicode-regex'),
+                require('babel-plugin-transform-es2015-modules-commonjs'),
+                require('babel-plugin-transform-async-to-generator'),
+                require('babel-plugin-transform-exponentiation-operator')
             ],
             ignore: ['bower_components/', 'node_modules/']
         };
