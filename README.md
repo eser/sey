@@ -21,7 +21,7 @@ This is where sey comes into play and offers alternative build system:
 | No disk IO during tasks | ✓            |              |              |
 | No maintainance cost    | ✓            |              |              |
 
-plus:
+in other words, sey...
 
 - has ability to target node.js projects as well as web browser projects,
 - has built-in tasks, which does not need extra maintenance cost due to expiration of concepts and methods. all you need is updating to keep up to date,
@@ -56,8 +56,7 @@ Configuration Based:
 let config = {
     main: {
         eslint: {
-            useEslintrc: false,
-            configFile: './etc/tasks/config/eslint.json'
+            useEslintrc: true
         }
 
         ops: [
@@ -86,7 +85,7 @@ API Based:
 ```js
 let config = new sey.config();
 
-config.bundle('main')
+config.bundle('scripts')
     .src('./src/**/*.js')
     .eolfix()
     .lint()
@@ -94,7 +93,7 @@ config.bundle('main')
     .dest('./dist/js/')
     .exec();
 
-config.bundle('main')
+config.bundle('styles')
     .src('./test/**/*.css')
     .less()
     .dest('./dist/css/')
@@ -117,8 +116,7 @@ See [GitHub Issues](https://github.com/eserozvataf/sey/issues).
 
 ### Requirements
 
-* Node (https://nodejs.org/)
-* NPM (https://npmjs.org)
+* node.js (https://nodejs.org/)
 
 
 ## License
