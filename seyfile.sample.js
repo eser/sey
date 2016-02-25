@@ -3,29 +3,22 @@
 let config = new sey.config({
     global: {
         babel: {
-
         },
 
         eslint: {
-            useEslintrc: true // ,
-            // configFile: './etc/tasks/config/eslint.json'
         },
 
         less: {
-            strictMath: true,
-            compress: false,
-            yuicompress: false,
-            optimization: 0
         }
     },
 
     main: {
         banner: [
             '/**',
-            ' * laroux.js',
+            ' * my package',
             ' *',
-            ' * @version v1.5.0',
-            ' * @link https://eserozvataf.github.io/laroux.js',
+            ' * @version v1.0.0',
+            ' * @link https://...',
             ' * @license Apache-2.0',
             ' */',
             ''
@@ -37,30 +30,27 @@ let config = new sey.config({
 
         ops: [
             {
-                src: ['./src/**/*.js'],
-                dest: './dist/',
+                src: './src/**/*.js',
+                dest: './dist/scripts/',
 
                 eolfix: true,
                 preprocess: true,
                 lint: true,
-                babel: true,
+                es6: true,
                 addheader: true
             },
             {
-                src: ['./etc/config/**/*.js'],
-                dest: './dist/config.js',
+                src: './src/**/*.less',
+                dest: './dist/styles/',
 
                 eolfix: true,
                 preprocess: true,
-                lint: true,
-                babel: true,
-                // concat: true,
+                less: true,
                 addheader: true
             },
             {
-                src: './test/**/*.js' // ,
-
-                // test: true
+                src: './test/*.js',
+                test: true
             }
         ]
     }

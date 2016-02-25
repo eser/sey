@@ -2,7 +2,7 @@
 
 const deepmerge = require('../utils/deepmerge.js');
 
-class closure {
+class optimize {
     async exec(runnerOp, files) {
         /*
         let options = {};
@@ -31,4 +31,4 @@ class closure {
     }
 }
 
-module.exports = closure;
+module.exports = optimize;

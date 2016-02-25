@@ -2,7 +2,7 @@
 
 const deepmerge = require('../utils/deepmerge.js');
 
-class babel {
+class es6 {
     async exec(runnerOp, files) {
         let options = {
             ast: false,
@@ -48,4 +48,4 @@ class babel {
     }
 }
 
-module.exports = babel;
+module.exports = es6;

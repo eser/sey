@@ -66,16 +66,16 @@ let config = {
 
         ops: [
             {
-                src: ['./src/**/*.js'],
-                dest: './dist/js/',
+                src: './src/**/*.js',
+                dest: './dist/scripts/',
 
                 eolfix: true,
                 lint: true,
-                babel: true
+                es6: true
             },
             {
-                src: './src/**/*.less',
-                dest: './dist/css/',
+                src: ['./src/**/*.less', './src/**/*.lss'],
+                dest: './dist/styles/',
                 less: true
             },
             {
@@ -98,14 +98,14 @@ config.bundle('main')
     .src('./src/**/*.js')
     .eolfix()
     .lint()
-    .babel()
-    .dest('./dist/js/')
+    .es6()
+    .dest('./dist/scripts/')
     .exec();
 
 config.bundle('main')
-    .src('./src/**/*.less')
+    .src(['./src/**/*.less', './src/**/*.lss'])
     .less()
-    .dest('./dist/css/')
+    .dest('./dist/styles/')
     .exec();
 
 config.bundle('main')
