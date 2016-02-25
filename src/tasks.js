@@ -30,12 +30,12 @@ class tasks {
         configBundle.addTask(name);
     }
 
-    exec(name, runnerOp, modifiedFiles) {
+    async exec(name, runnerOp, modifiedFiles) {
         if (this.items[name] === undefined) {
             throw Error('undefined task - ' + name);
         }
 
-        return this.items[name].exec(runnerOp, modifiedFiles);
+        return await this.items[name].exec(runnerOp, modifiedFiles);
     }
 }
 

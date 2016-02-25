@@ -3,7 +3,7 @@
 const deepmerge = require('../utils/deepmerge.js');
 
 class babel {
-    exec(runnerOp, files) {
+    async exec(runnerOp, files) {
         let options = {
             ast: false,
             code: true,

@@ -3,7 +3,7 @@
 const deepmerge = require('../utils/deepmerge.js');
 
 class preprocess {
-    exec(runnerOp, files) {
+    async exec(runnerOp, files) {
         let vars = process.env;
         if (runnerOp.config.preprocessVars !== undefined) {
             deepmerge(vars, runnerOp.config.preprocessVars);

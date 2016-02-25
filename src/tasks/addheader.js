@@ -1,7 +1,7 @@
 'use strict';
 
 class addheader {
-    exec(runnerOp, files) {
+    async exec(runnerOp, files) {
         if (runnerOp.config.banner === undefined) {
             return;
         }

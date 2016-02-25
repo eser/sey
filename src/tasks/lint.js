@@ -3,7 +3,7 @@
 const deepmerge = require('../utils/deepmerge.js');
 
 class lint {
-    exec(runnerOp, files) {
+    async exec(runnerOp, files) {
         let options = {};
         if (runnerOp.config.eslint !== undefined) {
             deepmerge(options, runnerOp.config.eslint);

@@ -23,25 +23,25 @@ class runner {
         return config;
     }
 
-    runBundle(name) {
+    async runBundle(name) {
         const config = this.getBundleConfig(name);
 
         console.log(chalk.green('bundle:'), chalk.bold.white(name));
         if (config.ops !== undefined) {
             for (let item of config.ops) {
                 const op = new runnerOp(name, item, config);
-                op.start();
+                await op.start();
             }
         }
     }
 
-    run() {
+    async run() {
         for (let bundle in this.config.content) {
             if (bundle === 'global') {
                 continue;
             }
 
-            this.runBundle(bundle);
+            await this.runBundle(bundle);
         }
     }
 }

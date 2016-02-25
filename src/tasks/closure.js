@@ -3,7 +3,7 @@
 const deepmerge = require('../utils/deepmerge.js');
 
 class closure {
-    exec(runnerOp, files) {
+    async exec(runnerOp, files) {
         /*
         let options = {};
         if (runnerOp.config.closure !== undefined) {

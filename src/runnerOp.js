@@ -22,7 +22,7 @@ class runnerOp {
         }
     }
 
-    startOp(task) {
+    async startOp(task) {
         let modifiedFiles = [];
 
         console.log(chalk.yellow('  task:'), chalk.white(task));
@@ -37,15 +37,15 @@ class runnerOp {
         }
         console.log(chalk.gray('    done.'));
 
-        sey.tasks.exec(task, this, modifiedFiles);
+        await sey.tasks.exec(task, this, modifiedFiles);
     }
 
-    start() {
+    async start() {
         this.loadFiles();
 
         for (let task in this.op) {
             if (task !== 'src' && task !== 'dest') {
-                this.startOp(task);
+                await this.startOp(task);
             }
         }
 

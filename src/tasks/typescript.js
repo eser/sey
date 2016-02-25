@@ -3,7 +3,7 @@
 const deepmerge = require('../utils/deepmerge.js');
 
 class typescript {
-    exec(runnerOp, files) {
+    async exec(runnerOp, files) {
         let options = {};
         if (runnerOp.config.typescript !== undefined) {
             deepmerge(options, runnerOp.config.typescript);

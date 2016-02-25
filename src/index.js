@@ -29,7 +29,7 @@ class sey {
         return [];
     }
 
-    static run(configInstance) {
+    static async run(configInstance) {
         let currentConfig;
 
         if (configInstance instanceof config) {
@@ -39,7 +39,7 @@ class sey {
         }
 
         const currentRunner = new runner(currentConfig);
-        currentRunner.run();
+        await currentRunner.run();
 
         return true;
     }
