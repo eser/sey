@@ -17,8 +17,9 @@ class less {
             }
 
             options.filename = file.file.path;
-            let result = this._lessLib.parse(options, content);
+            let result = await this._lessLib.render(content, options);
 
+            file.setExtension('css');
             file.setContent(result.css);
         }
     }

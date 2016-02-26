@@ -2,6 +2,7 @@
 'use strict';
 
 const crc = require('crc'),
+    pathinfo = require('./utils/pathinfo.js'),
     fsManager = require('./utils/fsManager.js');
 
 class runnerOpFile {
@@ -58,6 +59,22 @@ class runnerOpFile {
         }
 
         return this.content;
+    }
+
+    setFilename(filename) {
+        let dirname = pathinfo.dirname(this.file.path);
+
+        this.file.path = dirname + '/' + filename;
+    }
+
+    setExtension(extension) {
+        let dirname = pathinfo.dirname(this.file.path),
+            basename = pathinfo.basename(this.file.path);
+
+        this.file.path = dirname + '/' + basename;
+        if (extension) {
+            this.file.path += '.' + extension;
+        }
     }
 
     setContent(content) {
