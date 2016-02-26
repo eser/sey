@@ -1,10 +1,11 @@
 {
   "name": "sey",
-  "version": "0.1.9",
-  "description": "Simple javascript build tool with declarative configuration",
+  "version": "0.1.10",
+  "description": "Simple JavaScript build tool with declarative and easy configuration",
   "keywords": [
     "tasks",
-    "taskmaster"
+    "taskmaster",
+    "build"
   ],
   "engines": {
     "node": ">=5.2.0"

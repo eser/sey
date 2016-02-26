@@ -13,6 +13,9 @@ let config = new sey.config({
     },
 
     main: {
+        target: 'node',
+        standard: 2016,
+
         banner: [
             '/**',
             ' * my package',
@@ -36,7 +39,7 @@ let config = new sey.config({
                 eolfix: true,
                 preprocess: true,
                 lint: true,
-                es6: true,
+                transpile: true,
                 addheader: true
             },
             {

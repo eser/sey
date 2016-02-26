@@ -2,7 +2,8 @@
 
 const chalk = require('chalk'),
     deepmerge = require('./utils/deepmerge.js'),
-    runnerOp = require('./runnerOp.js');
+    runnerOp = require('./runnerOp.js'),
+    taskException = require('./taskException.js');
 
 class runner {
     constructor(config) {
@@ -27,11 +28,19 @@ class runner {
         const config = this.getBundleConfig(name);
 
         console.log(chalk.green('bundle:'), chalk.bold.white(name));
-        if (config.ops !== undefined) {
-            for (let key in config.ops) {
-                console.log(chalk.green('  op #' + key));
-                const op = new runnerOp(name, config.ops[key], config);
-                await op.start();
+        try {
+            if (config.ops !== undefined) {
+                for (let key in config.ops) {
+                    console.log(chalk.green('  op #' + key));
+                    const op = new runnerOp(name, config.ops[key], config);
+                    await op.start();
+                }
+            }
+        } catch (ex) {
+            if (ex instanceof taskException) {
+                console.log(ex.export());
+            } else {
+                console.log(ex);
             }
         }
     }

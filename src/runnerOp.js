@@ -26,6 +26,12 @@ class runnerOp {
         let modifiedFiles = [];
 
         console.log(chalk.yellow('    task:'), chalk.white(task));
+
+        if (!(task in sey.tasks.items)) {
+            console.log(chalk.red('      no such task named ' + task));
+            return;
+        }
+
         for (let opFile of this.opFiles) {
             opFile.addHash(task);
             if (opFile.cached) {
