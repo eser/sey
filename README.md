@@ -60,9 +60,19 @@ Configuration Based:
 ```js
 let config = {
     main: {
+        target: 'node',
+        standard: 2016,
+
         eslint: {
-            useEslintrc: true
-        }
+            quotes: [ 2, 'single' ]
+        },
+
+        banner: [
+            '/**',
+            ' * my package',
+            ' */',
+            ''
+        ].join('\n'),
 
         ops: [
             {
@@ -70,13 +80,19 @@ let config = {
                 dest: './dist/scripts/',
 
                 eolfix: true,
+                preprocess: true,
                 lint: true,
-                es6: true
+                transpile: true,
+                addheader: true
             },
             {
                 src: ['./src/**/*.less', './src/**/*.lss'],
                 dest: './dist/styles/',
-                less: true
+
+                eolfix: true,
+                preprocess: true,
+                less: true,
+                addheader: true
             },
             {
                 src: './test/*.js',
@@ -97,14 +113,19 @@ let config = new sey.config();
 config.bundle('main')
     .src('./src/**/*.js')
     .eolfix()
+    .preprocess()
     .lint()
-    .es6()
+    .transpile()
+    .addheader()
     .dest('./dist/scripts/')
     .exec();
 
 config.bundle('main')
     .src(['./src/**/*.less', './src/**/*.lss'])
+    .eolfix()
+    .preprocess()
     .less()
+    .addheader()
     .dest('./dist/styles/')
     .exec();
 
