@@ -9,6 +9,8 @@ Simple JavaScript build tool with declarative and easy configuration. It also ha
 
 ![Sey](docs/sey-effect.png)
 
+Built-in tasks empowers sey in order to achieve unique features like **dead code elimination** that no other build tool offered yet.
+
 
 ## Why sey
 
