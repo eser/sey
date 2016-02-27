@@ -7,6 +7,8 @@
 
 Simple JavaScript build tool with declarative and easy configuration. It also has incremental build support which only rebuilds changed files to pace up the build process.
 
+![Sey](docs/sey-effect.png)
+
 
 ## Why sey
 
