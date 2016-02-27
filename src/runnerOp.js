@@ -59,7 +59,7 @@ class runnerOp {
         this.loadFiles();
 
         for (let task in this.op) {
-            if (task !== 'src' && task !== 'dest') {
+            if (task !== 'src' && task !== 'dest' && this.op[task] !== false) {
                 await this.startOp(task);
             }
         }

@@ -38,9 +38,10 @@ let config = new sey.config({
 
                 eolfix: true,
                 preprocess: true,
-                lint: true,
+                jslint: true,
+                typescript: false,
                 transpile: true,
-                optimize: true,
+                jsoptimize: true,
                 addheader: true
             },
             {

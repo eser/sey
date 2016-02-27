@@ -3,7 +3,7 @@
 const deepmerge = require('../utils/deepmerge.js'),
     taskException = require('../taskException.js');
 
-class lint {
+class jslint {
     async exec(runnerOp, files) {
         let options = {
             env: {
@@ -71,4 +71,4 @@ class lint {
     }
 }
 
-module.exports = lint;
+module.exports = jslint;

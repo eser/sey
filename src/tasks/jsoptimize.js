@@ -4,7 +4,7 @@ const stream = require('stream'),
     deepmerge = require('../utils/deepmerge.js'),
     fsManager = require('../utils/fsManager.js');
 
-class optimize {
+class jsoptimize {
     execSingle(file, options) {
         return new Promise((resolve, reject) => {
             const content = file.getContent();
@@ -62,4 +62,4 @@ class optimize {
     }
 }
 
-module.exports = optimize;
+module.exports = jsoptimize;

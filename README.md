@@ -36,6 +36,19 @@ in other words, sey...
 - is specialized for create bundles and building projects,
 - is as fast as it can be.
 
+
+### Built-in Tasks
+
+* addheader: adds file header to each file
+* eolfix: replaces various EOL types with unix standard
+* jslint: ESLint JavaScript Linter
+* jsoptimize: advanced code optimizations with Google Closure Compiler
+* less: LESS compiler
+* preprocess: Code Preprocessor for macro support
+* transpile: Transpiles code to specified standard
+* typescript: Validates code with Microsoft TypeScript Compiler
+
+
 ### Usage
 
 To Install:   
@@ -52,6 +65,7 @@ To build:
 
 To clean working directory:   
 `sey clean`
+
 
 ### Configuration (seyfile) Examples
 
@@ -81,8 +95,9 @@ let config = {
 
                 eolfix: true,
                 preprocess: true,
-                lint: true,
+                jslint: true,
                 transpile: true,
+                jsoptimize: true,
                 addheader: true
             },
             {
@@ -114,8 +129,9 @@ config.bundle('main')
     .src('./src/**/*.js')
     .eolfix()
     .preprocess()
-    .lint()
+    .jslint()
     .transpile()
+    .jsoptimize()
     .addheader()
     .dest('./dist/scripts/')
     .exec();
@@ -142,10 +158,9 @@ sey.run(config);
 
 - Deploy Task
 - Watch Task (Refresh Friendliness)
-- JSX, Browserify, TypeScript, CSSMin, JSMin, Closure, PostCSS Tasks
+- JSX, Browserify, CSSMin, JSMin, PostCSS Tasks
 - Sourcemaps
 - Fancy output including line counts, lint and test results
-- Code optimizations
 
 See [GitHub Issues](https://github.com/eserozvataf/sey/issues).
 
