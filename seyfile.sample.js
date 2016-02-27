@@ -40,6 +40,7 @@ let config = new sey.config({
                 preprocess: true,
                 lint: true,
                 transpile: true,
+                optimize: true,
                 addheader: true
             },
             {

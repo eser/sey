@@ -46,6 +46,15 @@ class runnerOp {
         await sey.tasks.exec(task, this, modifiedFiles);
     }
 
+    outputFiles(dest) {
+        const destPath = dest + '/';
+
+        for (let opFile of this.opFiles) {
+            const filePath = destPath + opFile.file.path;
+            fsManager.writeFile(filePath, opFile.getContent());
+        }
+    }
+
     async start() {
         this.loadFiles();
 
@@ -56,12 +65,7 @@ class runnerOp {
         }
 
         if (this.op.dest !== undefined) {
-            const destPath = this.op.dest + '/';
-
-            for (let opFile of this.opFiles) {
-                const filePath = destPath + opFile.file.path;
-                fsManager.writeFile(filePath, opFile.getContent());
-            }
+            this.outputFiles(this.op.dest);
         }
     }
 
