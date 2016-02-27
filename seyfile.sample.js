@@ -51,6 +51,8 @@ let config = new sey.config({
                 eolfix: true,
                 preprocess: true,
                 less: true,
+                comb: true,
+                cssminify: true,
                 addheader: true
             },
             {

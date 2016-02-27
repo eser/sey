@@ -44,6 +44,8 @@ in other words, sey...
 ### Built-in Tasks
 
 * addheader: adds file header to each file
+* comb: css formatter
+* cssminify: css minification
 * eolfix: replaces various EOL types with unix standard
 * jslint: ESLint JavaScript Linter
 * jsoptimize: advanced code optimizations with Google Closure Compiler

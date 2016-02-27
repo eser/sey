@@ -36,7 +36,8 @@ class jsoptimize {
 
     async exec(runnerOp, files) {
         let options = {
-            compilation_level: 'ADVANCED_OPTIMIZATIONS'
+            compilation_level: 'ADVANCED_OPTIMIZATIONS' // ,
+            // formatting: 'PRETTY_PRINT'
         };
 
         if (runnerOp.config.standard >= 2015) {
