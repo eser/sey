@@ -1,6 +1,7 @@
 'use strict';
 
-const fs = require('fs'),
+const os = require('os'),
+    fs = require('fs'),
     path = require('path');
 
 class fsManager {
@@ -111,6 +112,19 @@ class fsManager {
                 }
             }
         }
+    }
+
+    static tempFile(name, content, callback) {
+        const tmpFile = path.join(os.tmpdir(), name),
+            cleanup = () => { fs.unlinkSync(tmpFile) };
+
+        fs.writeFileSync(tmpFile, content);
+        // try {
+        callback(tmpFile, cleanup);
+        // }
+        // finally {
+        //     fs.unlinkSync(tmpFile);
+        // }
     }
 }
 
