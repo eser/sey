@@ -50,8 +50,10 @@ in other words, sey...
 * eolfix: replaces various EOL types with unix standard
 * jslint: ESLint JavaScript Linter
 * jsoptimize: advanced code optimizations with Google Closure Compiler
+* jsx: converts React JSX files into browser compatible JavaScript
 * less: LESS compiler
 * preprocess: Code Preprocessor for macro support
+* sass: SASS compiler
 * transpile: Transpiles code to specified standard
 * typescript: Validates code with Microsoft TypeScript Compiler
 
@@ -102,6 +104,7 @@ let config = {
 
                 eolfix: true,
                 preprocess: true,
+                jsx: true,
                 jslint: true,
                 transpile: true,
                 jsoptimize: true,
@@ -138,6 +141,7 @@ config.bundle('main')
     .src('./src/**/*.js')
     .eolfix()
     .preprocess()
+    .jsx()
     .jslint()
     .transpile()
     .jsoptimize()
@@ -169,7 +173,7 @@ sey.run(config);
 
 - Deploy Task
 - Watch Task (Refresh Friendliness)
-- JSX, Browserify, CSSMin, JSMin, PostCSS Tasks
+- Browserify, PostCSS Tasks
 - Sourcemaps
 - Fancy output including line counts, lint and test results
 
