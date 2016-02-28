@@ -5,7 +5,7 @@ const stream = require('stream'),
     fsManager = require('../utils/fsManager.js');
 
 class jsoptimize {
-    execSingle(file, options) {
+    execSingle(value, file, options) {
         return new Promise((resolve, reject) => {
             const content = file.getContent();
 
@@ -34,7 +34,7 @@ class jsoptimize {
         });
     }
 
-    async exec(runnerOp, files) {
+    async exec(value, runnerOp, files) {
         let options = {
             compilation_level: 'ADVANCED_OPTIMIZATIONS' // ,
             // formatting: 'PRETTY_PRINT'
@@ -58,7 +58,7 @@ class jsoptimize {
                 this._closureLib = require('closurecompiler');
             }
 
-            await this.execSingle(file, options);
+            await this.execSingle(value, file, options);
         }
     }
 }

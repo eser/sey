@@ -22,7 +22,7 @@ class runnerOp {
         }
     }
 
-    async startOp(task) {
+    async startOp(task, value) {
         let modifiedFiles = [];
 
         console.log(chalk.yellow('    task:'), chalk.white(task));
@@ -32,8 +32,10 @@ class runnerOp {
             return;
         }
 
+        const valueSerialized = JSON.stringify(value);
         for (let opFile of this.opFiles) {
             opFile.addHash(task);
+            opFile.addHash(valueSerialized);
             if (opFile.cached) {
                 continue;
             }
@@ -43,7 +45,7 @@ class runnerOp {
         }
         console.log(chalk.gray('      done.'));
 
-        await sey.tasks.exec(task, this, modifiedFiles);
+        await sey.tasks.exec(task, value, this, modifiedFiles);
     }
 
     outputFiles(dest) {
@@ -60,7 +62,7 @@ class runnerOp {
 
         for (let task in this.op) {
             if (task !== 'src' && task !== 'dest' && this.op[task] !== false) {
-                await this.startOp(task);
+                await this.startOp(task, this.op[task]);
             }
         }
 

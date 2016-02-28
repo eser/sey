@@ -3,7 +3,7 @@
 const deepmerge = require('../utils/deepmerge.js');
 
 class comb {
-    async exec(runnerOp, files) {
+    async exec(value, runnerOp, files) {
         let options = {
             'remove-empty-rulesets': true,
             'always-semicolon': true,

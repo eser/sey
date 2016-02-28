@@ -3,7 +3,7 @@
 const deepmerge = require('../utils/deepmerge.js');
 
 class cssminify {
-    exec(runnerOp, files) {
+    exec(value, runnerOp, files) {
         return new Promise((resolve, reject) => {
             let options = {
                 fromString: true

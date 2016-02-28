@@ -4,7 +4,7 @@ const deepmerge = require('../utils/deepmerge.js'),
     taskException = require('../taskException.js');
 
 class jslint {
-    async exec(runnerOp, files) {
+    async exec(value, runnerOp, files) {
         let options = {
             env: {
                 es6: (runnerOp.config.standard >= 2015),

@@ -9,8 +9,8 @@ class configBundle {
     }
 
     static addTask(name) {
-        configBundle.prototype[name] = function () {
-            return this.op(name);
+        configBundle.prototype[name] = function (value) {
+            return this.op(name, value);
         };
     }
 
@@ -47,8 +47,8 @@ class configBundle {
         return this;
     }
 
-    op(name) {
-        this._op[name] = true;
+    op(name, value = true) {
+        this._op[name] = value;
         return this;
     }
 

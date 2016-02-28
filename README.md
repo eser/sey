@@ -113,6 +113,8 @@ let config = {
                 eolfix: true,
                 preprocess: true,
                 less: true,
+                concat: 'style.css',
+                cssminify: true,
                 addheader: true
             },
             {
@@ -147,6 +149,8 @@ config.bundle('main')
     .eolfix()
     .preprocess()
     .less()
+    .concat('style.css')
+    .cssminify()
     .addheader()
     .dest('./dist/styles/')
     .exec();
