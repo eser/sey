@@ -45,6 +45,7 @@ in other words, sey...
 
 * addheader: adds file header to each file
 * comb: css formatter
+* concat: concats all content of selected files
 * cssminify: css minification
 * eolfix: replaces various EOL types with unix standard
 * jslint: ESLint JavaScript Linter
