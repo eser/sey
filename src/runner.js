@@ -45,14 +45,28 @@ class runner {
         }
     }
 
-    async run() {
+    async run(options) {
+        const bundleOnly = (options.bundle !== undefined);
+
+        let bundleCount = 0;
+
         for (let bundle in this.config.content) {
             if (bundle === 'global') {
                 continue;
             }
+            if (bundleOnly && options.bundle !== bundle) {
+                continue;
+            }
 
+            bundleCount++;
             await this.runBundle(bundle);
         }
+
+        if (bundleOnly && bundleCount === 0) {
+            console.log(chalk.red('no such bundle named', options.bundle));
+        }
+
+        return (bundleCount > 0);
     }
 }
 

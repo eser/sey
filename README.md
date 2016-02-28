@@ -9,7 +9,7 @@ Simple JavaScript build tool with declarative and easy configuration. It also ha
 
 ![Sey](docs/sey-effect.png)
 
-Built-in tasks empowers sey in order to achieve unique features like **dead code elimination** that no other build tool offered yet.
+Built-in tasks empower sey in order to achieve unique features like **dead code elimination** that no other build tool offered yet.
 
 
 ## Why sey
@@ -43,19 +43,19 @@ in other words, sey...
 
 ### Built-in Tasks
 
-* addheader: adds file header to each file
-* comb: css formatter
-* concat: concats all content of selected files
-* cssminify: css minification
-* eolfix: replaces various EOL types with unix standard
-* jslint: ESLint JavaScript Linter
-* jsoptimize: advanced code optimizations with Google Closure Compiler
-* jsx: converts React JSX files into browser compatible JavaScript
-* less: LESS compiler
-* preprocess: Code Preprocessor for macro support
-* sass: SASS compiler
-* transpile: Transpiles code to specified standard
-* typescript: Validates code with Microsoft TypeScript Compiler
+* **addheader:** adds file header to each file
+* **comb:** css formatter
+* **concat:** concats all content of selected files
+* **cssminify:** css minification
+* **eolfix:** replaces various EOL types with unix standard
+* **jslint:** ESLint JavaScript Linter
+* **jsoptimize:** advanced code optimizations with Google Closure Compiler
+* **jsx:** converts React JSX files into browser compatible JavaScript
+* **less:** LESS compiler
+* **preprocess:** Code Preprocessor for macro support
+* **sass:** SASS compiler
+* **transpile:** Transpiles code to specified standard
+* **typescript:** Validates code with Microsoft TypeScript Compiler
 
 
 ### Usage

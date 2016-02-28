@@ -10,11 +10,16 @@ const path = require('path'),
 class sey {
     static preload() {
         this.config = config;
+        this.options = {};
 
         this.tasks = new tasks();
         this.tasks.load();
 
         this.workingPath = path.join(process.cwd(), '.sey');
+    }
+
+    static setOptions(options) {
+        this.options = options;
     }
 
     static initFile(file, override) {
@@ -49,9 +54,8 @@ class sey {
         }
 
         const currentRunner = new runner(currentConfig);
-        await currentRunner.run();
 
-        return true;
+        return await currentRunner.run(this.options);
     }
 }
 

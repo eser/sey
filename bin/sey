@@ -98,7 +98,14 @@ const selfCheckCmd = function (args) {
 const buildCmdR = function (argv) {
     const seyfile = locateSeyFile(argv.f);
 
+    let options = {};
+    if (argv._.length >= 2) {
+        options.bundle = argv._[1];
+    }
+
     global.sey = sey;
+    global.sey.setOptions(options);
+
     require(seyfile);
 };
 
