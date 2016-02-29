@@ -200,10 +200,12 @@ Apache 2.0, for further details, please see [LICENSE](LICENSE) file
 
 See [contributors.md](contributors.md)
 
-It is publicly open for any contribution. Bugfixes and suggestions are welcome.
+It is publicly open for any contribution. Bugfixes, new features and extra modules are welcome.
 
-* Fork the repo, push your changes to your fork, and submit a pull request.
-* If something does not work, please report it using GitHub issues.
+* To contribute to code: Fork the repo, push your changes to your fork, and submit a pull request.
+* To report a bug: If something does not work, please report it using GitHub issues.
+* To support: [![Donate](https://img.shields.io/gratipay/eserozvataf.svg)](https://gratipay.com/eserozvataf/)
+
 
 [npm-image]: https://img.shields.io/npm/v/sey.svg?style=flat-square
 [npm-url]: https://www.npmjs.com/package/sey
