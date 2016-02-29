@@ -38,8 +38,8 @@ let config = new sey.config({
 
                 eolfix: true,
                 preprocess: true,
-                jsx: false,
-                typescript: false,
+                // jsx: true,
+                // typescript: true,
                 jslint: true,
                 transpile: true,
                 jsoptimize: true,
@@ -52,6 +52,7 @@ let config = new sey.config({
                 eolfix: true,
                 preprocess: true,
                 less: true,
+                // sass: true,
                 concat: 'style.css',
                 comb: true,
                 cssminify: true,

@@ -66,11 +66,17 @@ To Install:
 To create the seyfile in current directory:   
 `sey init`
 
+To create the seyfile (with API-type configuration) in current directory:   
+`sey init --api`
+
 To edit seyfile created:   
 `vim seyfile.js` (or open **seyfile.js** with your favorite text editor)
 
 To build:   
 `sey build`
+
+To build single bundle named 'main':   
+`sey build main`
 
 To clean working directory:   
 `sey clean`

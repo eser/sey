@@ -1,5 +1,7 @@
 'use strict';
 
+const deepmerge = require('./utils/deepmerge.js');
+
 class configBundle {
     constructor(owner, name) {
         this.owner = owner;
@@ -12,6 +14,35 @@ class configBundle {
         configBundle.prototype[name] = function (value) {
             return this.op(name, value);
         };
+    }
+
+    getConfigNode() {
+        if (!(this.name in this.owner.content)) {
+            this.owner.content[this.name] = {};
+        }
+
+        return this.owner.content[this.name];
+    }
+
+    setTarget(target) {
+        let configNode = this.getConfigNode();
+        configNode.target = target;
+
+        return this;
+    }
+
+    setStandard(standard) {
+        let configNode = this.getConfigNode();
+        configNode.standard = standard;
+
+        return this;
+    }
+
+    set(options) {
+        let configNode = this.getConfigNode();
+        deepmerge(configNode, options);
+
+        return this;
     }
 
     reset() {
@@ -53,11 +84,8 @@ class configBundle {
     }
 
     exec() {
-        if (!(this.name in this.owner.content)) {
-            this.owner.content[this.name] = {};
-        }
+        let configNode = this.getConfigNode();
 
-        const configNode = this.owner.content[this.name];
         if (!('ops' in configNode)) {
             configNode.ops = [];
         }

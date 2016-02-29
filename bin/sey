@@ -36,7 +36,7 @@ const locateSeyFile = function (file) {
 
 const initCmdR = function (argv) {
     const seyfile = locateSeyFile(argv.f);
-    sey.initFile(seyfile, argv.o);
+    sey.initFile(seyfile, argv.a, argv.o);
 };
 
 const initCmd = function (args) {
@@ -50,6 +50,14 @@ const initCmd = function (args) {
                 default: 'seyfile.js',
                 describe: 'loads specified seyfile',
                 type: 'string'
+            }
+        )
+        .option(
+            'a',
+            {
+                alias: 'api',
+                describe: 'prefer api template',
+                type: 'boolean'
             }
         )
         .option(
