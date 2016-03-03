@@ -31,9 +31,13 @@ let config = new sey.config({
             BUNDLE: 'main'
         },
 
+        clean: {
+            beforeBuild: './dist'
+        },
+
         ops: [
             {
-                src: './src/**/*.js',
+                src: ['./src/**/*.js', './src/**/*.ts'],
                 dest: './dist/scripts/',
 
                 eolfix: true,
@@ -46,7 +50,7 @@ let config = new sey.config({
                 addheader: true
             },
             {
-                src: './src/**/*.less',
+                src: ['./src/**/*.css', './src/**/*.less'],
                 dest: './dist/styles/',
 
                 eolfix: true,

@@ -2,6 +2,7 @@
 
 const chalk = require('chalk'),
     deepmerge = require('./utils/deepmerge.js'),
+    fsManager = require('./utils/fsManager.js'),
     runnerOp = require('./runnerOp.js'),
     taskException = require('./taskException.js');
 
@@ -29,6 +30,17 @@ class runner {
 
         console.log(chalk.green('bundle:'), chalk.bold.white(name));
         try {
+            if (config.clean.beforeBuild !== undefined) {
+                const pathArray = (config.clean.beforeBuild.constructor === Array) ?
+                    config.clean.beforeBuild :
+                    [config.clean.beforeBuild];
+
+                for (let path of pathArray) {
+                    console.log(chalk.gray('  cleaning', path));
+                    fsManager.rmdir(path);
+                }
+            }
+
             if (config.ops !== undefined) {
                 for (let key in config.ops) {
                     console.log(chalk.green('  op #' + key));

@@ -31,11 +31,15 @@ config.bundle('main')
 
         preprocessVars: {
             BUNDLE: 'main'
+        },
+
+        clean: {
+            beforeBuild: './dist'
         }
     });
 
 config.bundle('main')
-    .src('./src/**/*.js')
+    .src(['./src/**/*.js', './src/**/*.ts'])
     .eolfix()
     .preprocess()
     // .jsx()
@@ -48,7 +52,7 @@ config.bundle('main')
     .exec();
 
 config.bundle('main')
-    .src('./src/**/*.less')
+    .src(['./src/**/*.css', './src/**/*.less'])
     .eolfix()
     .preprocess()
     .less()

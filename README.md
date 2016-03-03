@@ -53,6 +53,7 @@ in other words, sey...
 * **jsx:** converts React JSX files into browser compatible JavaScript
 * **less:** LESS compiler
 * **preprocess:** Code Preprocessor for macro support
+* **renameExtension:** Renames extensions of files
 * **sass:** SASS compiler
 * **transpile:** Transpiles code to specified standard
 * **typescript:** Validates code with Microsoft TypeScript Compiler
