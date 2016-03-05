@@ -30,7 +30,7 @@ class runner {
 
         console.log(chalk.green('bundle:'), chalk.bold.white(name));
         try {
-            if (config.clean.beforeBuild !== undefined) {
+            if (config.clean !== undefined && config.clean.beforeBuild !== undefined) {
                 const pathArray = (config.clean.beforeBuild.constructor === Array) ?
                     config.clean.beforeBuild :
                     [config.clean.beforeBuild];

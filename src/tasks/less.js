@@ -3,6 +3,18 @@
 const deepmerge = require('../utils/deepmerge.js');
 
 class less {
+    info() {
+        return [
+            {
+                phase: 'compile',
+                formats: 'less',
+                op: 'transpile',
+                weight: 0.5,
+                method: 'exec'
+            }
+        ];
+    }
+
     async exec(value, runnerOp, files) {
         let options = {};
         if (runnerOp.config.less !== undefined) {

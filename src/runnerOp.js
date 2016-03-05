@@ -13,6 +13,32 @@ class runnerOp {
         this.config = config;
     }
 
+    getTarget() {
+        return this.config.target || 'node';
+    }
+
+    isTargeting(target) {
+        if ((this.config.target === undefined && target === 'node') ||
+            (this.config.target === target)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    getStandard() {
+        return this.config.standard || 2016;
+    }
+
+    isStandard(standard) {
+        if ((this.config.standard === undefined && standard >= 2016) ||
+            (this.config.standard >= standard)) {
+            return true;
+        }
+
+        return false;
+    }
+
     loadFiles() {
         const files = globManager.glob(this.op.src);
 

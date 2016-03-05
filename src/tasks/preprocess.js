@@ -3,8 +3,22 @@
 const deepmerge = require('../utils/deepmerge.js');
 
 class preprocess {
+    info() {
+        return [
+            {
+                phase: 'preprocess',
+                formats: '*',
+                op: 'preprocess',
+                weight: 0.5,
+                method: 'exec'
+            }
+        ];
+    }
+
     async exec(value, runnerOp, files) {
         let vars = process.env;
+        vars.BUNDLE = runnerOp.bundleName;
+        vars.ENV = runnerOp.getTarget();
         if (runnerOp.config.preprocessVars !== undefined) {
             deepmerge(vars, runnerOp.config.preprocessVars);
         }
@@ -16,7 +30,7 @@ class preprocess {
                 this._preprocessLib = require('preprocess');
             }
 
-            const result = this._preprocessLib.preprocess(content, vars);
+            const result = this._preprocessLib.preprocess(content, vars/* , { type: 'js' } */);
 
             file.setContent(result);
         }

@@ -5,6 +5,18 @@ const // stream = require('stream'),
     fsManager = require('../utils/fsManager.js');
 
 class jsoptimize {
+    info() {
+        return [
+            {
+                phase: 'optimization',
+                formats: 'js',
+                op: 'optimize',
+                weight: 0.5,
+                method: 'exec'
+            }
+        ];
+    }
+
     execSingle(value, file, options) {
         return new Promise((resolve, reject) => {
             const content = file.getContent();
@@ -40,11 +52,11 @@ class jsoptimize {
             // formatting: 'PRETTY_PRINT'
         };
 
-        if (runnerOp.config.standard >= 2015) {
+        if (runnerOp.isStandard(2015)) {
             options.language_in = 'ES6';
         }
 
-        if (runnerOp.config.standard >= 2016) {
+        if (runnerOp.isStandard(2016)) {
             // TODO will be replaced with es2016
             options.language_in = 'ES6';
         }

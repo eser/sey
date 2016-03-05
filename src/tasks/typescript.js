@@ -3,6 +3,18 @@
 const deepmerge = require('../utils/deepmerge.js');
 
 class typescript {
+    info() {
+        return [
+            {
+                phase: 'compile',
+                formats: 'ts',
+                op: 'typescript',
+                weight: 0.5,
+                method: 'exec'
+            }
+        ];
+    }
+
     async exec(value, runnerOp, files) {
         let options = {
             // isolatedModules: true,
@@ -11,11 +23,11 @@ class typescript {
             allowNonTsExtensions: true
         };
 
-        if (runnerOp.config.standard >= 2015) {
+        if (runnerOp.isStandard(2015)) {
             options.target = 'ES6';
         }
 
-        if (runnerOp.config.standard >= 2016) {
+        if (runnerOp.isStandard(2016)) {
             options.experimentalAsyncFunctions = true;
         }
 
