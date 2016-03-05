@@ -6,9 +6,9 @@ class typescript {
     async exec(value, runnerOp, files) {
         let options = {
             // isolatedModules: true,
-            allowNonTsExtensions: true,
             // noLib: true,
-            // noResolve: true
+            // noResolve: true,
+            allowNonTsExtensions: true
         };
 
         if (runnerOp.config.standard >= 2015) {

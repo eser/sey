@@ -46,7 +46,8 @@ let config = new sey.config({
                 // typescript: true,
                 jslint: true,
                 transpile: true,
-                jsoptimize: true,
+                // jsoptimize: true,
+                // browserify: { name: 'browserified.js', entry: './index.js' },
                 addheader: true
             },
             {

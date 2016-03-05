@@ -116,7 +116,7 @@ class fsManager {
 
     static tempFile(name, content, callback) {
         const tmpFile = path.join(os.tmpdir(), name),
-            cleanup = () => { fs.unlinkSync(tmpFile) };
+            cleanup = () => { fs.unlinkSync(tmpFile); };
 
         fs.writeFileSync(tmpFile, content);
         // try {

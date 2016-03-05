@@ -6,9 +6,9 @@ const deepmerge = require('../utils/deepmerge.js'),
 class concat {
     async exec(value, runnerOp, files) {
         let newFile = new runnerOpFile({
-            path: '/' + value,
-            fullpath: './' + value
-        }),
+                path: '/' + value,
+                fullpath: './' + value
+            }),
             content = '';
 
         for (let file of files) {

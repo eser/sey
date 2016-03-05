@@ -1,6 +1,6 @@
 'use strict';
 
-const stream = require('stream'),
+const // stream = require('stream'),
     deepmerge = require('../utils/deepmerge.js'),
     fsManager = require('../utils/fsManager.js');
 

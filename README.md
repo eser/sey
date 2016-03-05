@@ -44,6 +44,7 @@ in other words, sey...
 ### Built-in Tasks
 
 * **addheader:** adds file header to each file
+* **browserify:** require directives in browser
 * **comb:** css formatter
 * **concat:** concats all content of selected files
 * **cssminify:** css minification
@@ -53,10 +54,10 @@ in other words, sey...
 * **jsx:** converts React JSX files into browser compatible JavaScript
 * **less:** LESS compiler
 * **preprocess:** Code Preprocessor for macro support
-* **renameExtension:** Renames extensions of files
+* **renameExtension:** renames extensions of files
 * **sass:** SASS compiler
-* **transpile:** Transpiles code to specified standard
-* **typescript:** Validates code with Microsoft TypeScript Compiler
+* **transpile:** transpiles code to specified standard
+* **typescript:** validates code with Microsoft TypeScript Compiler
 
 
 ### Usage
@@ -104,6 +105,10 @@ let config = {
             ''
         ].join('\n'),
 
+        clean: {
+            beforeBuild: './dist'
+        },
+
         ops: [
             {
                 src: './src/**/*.js',
@@ -115,6 +120,7 @@ let config = {
                 jslint: true,
                 transpile: true,
                 jsoptimize: true,
+                browserify: { name: 'browserified.js', entry: './index.js' },
                 addheader: true
             },
             {
@@ -145,6 +151,26 @@ API Based:
 let config = new sey.config();
 
 config.bundle('main')
+    .setTarget('node')
+    .setStandard(2016)
+    .set({
+        eslint: {
+            quotes: [ 2, 'single' ]
+        },
+
+        banner: [
+            '/**',
+            ' * my package',
+            ' */',
+            ''
+        ].join('\n'),
+
+        clean: {
+            beforeBuild: './dist'
+        }
+    });
+
+config.bundle('main')
     .src('./src/**/*.js')
     .eolfix()
     .preprocess()
@@ -152,6 +178,7 @@ config.bundle('main')
     .jslint()
     .transpile()
     .jsoptimize()
+    .browserify({ name: 'browserified.js', entry: './index.js' })
     .addheader()
     .dest('./dist/scripts/')
     .exec();
