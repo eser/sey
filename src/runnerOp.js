@@ -53,7 +53,7 @@ class runnerOp {
 
         console.log(chalk.yellow('    task:'), chalk.white(task));
 
-        if (!(task in sey.tasks.items)) {
+        if (!(task in sey.registry.items)) {
             console.log(chalk.red('      no such task named ' + task));
             return;
         }
@@ -71,7 +71,7 @@ class runnerOp {
         }
         console.log(chalk.gray('      done.'));
 
-        await sey.tasks.exec(task, value, this, modifiedFiles);
+        await sey.registry.exec(task, value, this, modifiedFiles);
     }
 
     outputFiles(dest) {

@@ -3,18 +3,6 @@
 const deepmerge = require('../utils/deepmerge.js');
 
 class transpile {
-    info() {
-        return [
-            {
-                phase: 'compile',
-                formats: 'js',
-                op: 'transpile',
-                weight: 0.5,
-                method: 'exec'
-            }
-        ];
-    }
-
     async exec(value, runnerOp, files) {
         let options = {
             ast: false,
@@ -87,5 +75,15 @@ class transpile {
         }
     }
 }
+
+transpile.info = [
+    {
+        phase: 'compile',
+        formats: 'js',
+        op: 'transpile',
+        weight: 0.5,
+        method: 'exec'
+    }
+];
 
 module.exports = transpile;

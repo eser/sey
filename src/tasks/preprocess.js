@@ -3,18 +3,6 @@
 const deepmerge = require('../utils/deepmerge.js');
 
 class preprocess {
-    info() {
-        return [
-            {
-                phase: 'preprocess',
-                formats: '*',
-                op: 'preprocess',
-                weight: 0.5,
-                method: 'exec'
-            }
-        ];
-    }
-
     async exec(value, runnerOp, files) {
         let vars = process.env;
         vars.BUNDLE = runnerOp.bundleName;
@@ -36,5 +24,15 @@ class preprocess {
         }
     }
 }
+
+preprocess.info = [
+    {
+        phase: 'preprocess',
+        formats: '*',
+        op: 'preprocess',
+        weight: 0.5,
+        method: 'exec'
+    }
+];
 
 module.exports = preprocess;

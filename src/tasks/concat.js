@@ -4,18 +4,6 @@ const deepmerge = require('../utils/deepmerge.js'),
     runnerOpFile = require('../runnerOpFile.js');
 
 class concat {
-    info() {
-        return [
-            {
-                phase: 'bundling',
-                formats: '*',
-                op: 'concat',
-                weight: 0.5,
-                method: 'exec'
-            }
-        ];
-    }
-
     async exec(value, runnerOp, files) {
         let newFile = new runnerOpFile({
                 path: '/' + value,
@@ -32,5 +20,15 @@ class concat {
         runnerOp.opFiles = [newFile];
     }
 }
+
+concat.info = [
+    {
+        phase: 'bundling',
+        formats: '*',
+        op: 'concat',
+        weight: 0.5,
+        method: 'exec'
+    }
+];
 
 module.exports = concat;

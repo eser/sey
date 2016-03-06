@@ -5,18 +5,6 @@ const // stream = require('stream'),
     fsManager = require('../utils/fsManager.js');
 
 class jsoptimize {
-    info() {
-        return [
-            {
-                phase: 'optimization',
-                formats: 'js',
-                op: 'optimize',
-                weight: 0.5,
-                method: 'exec'
-            }
-        ];
-    }
-
     execSingle(value, file, options) {
         return new Promise((resolve, reject) => {
             const content = file.getContent();
@@ -74,5 +62,15 @@ class jsoptimize {
         }
     }
 }
+
+jsoptimize.info = [
+    {
+        phase: 'optimization',
+        formats: 'js',
+        op: 'optimize',
+        weight: 0.5,
+        method: 'exec'
+    }
+];
 
 module.exports = jsoptimize;

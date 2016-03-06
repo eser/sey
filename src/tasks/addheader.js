@@ -1,18 +1,6 @@
 'use strict';
 
 class addheader {
-    info() {
-        return [
-            {
-                phase: 'branding',
-                formats: '*',
-                op: 'addheader',
-                weight: 0.5,
-                method: 'exec'
-            }
-        ];
-    }
-
     async exec(value, runnerOp, files) {
         if (runnerOp.config.banner === undefined) {
             return;
@@ -24,5 +12,15 @@ class addheader {
         }
     }
 }
+
+addheader.info = [
+    {
+        phase: 'branding',
+        formats: '*',
+        op: 'addheader',
+        weight: 0.5,
+        method: 'exec'
+    }
+];
 
 module.exports = addheader;

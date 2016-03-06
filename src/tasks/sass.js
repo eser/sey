@@ -3,18 +3,6 @@
 const deepmerge = require('../utils/deepmerge.js');
 
 class sass {
-    info() {
-        return [
-            {
-                phase: 'compile',
-                formats: 'scss',
-                op: 'transpile',
-                weight: 0.5,
-                method: 'exec'
-            }
-        ];
-    }
-
     async exec(value, runnerOp, files) {
         let options = {};
         if (runnerOp.config.sass !== undefined) {
@@ -36,5 +24,15 @@ class sass {
         }
     }
 }
+
+sass.info = [
+    {
+        phase: 'compile',
+        formats: 'scss',
+        op: 'transpile',
+        weight: 0.5,
+        method: 'exec'
+    }
+];
 
 module.exports = sass;

@@ -4,18 +4,6 @@ const deepmerge = require('../utils/deepmerge.js'),
     taskException = require('../taskException.js');
 
 class jslint {
-    info() {
-        return [
-            {
-                phase: 'lint',
-                formats: 'js',
-                op: 'lint',
-                weight: 0.5,
-                method: 'exec'
-            }
-        ];
-    }
-
     async exec(value, runnerOp, files) {
         let options = {
             env: {
@@ -82,5 +70,15 @@ class jslint {
         }
     }
 }
+
+jslint.info = [
+    {
+        phase: 'lint',
+        formats: 'js',
+        op: 'lint',
+        weight: 0.5,
+        method: 'exec'
+    }
+];
 
 module.exports = jslint;

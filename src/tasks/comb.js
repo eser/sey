@@ -3,18 +3,6 @@
 const deepmerge = require('../utils/deepmerge.js');
 
 class comb {
-    info() {
-        return [
-            {
-                phase: 'optimization',
-                formats: 'css',
-                op: 'optimize',
-                weight: 0.5,
-                method: 'exec'
-            }
-        ];
-    }
-
     async exec(value, runnerOp, files) {
         let options = {
             'remove-empty-rulesets': true,
@@ -59,5 +47,15 @@ class comb {
         }
     }
 }
+
+comb.info = [
+    {
+        phase: 'optimization',
+        formats: 'css',
+        op: 'optimize',
+        weight: 0.5,
+        method: 'exec'
+    }
+];
 
 module.exports = comb;

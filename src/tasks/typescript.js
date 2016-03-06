@@ -3,18 +3,6 @@
 const deepmerge = require('../utils/deepmerge.js');
 
 class typescript {
-    info() {
-        return [
-            {
-                phase: 'compile',
-                formats: 'ts',
-                op: 'typescript',
-                weight: 0.5,
-                method: 'exec'
-            }
-        ];
-    }
-
     async exec(value, runnerOp, files) {
         let options = {
             // isolatedModules: true,
@@ -50,5 +38,15 @@ class typescript {
         }
     }
 }
+
+typescript.info = [
+    {
+        phase: 'compile',
+        formats: 'ts',
+        op: 'typescript',
+        weight: 0.5,
+        method: 'exec'
+    }
+];
 
 module.exports = typescript;

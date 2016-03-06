@@ -3,18 +3,6 @@
 const deepmerge = require('../utils/deepmerge.js');
 
 class jsx {
-    info() {
-        return [
-            {
-                phase: 'compile',
-                formats: 'jsx',
-                op: 'jsx',
-                weight: 0.5,
-                method: 'exec'
-            }
-        ];
-    }
-
     async exec(value, runnerOp, files) {
         let options = {
             ast: false,
@@ -48,5 +36,15 @@ class jsx {
         }
     }
 }
+
+jsx.info = [
+    {
+        phase: 'compile',
+        formats: 'jsx',
+        op: 'jsx',
+        weight: 0.5,
+        method: 'exec'
+    }
+];
 
 module.exports = jsx;

@@ -3,18 +3,6 @@
 const deepmerge = require('../utils/deepmerge.js');
 
 class cssminify {
-    info() {
-        return [
-            {
-                phase: 'optimization',
-                formats: 'css',
-                op: 'minify',
-                weight: 0.6,
-                method: 'exec'
-            }
-        ];
-    }
-
     exec(value, runnerOp, files) {
         return new Promise((resolve, reject) => {
             let options = {
@@ -48,5 +36,15 @@ class cssminify {
         });
     }
 }
+
+cssminify.info = [
+    {
+        phase: 'optimization',
+        formats: 'css',
+        op: 'minify',
+        weight: 0.6,
+        method: 'exec'
+    }
+];
 
 module.exports = cssminify;
