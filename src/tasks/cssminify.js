@@ -3,13 +3,13 @@
 const deepmerge = require('../utils/deepmerge.js');
 
 class cssminify {
-    exec(value, runnerOp, files) {
+    exec(value, runnerOpSet, files) {
         return new Promise((resolve, reject) => {
             let options = {
                 fromString: true
             };
-            if (runnerOp.config.cleancss !== undefined) {
-                deepmerge(options, runnerOp.config.cleancss);
+            if (runnerOpSet.config.cleancss !== undefined) {
+                deepmerge(options, runnerOpSet.config.cleancss);
             }
 
             for (let file of files) {

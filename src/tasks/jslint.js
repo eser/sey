@@ -4,20 +4,20 @@ const deepmerge = require('../utils/deepmerge.js'),
     taskException = require('../taskException.js');
 
 class jslint {
-    async exec(value, runnerOp, files) {
+    async exec(value, runnerOpSet, files) {
         let options = {
             env: {
-                es6: runnerOp.isStandard(2015),
-                node: runnerOp.isTargeting('node'),
-                browser: runnerOp.isTargeting('web')
+                es6: runnerOpSet.isStandard(2015),
+                node: runnerOpSet.isTargeting('node'),
+                browser: runnerOpSet.isTargeting('web')
             },
             extends: 'eslint:recommended'
         };
-        if (runnerOp.isStandard(2015)) {
+        if (runnerOpSet.isStandard(2015)) {
             options.parser = 'babel-eslint';
         }
-        if (runnerOp.config.eslint !== undefined) {
-            deepmerge(options, runnerOp.config.eslint);
+        if (runnerOpSet.config.eslint !== undefined) {
+            deepmerge(options, runnerOpSet.config.eslint);
         }
 
         let allIssues = [];

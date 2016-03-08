@@ -3,7 +3,7 @@
 const deepmerge = require('../utils/deepmerge.js');
 
 class comb {
-    async exec(value, runnerOp, files) {
+    async exec(value, runnerOpSet, files) {
         let options = {
             'remove-empty-rulesets': true,
             'always-semicolon': true,
@@ -30,8 +30,8 @@ class comb {
             'vendor-prefix-align': true,
             'verbose': true
         };
-        if (runnerOp.config.csscomb !== undefined) {
-            deepmerge(options, runnerOp.config.csscomb);
+        if (runnerOpSet.config.csscomb !== undefined) {
+            deepmerge(options, runnerOpSet.config.csscomb);
         }
 
         for (let file of files) {

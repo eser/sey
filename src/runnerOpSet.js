@@ -6,10 +6,10 @@ const chalk = require('chalk'),
     globManager = require('./utils/globManager.js'),
     runnerOpFile = require('./runnerOpFile.js');
 
-class runnerOp {
-    constructor(bundleName, op, config) {
-        this.bundleName = bundleName;
-        this.op = op;
+class runnerOpSet {
+    constructor(bundle, opSet, config) {
+        this.bundle = bundle;
+        this.opSet = opSet;
         this.config = config;
     }
 
@@ -39,12 +39,16 @@ class runnerOp {
         return false;
     }
 
-    loadFiles() {
-        const files = globManager.glob(this.op.src);
+    async exec(phase, phaseOps) {
+        console.log(this.bundle, phase, this.opSet.src);
+    }
 
-        this.opFiles = [];
+    loadFiles() {
+        const files = globManager.glob(this.opSet.src);
+
+        this.opSetFiles = [];
         for (let file of files) {
-            this.opFiles.push(new runnerOpFile(file));
+            this.opSetFiles.push(new runnerOpFile(file));
         }
     }
 
@@ -58,9 +62,9 @@ class runnerOp {
             return;
         }
 
-        const valueSerialized = JSON.stringify(value);
-        for (let opFile of this.opFiles) {
-            opFile.addHash(task);
+        let tasks = {};
+        const valueSerialized = JSON.stringify([task, value]);
+        for (let opFile of this.opSetFiles) {
             opFile.addHash(valueSerialized);
             if (opFile.cached) {
                 continue;
@@ -71,13 +75,13 @@ class runnerOp {
         }
         console.log(chalk.gray('      done.'));
 
-        await sey.registry.exec(task, value, this, modifiedFiles);
+        // await sey.registry.exec(task, value, this, modifiedFiles);
     }
 
     outputFiles(dest) {
         const destPath = dest + '/';
 
-        for (let opFile of this.opFiles) {
+        for (let opFile of this.opSetFiles) {
             const filePath = destPath + opFile.file.path;
             fsManager.writeFile(filePath, opFile.getContent());
         }
@@ -86,14 +90,14 @@ class runnerOp {
     async start() {
         this.loadFiles();
 
-        for (let task in this.op) {
-            if (task !== 'src' && task !== 'dest' && this.op[task] !== false) {
-                await this.startOp(task, this.op[task]);
+        for (let op in this.opSet) {
+            if (op !== 'src' && op !== 'dest' && this.opSet[op] !== false) {
+                await this.startOp(op, this.opSet[op]);
             }
         }
 
-        if (this.op.dest !== undefined) {
-            this.outputFiles(this.op.dest);
+        if (this.opSet.dest !== undefined) {
+            this.outputFiles(this.opSet.dest);
         }
     }
 
@@ -128,16 +132,16 @@ class runnerOp {
         }
 
         let newFile = new runnerOpFile(newFilename, mightBeCached ? newest : null);
-        for (let opFile of this.opFiles) {
+        for (let opFile of this.opSetFiles) {
             // combine + sum hash
             newFile.addHash(opFile.getHash());
         }
 
-        this.opFiles = [newFile];
+        this.opSetFiles = [newFile];
 
         return this;
     }
 */
 }
 
-module.exports = runnerOp;
+module.exports = runnerOpSet;

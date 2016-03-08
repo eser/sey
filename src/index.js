@@ -57,7 +57,7 @@ class sey {
 
         const currentRunner = new runner(currentConfig);
 
-        return await currentRunner.run(this.options);
+        return await currentRunner.run('publish', this.options);
     }
 }
 

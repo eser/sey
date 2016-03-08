@@ -3,7 +3,7 @@
 const deepmerge = require('../utils/deepmerge.js');
 
 class jsx {
-    async exec(value, runnerOp, files) {
+    async exec(value, runnerOpSet, files) {
         let options = {
             ast: false,
             code: true,
@@ -15,8 +15,8 @@ class jsx {
             ],
             ignore: ['bower_components/', 'node_modules/']
         };
-        if (runnerOp.config.babel !== undefined) {
-            deepmerge(options, runnerOp.config.babel);
+        if (runnerOpSet.config.babel !== undefined) {
+            deepmerge(options, runnerOpSet.config.babel);
         }
 
         for (let file of files) {

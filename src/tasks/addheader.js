@@ -1,14 +1,14 @@
 'use strict';
 
 class addheader {
-    async exec(value, runnerOp, files) {
-        if (runnerOp.config.banner === undefined) {
+    async exec(value, runnerOpSet, files) {
+        if (runnerOpSet.config.banner === undefined) {
             return;
         }
 
         for (let file of files) {
             let content = file.getContent();
-            file.setContent(runnerOp.config.banner + content);
+            file.setContent(runnerOpSet.config.banner + content);
         }
     }
 }

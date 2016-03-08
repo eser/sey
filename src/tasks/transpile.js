@@ -3,7 +3,7 @@
 const deepmerge = require('../utils/deepmerge.js');
 
 class transpile {
-    async exec(value, runnerOp, files) {
+    async exec(value, runnerOpSet, files) {
         let options = {
             ast: false,
             code: true,
@@ -13,12 +13,12 @@ class transpile {
             plugins: [],
             ignore: ['bower_components/', 'node_modules/']
         };
-        if (runnerOp.config.babel !== undefined) {
-            deepmerge(options, runnerOp.config.babel);
+        if (runnerOpSet.config.babel !== undefined) {
+            deepmerge(options, runnerOpSet.config.babel);
         }
 
-        if (runnerOp.isStandard(2015)) {
-            if (runnerOp.isTargeting('web')) {
+        if (runnerOpSet.isStandard(2015)) {
+            if (runnerOpSet.isTargeting('web')) {
                 options.plugins = options.plugins.concat([
                     require('babel-plugin-transform-es2015-template-literals'),
                     require('babel-plugin-transform-es2015-literals'),
@@ -51,7 +51,7 @@ class transpile {
             ]);
         }
 
-        if (runnerOp.isStandard(2016)) {
+        if (runnerOpSet.isStandard(2016)) {
             options.plugins = options.plugins.concat([
                 require('babel-plugin-transform-async-to-generator'),
                 require('babel-plugin-transform-exponentiation-operator')

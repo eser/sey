@@ -3,10 +3,10 @@
 const deepmerge = require('../utils/deepmerge.js');
 
 class sass {
-    async exec(value, runnerOp, files) {
+    async exec(value, runnerOpSet, files) {
         let options = {};
-        if (runnerOp.config.sass !== undefined) {
-            deepmerge(options, runnerOp.config.sass);
+        if (runnerOpSet.config.sass !== undefined) {
+            deepmerge(options, runnerOpSet.config.sass);
         }
 
         for (let file of files) {

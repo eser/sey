@@ -3,10 +3,10 @@
 const deepmerge = require('../utils/deepmerge.js');
 
 class less {
-    async exec(value, runnerOp, files) {
+    async exec(value, runnerOpSet, files) {
         let options = {};
-        if (runnerOp.config.less !== undefined) {
-            deepmerge(options, runnerOp.config.less);
+        if (runnerOpSet.config.less !== undefined) {
+            deepmerge(options, runnerOpSet.config.less);
         }
 
         for (let file of files) {

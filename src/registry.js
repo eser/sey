@@ -36,10 +36,11 @@ class registry {
                 weight: taskInfoItem.weight,
                 method: taskInfoItem.method
             });
+
+            configBundle.addOp(taskInfoItem.op);
         }
 
         this.items[name] = task;
-        configBundle.addTask(name);
     }
 
     loadFromFile(filepath) {
@@ -68,18 +69,15 @@ class registry {
         }
 
         this.sort();
-
-        // console.log(JSON.stringify(this.phases));
-        // process.exit(0);
     }
 
-    async exec(name, value, runnerOp, modifiedFiles) {
-        if (this.items[name] === undefined) {
-            throw Error('undefined task - ' + name);
-        }
-
-        return await this.items[name].exec(value, runnerOp, modifiedFiles);
-    }
+    // async exec(name, value, runnerOpSet, modifiedFiles) {
+    //     if (this.items[name] === undefined) {
+    //         throw Error('undefined task - ' + name);
+    //     }
+    //
+    //     return await this.items[name].exec(value, runnerOpSet, modifiedFiles);
+    // }
 }
 
 module.exports = registry;

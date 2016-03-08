@@ -34,23 +34,23 @@ class jsoptimize {
         });
     }
 
-    async exec(value, runnerOp, files) {
+    async exec(value, runnerOpSet, files) {
         let options = {
             compilation_level: 'ADVANCED_OPTIMIZATIONS' // ,
             // formatting: 'PRETTY_PRINT'
         };
 
-        if (runnerOp.isStandard(2015)) {
+        if (runnerOpSet.isStandard(2015)) {
             options.language_in = 'ES6';
         }
 
-        if (runnerOp.isStandard(2016)) {
+        if (runnerOpSet.isStandard(2016)) {
             // TODO will be replaced with es2016
             options.language_in = 'ES6';
         }
 
-        if (runnerOp.config.closure !== undefined) {
-            deepmerge(options, runnerOp.config.closure);
+        if (runnerOpSet.config.closure !== undefined) {
+            deepmerge(options, runnerOpSet.config.closure);
         }
 
         for (let file of files) {
