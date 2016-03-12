@@ -11,6 +11,14 @@ class runnerOpSet {
         this.bundle = bundle;
         this.opSet = opSet;
         this.config = config;
+
+        const files = globManager.glob(this.opSet.src),
+            filesLength = files.length;
+
+        this.opSetFiles = new Array(filesLength);
+        for (let i = 0; i < filesLength; i++) {
+            this.opSetFiles[i] = new runnerOpFile(files[i]);
+        }
     }
 
     getTarget() {
@@ -39,43 +47,78 @@ class runnerOpSet {
         return false;
     }
 
-    async exec(phase, phaseOps) {
-        console.log(this.bundle, phase, this.opSet.src);
-    }
+    categorizeFiles(phaseOps) {
+        // duplicate files array
+        let opFiles = this.opSetFiles.slice(0),
+            opFilesLength = opFiles.length,
+            categorizedFiles = {};
 
-    loadFiles() {
-        const files = globManager.glob(this.opSet.src);
+        for (let i = 0; i < opFilesLength; i++) {
+            const opFile = opFiles[i];
 
-        this.opSetFiles = [];
-        for (let file of files) {
-            this.opSetFiles.push(new runnerOpFile(file));
-        }
-    }
-
-    async startOp(task, value) {
-        let modifiedFiles = [];
-
-        console.log(chalk.yellow('    task:'), chalk.white(task));
-
-        if (!(task in sey.registry.items)) {
-            console.log(chalk.red('      no such task named ' + task));
-            return;
-        }
-
-        let tasks = {};
-        const valueSerialized = JSON.stringify([task, value]);
-        for (let opFile of this.opSetFiles) {
-            opFile.addHash(valueSerialized);
-            if (opFile.cached) {
+            if (opFile === undefined) {
                 continue;
             }
 
-            console.log(chalk.gray('      ' + opFile.file.path));
-            modifiedFiles.push(opFile);
-        }
-        console.log(chalk.gray('      done.'));
+            const fileExtension = opFile.getExtension();
+            let opsDone = [];
 
-        // await sey.registry.exec(task, value, this, modifiedFiles);
+            for (let phaseOp of phaseOps) {
+                if (this.opSet[phaseOp.op] === undefined) {
+                    continue;
+                }
+
+                if (opsDone.indexOf(phaseOp.op) !== -1) {
+                    continue;
+                }
+
+                if (!opFile.checkExtensionMatching(phaseOp.formats)) {
+                    continue;
+                }
+
+                opsDone.push(phaseOp.op);
+                delete opFiles[i];
+
+                if (!(categorizedFiles[phaseOp.op] instanceof Array)) {
+                    categorizedFiles[phaseOp.op] = [];
+                }
+
+                if (!(categorizedFiles[phaseOp.op][phaseOp.task] instanceof Array)) {
+                    categorizedFiles[phaseOp.op][phaseOp.task] = [];
+                }
+
+                categorizedFiles[phaseOp.op][phaseOp.task].push(opFile);
+            }
+        }
+
+        return categorizedFiles;
+    }
+
+    async exec(phase, phaseOps) {
+        const categorizedFiles = this.categorizeFiles(phaseOps);
+
+        for (let opKey in categorizedFiles) {
+            const filesByTasks = categorizedFiles[opKey],
+                value = this.opSet[opKey];
+
+            for (let taskKey in filesByTasks) {
+                const files = filesByTasks[taskKey];
+                let modifiedFiles = [];
+
+                const valueSerialized = JSON.stringify([taskKey, value]);
+                for (let opFile of files) {
+                    opFile.addHash(valueSerialized);
+                    if (opFile.cached) {
+                        continue;
+                    }
+
+                    console.log(chalk.yellow('    ' + opKey), chalk.gray(opFile.file.path));
+                    modifiedFiles.push(opFile);
+                }
+
+                // await sey.registry.exec(taskKey, value, this, modifiedFiles);
+            }
+        }
     }
 
     outputFiles(dest) {
@@ -86,62 +129,6 @@ class runnerOpSet {
             fsManager.writeFile(filePath, opFile.getContent());
         }
     }
-
-    async start() {
-        this.loadFiles();
-
-        for (let op in this.opSet) {
-            if (op !== 'src' && op !== 'dest' && this.opSet[op] !== false) {
-                await this.startOp(op, this.opSet[op]);
-            }
-        }
-
-        if (this.opSet.dest !== undefined) {
-            this.outputFiles(this.opSet.dest);
-        }
-    }
-
-/*
-    const file = require('./file.js'),
-        fsManager = require('./fsManager.js');
-
-    addFiles(files) {
-        for (let item of files) {
-            const filepath = item,
-                lastMod = fsManager.getLastMod(filepath);
-
-            files.push(new file(filepath, lastMod));
-        }
-
-        return this;
-    }
-
-    combineFile(newFilename) {
-        let mightBeCached = true,
-            newest = 0;
-
-        for (let item of files) {
-            if (!item.cached) {
-                mightBeCached = false;
-                break;
-            }
-
-            if (newest < item.modified) {
-                newest = item.modified;
-            }
-        }
-
-        let newFile = new runnerOpFile(newFilename, mightBeCached ? newest : null);
-        for (let opFile of this.opSetFiles) {
-            // combine + sum hash
-            newFile.addHash(opFile.getHash());
-        }
-
-        this.opSetFiles = [newFile];
-
-        return this;
-    }
-*/
 }
 
 module.exports = runnerOpSet;

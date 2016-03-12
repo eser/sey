@@ -5,18 +5,20 @@ const globAll = require('glob-all'),
 
 class globManager {
     static _conversions(paths) {
-        const pathArray = (paths.constructor === Array) ? paths : [paths];
-        let result = [];
+        const pathArray = (paths.constructor === Array) ? paths : [paths],
+            pathArrayLength = pathArray.length;
+        let result = new Array(pathArrayLength);
 
-        for (let pathstr of pathArray) {
+        for (let i = 0; i < pathArrayLength; i++) {
+            const pathstr = pathArray[i];
             if (pathstr.substring(0, 1) === '!') {
                 continue;
             }
 
-            result.push([
+            result[i] = [
                 pathstr,
                 globParent(pathstr)
-            ]);
+            ];
         }
 
         return result;
@@ -32,18 +34,20 @@ class globManager {
         return pathstr;
     }
 
-    static *glob(paths) {
+    static glob(paths) {
         const pathConversions = this._conversions(paths),
-            files = globAll.sync(paths, { nosort: true, nonull: false });
+            files = globAll.sync(paths, { nosort: true, nonull: false }),
+            filesLength = files.length;
 
-        if (files !== null) {
-            for (let file of files) {
-                yield {
-                    fullpath: file,
-                    path: this._convert(pathConversions, file)
-                };
-            }
+        let fileObjects = new Array(filesLength);
+        for (let i = 0; i < filesLength; i++) {
+            fileObjects[i] = {
+                fullpath: files[i],
+                path: this._convert(pathConversions, files[i])
+            };
         }
+
+        return fileObjects;
     }
 }
 

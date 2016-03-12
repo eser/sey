@@ -14,11 +14,14 @@ class taskException {
     }
 
     export() {
-        let messages = [];
+        const issuesLength = this.issues.length;
+        let messages = new Array(issuesLength);
 
-        for (let issue of this.issues) {
-            const severity = (issue.severity === this.ERROR) ? 'ERROR' : 'WARNING';
-            messages.push(`${severity} File: ${issue.file.file.path}\n${issue.message}\n`);
+        for (let i = 0; i < issuesLength; i++) {
+            const issue = this.issues[i],
+                severity = (issue.severity === this.ERROR) ? 'ERROR' : 'WARNING';
+
+            messages[i] = `${severity} File: ${issue.file.file.path}\n${issue.message}\n`;
         }
 
         return messages.join('\n');

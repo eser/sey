@@ -9,14 +9,6 @@ const chalk = require('chalk'),
 class runner {
     constructor(config) {
         this.config = config;
-        this.presets = {
-            'lint': ['init', 'preprocess', 'lint', 'finalize'],
-            'build': ['init', 'preprocess', 'lint', 'compile', 'bundling', 'finalize'],
-            'publish': ['init', 'preprocess', 'lint', 'compile', 'bundling', 'optimization', 'branding', 'finalize'],
-            'test': ['init', 'preprocess', 'lint', 'compile', 'bundling', 'optimization', 'branding', 'testing', 'finalize'],
-            'server': ['init', 'preprocess', 'lint', 'compile', 'bundling', 'optimization', 'branding', 'finalize', 'development-server'],
-            'deploy': ['init', 'preprocess', 'lint', 'compile', 'bundling', 'optimization', 'branding', 'finalize', 'deploy']
-        };
     }
 
     getBundleConfig(bundle) {
@@ -38,31 +30,30 @@ class runner {
 
         console.log(chalk.green('bundle:'), chalk.bold.white(bundle));
         try {
-            // if (config.clean !== undefined && config.clean.beforeBuild !== undefined) {
-            //     const pathArray = (config.clean.beforeBuild.constructor === Array) ?
-            //         config.clean.beforeBuild :
-            //         [config.clean.beforeBuild];
-            //
-            //     for (let path of pathArray) {
-            //         console.log(chalk.gray('  cleaning', path));
-            //         fsManager.rmdir(path);
-            //     }
-            // }
+            if (config.ops === undefined) {
+                return;
+            }
 
-            if (config.ops !== undefined) {
-                let runnerOpSets = [];
-                for (let i = 0, length = config.ops.length; i < length; i++) {
-                    runnerOpSets.push(new runnerOpSet(bundle, config.ops[i], config));
+            let opsLength = config.ops.length,
+                runnerOpSets = new Array(opsLength);
+
+            for (let i = 0; i < opsLength; i++) {
+                runnerOpSets[i] = new runnerOpSet(bundle, config.ops[i], config);
+            }
+
+            for (let phase of this.config.content.presets[preset]) {
+                const phaseOps = sey.registry.phases[phase];
+
+                if (phaseOps.length === 0) {
+                    continue;
                 }
 
-                for (let phase of this.presets[preset]) {
-                    const phaseOps = sey.registry.phases[phase];
-
-                    for (let currentRunnerOpSet of runnerOpSets) {
-                        // FIXME: await Promise.all([]) for each phase?
-                        await currentRunnerOpSet.exec(phase, phaseOps);
-                    }
+                let promises = new Array(opsLength);
+                for (let i = 0; i < opsLength; i++) {
+                    promises[i] = runnerOpSets[i].exec(phase, phaseOps);
                 }
+
+                await Promise.all(promises);
             }
         } catch (ex) {
             if (ex instanceof taskException) {
@@ -79,7 +70,7 @@ class runner {
         let bundleCount = 0;
 
         for (let bundle in this.config.content) {
-            if (bundle === 'global') {
+            if (bundle === 'global' || bundle === 'presets') {
                 continue;
             }
             if (bundleOnly && options.bundle !== bundle) {
@@ -96,9 +87,13 @@ class runner {
             } else {
                 console.log(chalk.red('no bundle available to run'));
             }
+
+            return false;
         }
 
-        return (bundleCount > 0);
+        console.log(chalk.green('done.'));
+
+        return true;
     }
 }
 
