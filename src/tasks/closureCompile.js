@@ -77,7 +77,7 @@ closureCompile.info = [
         phase: 'optimization',
         formats: 'js',
         op: 'optimize',
-        weight: 0.5,
+        weight: 0.1,
         method: 'exec'
     }
 ];

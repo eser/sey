@@ -5,7 +5,7 @@ const // stream = require('stream'),
     tmp = require('tmp'),
     deepmerge = require('../utils/deepmerge.js'),
     fsManager = require('../utils/fsManager.js'),
-    runnerOpFile = require('../runnerOpFile.js');
+    runnerOpSetFile = require('../runnerOpSetFile.js');
 
 class closureCommonJs {
     exec(value, runnerOpSet, files) {
@@ -51,7 +51,7 @@ class closureCommonJs {
                             return;
                         }
 
-                        let newFile = new runnerOpFile({
+                        let newFile = new runnerOpSetFile({
                             path: '/' + value.name,
                             fullpath: './' + value.name
                         });
@@ -59,8 +59,9 @@ class closureCommonJs {
                         for (let file of files) {
                             newFile.addHash(file.getHash());
                         }
+
                         newFile.setContent(result);
-                        runnerOpSet.opFiles = [newFile];
+                        runnerOpSet.opSetFiles = [newFile];
 
                         cleanup();
                         resolve();
@@ -76,7 +77,7 @@ closureCommonJs.info = [
         phase: 'bundling',
         formats: 'js',
         op: 'commonjs',
-        weight: 0.5,
+        weight: 0.1,
         method: 'exec'
     }
 ];

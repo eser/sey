@@ -1,8 +1,10 @@
 'use strict';
 
 const stream = require('stream'),
+    path = require('path'),
+    tmp = require('tmp'),
     deepmerge = require('../utils/deepmerge.js'),
-    runnerOpFile = require('../runnerOpFile.js');
+    runnerOpSetFile = require('../runnerOpSetFile.js');
 
 class browserify {
     exec(value, runnerOpSet, files) {
@@ -14,44 +16,48 @@ class browserify {
                 deepmerge(options, runnerOpSet.config.browserify);
             }
 
-            let newFile = new runnerOpFile({
-                path: '/' + value.name,
-                fullpath: './' + value.name
-            });
-
             if (this._browserifyLib === undefined) {
                 this._browserifyLib = require('browserify');
             }
 
-            let browserifyBundle = this._browserifyLib();
-            for (let file of files) {
-                const filename = '.' + file.file.path,
-                    content = file.getContent();
-                newFile.addHash(file.getHash());
+            tmp.dir({ unsafeCleanup: true }, (err, tmppath, cleanup) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
 
-                browserifyBundle.require({
-                    file: file.file.fullpath,
-                    basedir: '.',
-                    source: content,
-                    entry: (filename === value.entry) ? true : false
-                });
-            }
+                runnerOpSet.outputFilesTo(tmppath);
 
-            let browserifyOutput = '';
-            let browserifyStream = browserifyBundle.bundle();
+                let browserifyInstance = this._browserifyLib();
+                browserifyInstance.add(path.join(tmppath, value.entry));
 
-            browserifyStream
-                .on('readable', () => {
-                    const chunk = browserifyStream.read();
-                    if (chunk !== null) {
-                        browserifyOutput += chunk.toString();
-                    }
-                })
-                .on('end', () => {
-                    newFile.setContent(browserifyOutput);
-                    runnerOpSet.opFiles = [newFile];
-                    resolve();
-                });
+                let browserifyOutput = '';
+                let browserifyStream = browserifyInstance.bundle();
+
+                browserifyStream
+                    .on('readable', () => {
+                        const chunk = browserifyStream.read();
+                        if (chunk !== null) {
+                            browserifyOutput += chunk.toString();
+                        }
+                    })
+                    .on('end', () => {
+                        let newFile = new runnerOpSetFile({
+                            path: '/' + value.name,
+                            fullpath: './' + value.name
+                        });
+
+                        for (let file of files) {
+                            newFile.addHash(file.getHash());
+                        }
+
+                        newFile.setContent(browserifyOutput);
+                        runnerOpSet.opSetFiles = [newFile];
+
+                        cleanup();
+                        resolve();
+                    });
+            });
         });
     }
 }

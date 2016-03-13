@@ -1,11 +1,11 @@
 'use strict';
 
 const deepmerge = require('../utils/deepmerge.js'),
-    runnerOpFile = require('../runnerOpFile.js');
+    runnerOpSetFile = require('../runnerOpSetFile.js');
 
 class concat {
     async exec(value, runnerOpSet, files) {
-        let newFile = new runnerOpFile({
+        let newFile = new runnerOpSetFile({
                 path: '/' + value,
                 fullpath: './' + value
             }),
@@ -17,7 +17,7 @@ class concat {
         }
 
         newFile.setContent(content);
-        runnerOpSet.opFiles = [newFile];
+        runnerOpSet.opSetFiles = [newFile];
     }
 }
 

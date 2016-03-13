@@ -2,15 +2,18 @@
 'use strict';
 
 const crc = require('crc'),
-      pathinfo = require('./utils/pathinfo.js'),
-      fsManager = require('./utils/fsManager.js');
+    pathinfo = require('./utils/pathinfo.js'),
+    fsManager = require('./utils/fsManager.js');
 
-class runnerOpFile {
+class runnerOpSetFile {
     constructor(file, hash, content) {
         this.file = file;
 
         if (hash === undefined) {
-            this.hash = crc.crc32(String(fsManager.getLastMod(file.fullpath)), crc.crc32(file.fullpath));
+            this.hash = crc.crc32(
+                String(fsManager.getLastMod(file.fullpath)),
+                crc.crc32(file.fullpath)
+            );
         } else {
             this.hash = hash;
         }
@@ -97,4 +100,4 @@ class runnerOpFile {
     }
 }
 
-module.exports = runnerOpFile;
+module.exports = runnerOpSetFile;
