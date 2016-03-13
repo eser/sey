@@ -2,7 +2,7 @@
 
 const deepmerge = require('../utils/deepmerge.js');
 
-class comb {
+class csscomb {
     async exec(value, runnerOpSet, files) {
         let options = {
             'remove-empty-rulesets': true,
@@ -37,18 +37,18 @@ class comb {
         for (let file of files) {
             const content = file.getContent();
 
-            if (this._csscombLib === undefined) {
-                const csscomb = require('csscomb');
-                this._csscombLib = new csscomb(options, 'css');
+            if (this._csscombInstance === undefined) {
+                const csscombType = require('csscomb');
+                this._csscombInstance = new csscombType(options, 'css');
             }
 
-            const result = this._csscombLib.processString(content);
+            const result = this._csscombInstance.processString(content);
             file.setContent(result);
         }
     }
 }
 
-comb.info = [
+csscomb.info = [
     {
         phase: 'optimization',
         formats: 'css',
@@ -58,4 +58,4 @@ comb.info = [
     }
 ];
 
-module.exports = comb;
+module.exports = csscomb;

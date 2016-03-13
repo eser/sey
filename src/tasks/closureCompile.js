@@ -1,10 +1,12 @@
 'use strict';
 
 const // stream = require('stream'),
+    fs = require('fs'),
+    tmp = require('tmp'),
     deepmerge = require('../utils/deepmerge.js'),
     fsManager = require('../utils/fsManager.js');
 
-class jsoptimize {
+class closureCompile {
     execSingle(value, file, options) {
         return new Promise((resolve, reject) => {
             const content = file.getContent();
@@ -13,7 +15,14 @@ class jsoptimize {
             // readableStream.push(content);
             // readableStream.push(null);
 
-            fsManager.tempFile('closure.js', content, (tmppath, cleanup) => {
+            tmp.file((err, tmppath, fd, cleanup) => {
+                if (err) {
+                    throw err;
+                }
+
+                fs.writeSync(fd, content);
+                fs.closeSync(fd);
+
                 this._closureLib.compile(
                     tmppath, // [],
                     options,
@@ -63,7 +72,7 @@ class jsoptimize {
     }
 }
 
-jsoptimize.info = [
+closureCompile.info = [
     {
         phase: 'optimization',
         formats: 'js',
@@ -73,4 +82,4 @@ jsoptimize.info = [
     }
 ];
 
-module.exports = jsoptimize;
+module.exports = closureCompile;

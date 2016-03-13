@@ -2,7 +2,7 @@
 
 const deepmerge = require('../utils/deepmerge.js');
 
-class jsx {
+class babeljsx {
     async exec(value, runnerOpSet, files) {
         let options = {
             ast: false,
@@ -37,7 +37,7 @@ class jsx {
     }
 }
 
-jsx.info = [
+babeljsx.info = [
     {
         phase: 'compile',
         formats: 'jsx',
@@ -47,4 +47,4 @@ jsx.info = [
     }
 ];
 
-module.exports = jsx;
+module.exports = babeljsx;

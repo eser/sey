@@ -55,6 +55,10 @@ class runner {
 
                 await Promise.all(promises);
             }
+
+            for (let i = 0; i < opsLength; i++) {
+                runnerOpSets[i].outputFiles();
+            }
         } catch (ex) {
             if (ex instanceof taskException) {
                 console.log(ex.export());

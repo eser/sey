@@ -55,6 +55,7 @@
     "less": "^2.6.0",
     "node-sass": "^3.4.2",
     "preprocess": "^3.0.2",
+    "tmp": "0.0.28",
     "typescript": "^1.8.7",
     "update-notifier": "^0.6.1",
     "yargs": "^4.1.0"

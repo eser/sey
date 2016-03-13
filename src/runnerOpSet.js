@@ -112,22 +112,30 @@ class runnerOpSet {
                         continue;
                     }
 
-                    console.log(chalk.yellow('    ' + opKey), chalk.gray(opFile.file.path));
                     modifiedFiles.push(opFile);
                 }
 
-                // await sey.registry.exec(taskKey, value, this, modifiedFiles);
+                console.log(chalk.yellow('    ' + opKey + '(' + taskKey + ')'), chalk.gray(modifiedFiles.length + ' files'));
+                await sey.registry.tasks[taskKey].exec(value, this, modifiedFiles);
             }
         }
     }
 
-    outputFiles(dest) {
+    outputFilesTo(dest) {
         const destPath = dest + '/';
 
         for (let opFile of this.opSetFiles) {
             const filePath = destPath + opFile.file.path;
             fsManager.writeFile(filePath, opFile.getContent());
         }
+    }
+
+    outputFiles() {
+        if (this.opSet.dest === undefined) {
+            return;
+        }
+
+        this.outputFilesTo(this.opSet.dest);
     }
 }
 

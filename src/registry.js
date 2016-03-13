@@ -1,12 +1,12 @@
 'use strict';
 
-const path = require('path'),
+const pathLib = require('path'),
     fs = require('fs'),
     configBundle = require('./configBundle.js');
 
 class registry {
     constructor() {
-        this.items = {};
+        this.tasks = {};
         this.phases = {
             'init': [],
             'preprocess': [],
@@ -23,7 +23,7 @@ class registry {
     }
 
     define(name, taskObject) {
-        if (name in this.items) {
+        if (name in this.tasks) {
             return;
         }
 
@@ -41,11 +41,11 @@ class registry {
             configBundle.addOp(taskInfoItem.op);
         }
 
-        this.items[name] = task;
+        this.tasks[name] = task;
     }
 
     loadFromFile(filepath) {
-        const basename = path.basename(filepath, '.js'),
+        const basename = pathLib.basename(filepath, '.js'),
             taskObject = require(filepath);
 
         this.define(basename, taskObject);
@@ -62,7 +62,7 @@ class registry {
     }
 
     load() {
-        const normalizedPath = path.join(__dirname, './tasks'),
+        const normalizedPath = pathLib.join(__dirname, './tasks'),
             files = fs.readdirSync(normalizedPath);
 
         for (let item of files) {
@@ -71,14 +71,6 @@ class registry {
 
         this.sort();
     }
-
-    // async exec(name, value, runnerOpSet, modifiedFiles) {
-    //     if (this.items[name] === undefined) {
-    //         throw Error('undefined task - ' + name);
-    //     }
-    //
-    //     return await this.items[name].exec(value, runnerOpSet, modifiedFiles);
-    // }
 }
 
 module.exports = registry;

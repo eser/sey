@@ -2,7 +2,7 @@
 
 const deepmerge = require('../utils/deepmerge.js');
 
-class transpile {
+class babel {
     async exec(value, runnerOpSet, files) {
         let options = {
             ast: false,
@@ -76,7 +76,7 @@ class transpile {
     }
 }
 
-transpile.info = [
+babel.info = [
     {
         phase: 'compile',
         formats: 'js',
@@ -86,4 +86,4 @@ transpile.info = [
     }
 ];
 
-module.exports = transpile;
+module.exports = babel;

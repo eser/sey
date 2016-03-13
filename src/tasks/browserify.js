@@ -61,7 +61,7 @@ browserify.info = [
         phase: 'bundling',
         formats: 'js',
         op: 'commonjs',
-        weight: 0.5,
+        weight: 0.4,
         method: 'exec'
     }
 ];
