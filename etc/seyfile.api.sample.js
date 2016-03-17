@@ -31,37 +31,33 @@ config.bundle('main')
 
         preprocessVars: {
             BUNDLE: 'main'
-        },
-
-        clean: {
-            beforeBuild: './dist'
         }
     });
 
 config.bundle('main')
-    .src(['./src/**/*.js', './src/**/*.ts'])
-    .eolfix()
-    .preprocess()
-    // .jsx()
-    // .typescript()
-    .jslint()
-    .transpile()
-    // .jsoptimize()
-    // .browserify({ name: 'browserified.js', entry: './index.js' })
+    .src(['./src/**/*.js', './src/**/*.ts', './src/**/*.jsx'])
     .addheader()
+    .commonjs({ name: 'browserified.js', entry: './index.js' })
+    .eolfix()
+    .jsx()
+    .lint()
+    .optimize()
+    .preprocess()
+    .transpile()
+    .typescript()
     .dest('./dist/scripts/')
     .exec();
 
 config.bundle('main')
-    .src(['./src/**/*.css', './src/**/*.less'])
-    .eolfix()
-    .preprocess()
-    .less()
-    // .sass()
-    .concat('style.css')
-    .comb()
-    .cssminify()
+    .src(['./src/**/*.css', './src/**/*.less', './src/**/*.scss'])
     .addheader()
+    .concat('style.css')
+    .eolfix()
+    .lint()
+    .minify()
+    .optimize()
+    .preprocess()
+    .transpile()
     .dest('./dist/styles/')
     .exec();
 

@@ -31,37 +31,33 @@ let config = new sey.config({
             BUNDLE: 'main'
         },
 
-        clean: {
-            beforeBuild: './dist'
-        },
-
         ops: [
             {
-                src: ['./src/**/*.js', './src/**/*.ts'],
+                src: ['./src/**/*.js', './src/**/*.ts', './src/**/*.jsx'],
                 dest: './dist/scripts/',
 
+                addheader: true,
+                commonjs: { name: 'browserified.js', entry: './index.js' },
                 eolfix: true,
+                jsx: true,
+                lint: true,
+                optimize: true,
                 preprocess: true,
-                // jsx: true,
-                // typescript: true,
-                jslint: true,
                 transpile: true,
-                // jsoptimize: true,
-                // browserify: { name: 'browserified.js', entry: './index.js' },
-                addheader: true
+                typescript: true
             },
             {
-                src: ['./src/**/*.css', './src/**/*.less'],
+                src: ['./src/**/*.css', './src/**/*.less', './src/**/*.scss'],
                 dest: './dist/styles/',
 
-                eolfix: true,
-                preprocess: true,
-                less: true,
-                // sass: true,
+                addheader: true,
                 concat: 'style.css',
-                comb: true,
-                cssminify: true,
-                addheader: true
+                eolfix: true,
+                lint: true,
+                minify: true,
+                optimize: true,
+                preprocess: true,
+                transpile: true
             },
             {
                 src: './test/*.js',

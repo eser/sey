@@ -44,20 +44,16 @@ in other words, sey...
 ### Built-in Tasks
 
 * **addheader:** adds file header to each file
-* **browserify:** require directives in browser
-* **comb:** css formatter
-* **concat:** concats all content of selected files
-* **cssminify:** css minification
+* **commonjs:** enables commonjs modules in browser
+* **concat:** concatenates all content of source files
 * **eolfix:** replaces various EOL types with unix standard
-* **jslint:** ESLint JavaScript Linter
-* **jsoptimize:** advanced code optimizations with Google Closure Compiler
 * **jsx:** converts React JSX files into browser compatible JavaScript
-* **less:** LESS compiler
-* **preprocess:** Code Preprocessor for macro support
-* **renameExtension:** renames extensions of files
-* **sass:** SASS compiler
-* **transpile:** transpiles code to specified standard
-* **typescript:** validates code with Microsoft TypeScript Compiler
+* **lint:** lints source files
+* **minify:** minifies source files
+* **optimize:** optimizes source files if available
+* **preprocess:** proprocesses source files for macro support
+* **transpile:** transpiles source files to adapt standards (LESS/SASS -> CSS, ES6 -> JS, etc.)
+* **typescript:** compiles Microsoft TypeScript files into JS code
 
 
 ### Usage
@@ -105,34 +101,33 @@ let config = {
             ''
         ].join('\n'),
 
-        clean: {
-            beforeBuild: './dist'
-        },
-
         ops: [
             {
-                src: './src/**/*.js',
+                src: ['./src/**/*.js', './src/**/*.ts', './src/**/*.jsx'],
                 dest: './dist/scripts/',
 
+                addheader: true,
+                commonjs: { name: 'browserified.js', entry: './index.js' },
                 eolfix: true,
-                preprocess: true,
                 jsx: true,
-                jslint: true,
+                lint: true,
+                optimize: true,
+                preprocess: true,
                 transpile: true,
-                jsoptimize: true,
-                browserify: { name: 'browserified.js', entry: './index.js' },
-                addheader: true
+                typescript: true
             },
             {
-                src: ['./src/**/*.less', './src/**/*.lss'],
+                src: ['./src/**/*.css', './src/**/*.less', './src/**/*.scss'],
                 dest: './dist/styles/',
 
-                eolfix: true,
-                preprocess: true,
-                less: true,
+                addheader: true,
                 concat: 'style.css',
-                cssminify: true,
-                addheader: true
+                eolfix: true,
+                lint: true,
+                minify: true,
+                optimize: true,
+                preprocess: true,
+                transpile: true
             },
             {
                 src: './test/*.js',
@@ -163,34 +158,33 @@ config.bundle('main')
             ' * my package',
             ' */',
             ''
-        ].join('\n'),
-
-        clean: {
-            beforeBuild: './dist'
-        }
+        ].join('\n')
     });
 
 config.bundle('main')
-    .src('./src/**/*.js')
-    .eolfix()
-    .preprocess()
-    .jsx()
-    .jslint()
-    .transpile()
-    .jsoptimize()
-    .browserify({ name: 'browserified.js', entry: './index.js' })
+    .src(['./src/**/*.js', './src/**/*.ts', './src/**/*.jsx'])
     .addheader()
+    .commonjs({ name: 'browserified.js', entry: './index.js' })
+    .eolfix()
+    .jsx()
+    .lint()
+    .optimize()
+    .preprocess()
+    .transpile()
+    .typescript()
     .dest('./dist/scripts/')
     .exec();
 
 config.bundle('main')
-    .src(['./src/**/*.less', './src/**/*.lss'])
-    .eolfix()
-    .preprocess()
-    .less()
-    .concat('style.css')
-    .cssminify()
+    .src(['./src/**/*.css', './src/**/*.less', './src/**/*.scss'])
     .addheader()
+    .concat('style.css')
+    .eolfix()
+    .lint()
+    .minify()
+    .optimize()
+    .preprocess()
+    .transpile()
     .dest('./dist/styles/')
     .exec();
 
@@ -207,7 +201,7 @@ sey.run(config);
 
 - Deploy Task
 - Watch Task (Refresh Friendliness)
-- Browserify, PostCSS Tasks
+- PostCSS Tasks
 - Sourcemaps
 - Fancy output including line counts, lint and test results
 
