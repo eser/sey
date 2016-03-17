@@ -9,6 +9,11 @@ let config = new sey.config({
         },
 
         less: {
+        },
+
+        clean: {
+            before: ['./dist'],
+            after: []
         }
     },
 

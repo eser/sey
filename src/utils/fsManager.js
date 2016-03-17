@@ -2,7 +2,8 @@
 
 const os = require('os'),
     fs = require('fs'),
-    path = require('path');
+    path = require('path'),
+    globAll = require('glob-all');
 
 class fsManager {
     static getStat(pathstr) {
@@ -45,6 +46,25 @@ class fsManager {
         }
 
         return true;
+    }
+
+    static rm(str) {
+        const files = globAll.sync(str, { nosort: true, nonull: false });
+
+        for (let file of files) {
+            const stat = fs.statSync(file);
+
+            if (file === '.' || file === '..') {
+                continue;
+            }
+
+            if (stat.isDirectory()) {
+                this.rmdir(file);
+                continue;
+            }
+
+            fs.unlinkSync(file);
+        }
     }
 
     static rmdir(pathstr) {

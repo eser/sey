@@ -31,6 +31,11 @@ config.bundle('main')
 
         preprocessVars: {
             BUNDLE: 'main'
+        },
+
+        clean: {
+            before: ['./dist'],
+            after: []
         }
     });
 

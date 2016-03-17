@@ -4,6 +4,7 @@
 const chalk = require('chalk'),
     fsManager = require('./utils/fsManager.js'),
     globManager = require('./utils/globManager.js'),
+    registry = require('./registry.js'),
     runnerOpSetFile = require('./runnerOpSetFile.js');
 
 class runnerOpSet {
@@ -87,7 +88,11 @@ class runnerOpSet {
                     categorizedFiles[phaseOp.op][phaseOp.task] = [];
                 }
 
-                categorizedFiles[phaseOp.op][phaseOp.task].push(opSetFile);
+                if (!(categorizedFiles[phaseOp.op][phaseOp.task][phaseOp.method] instanceof Array)) {
+                    categorizedFiles[phaseOp.op][phaseOp.task][phaseOp.method] = [];
+                }
+
+                categorizedFiles[phaseOp.op][phaseOp.task][phaseOp.method].push(opSetFile);
             }
         }
 
@@ -102,21 +107,29 @@ class runnerOpSet {
                 value = this.opSet[opKey];
 
             for (let taskKey in filesByTasks) {
-                const files = filesByTasks[taskKey];
-                let modifiedFiles = [];
+                const filesByMethods = filesByTasks[taskKey];
 
-                const valueSerialized = JSON.stringify([taskKey, value]);
-                for (let opSetFile of files) {
-                    opSetFile.addHash(valueSerialized);
-                    if (opSetFile.cached) {
-                        continue;
+                for (let methodKey in filesByMethods) {
+                    const files = filesByMethods[methodKey];
+                    let modifiedFiles = [];
+
+                    const valueSerialized = JSON.stringify([taskKey, value]);
+                    for (let opSetFile of files) {
+                        opSetFile.addHash(valueSerialized);
+                        if (opSetFile.cached) {
+                            continue;
+                        }
+
+                        modifiedFiles.push(opSetFile);
                     }
 
-                    modifiedFiles.push(opSetFile);
-                }
+                    const opDesc = (opKey === taskKey) ?
+                        opKey :
+                        `${opKey}:${taskKey}`;
 
-                console.log(chalk.yellow('    ' + opKey + '(' + taskKey + ')'), chalk.gray(modifiedFiles.length + ' files'));
-                await sey.registry.tasks[taskKey].exec(value, this, modifiedFiles);
+                    console.log(chalk.yellow('    ' + opDesc), chalk.gray(modifiedFiles.length + ' files'));
+                    await registry.modules[taskKey][methodKey](value, this, modifiedFiles);
+                }
             }
         }
     }

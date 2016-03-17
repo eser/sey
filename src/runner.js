@@ -3,6 +3,7 @@
 const chalk = require('chalk'),
     deepmerge = require('./utils/deepmerge.js'),
     // fsManager = require('./utils/fsManager.js'),
+    registry = require('./registry.js'),
     runnerOpSet = require('./runnerOpSet.js'),
     taskException = require('./taskException.js');
 
@@ -42,18 +43,20 @@ class runner {
             }
 
             for (let phase of this.config.content.presets[preset]) {
-                const phaseOps = sey.registry.phases[phase];
+                const phaseOps = registry.phases[phase];
 
-                if (phaseOps.length === 0) {
-                    continue;
+                registry.events.emit('before-' + phase, config, bundle);
+
+                if (phaseOps.length > 0) {
+                    let promises = new Array(opsLength);
+                    for (let i = 0; i < opsLength; i++) {
+                        promises[i] = runnerOpSets[i].exec(phase, phaseOps);
+                    }
+
+                    await Promise.all(promises);
                 }
 
-                let promises = new Array(opsLength);
-                for (let i = 0; i < opsLength; i++) {
-                    promises[i] = runnerOpSets[i].exec(phase, phaseOps);
-                }
-
-                await Promise.all(promises);
+                registry.events.emit('after-' + phase, config, bundle);
             }
 
             for (let i = 0; i < opsLength; i++) {
