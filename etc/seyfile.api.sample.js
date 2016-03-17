@@ -34,7 +34,7 @@ config.bundle('main')
         },
 
         clean: {
-            before: ['./dist'],
+            before: ['./dist/*'],
             after: []
         }
     });

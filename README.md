@@ -101,6 +101,11 @@ let config = {
             ''
         ].join('\n'),
 
+        clean: {
+            before: ['./dist/*'],
+            after: []
+        },
+
         ops: [
             {
                 src: ['./src/**/*.js', './src/**/*.ts', './src/**/*.jsx'],
@@ -158,7 +163,12 @@ config.bundle('main')
             ' * my package',
             ' */',
             ''
-        ].join('\n')
+        ].join('\n'),
+
+        clean: {
+            before: ['./dist/*'],
+            after: []
+        }
     });
 
 config.bundle('main')

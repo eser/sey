@@ -12,7 +12,7 @@ let config = new sey.config({
         },
 
         clean: {
-            before: ['./dist'],
+            before: ['./dist/*'],
             after: []
         }
     },

@@ -8,13 +8,13 @@ const // stream = require('stream'),
 
 class closureCompile {
     onLoad(registry) {
-        registry.addTask(this, {
-            phase: 'optimization',
-            formats: 'js',
-            op: 'optimize',
-            weight: 0.1,
-            method: 'exec'
-        });
+        // registry.addTask(this, {
+        //     phase: 'optimization',
+        //     formats: 'js',
+        //     op: 'optimize',
+        //     weight: 0.1,
+        //     method: 'exec'
+        // });
     }
 
     execSingle(value, file, options) {
