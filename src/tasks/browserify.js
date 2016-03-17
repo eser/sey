@@ -9,6 +9,10 @@ const stream = require('stream'),
 class browserify {
     exec(value, runnerOpSet, files) {
         return new Promise((resolve, reject) => {
+            if (!runnerOpSet.isTargeting('web')) {
+                return;
+            }
+
             let options = {
                 fullPaths: true
             };
