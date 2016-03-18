@@ -8,7 +8,7 @@ class babeljsx {
             phase: 'compile',
             formats: 'jsx',
             op: 'jsx',
-            weight: 0.5,
+            weight: 0.6,
             method: 'exec'
         });
     }
@@ -42,6 +42,7 @@ class babeljsx {
 
             const result = this._babelLib.transform(content, options);
 
+            file.setExtension('js');
             file.setContent(result.code);
         }
     }
