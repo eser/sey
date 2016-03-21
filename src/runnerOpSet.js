@@ -13,7 +13,7 @@ class runnerOpSet {
         this.opSet = opSet;
         this.config = config;
 
-        const files = globManager.glob(this.opSet.src),
+        const files = globManager.glob(this.opSet.src, true),
             filesLength = files.length;
 
         this.opSetFiles = new Array(filesLength);
