@@ -34,9 +34,9 @@ class globManager {
         return pathstr;
     }
 
-    static glob(paths) {
+    static glob(paths, noDirs) {
         const pathConversions = this._conversions(paths),
-            files = globAll.sync(paths, { nosort: true, nonull: false }),
+            files = globAll.sync(paths, { nosort: true, nonull: false, nodir: (noDirs === true) }),
             filesLength = files.length;
 
         let fileObjects = new Array(filesLength);
