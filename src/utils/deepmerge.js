@@ -1,16 +1,17 @@
-'use strict';
-
-let deepmerge = function (dst, src) {
+const deepmerge = function (dst, src) {
     for (let key in src) {
         if (typeof src[key] !== 'object') {
             dst[key] = src[key];
-        } else if (key in dst) {
+        }
+        else if (key in dst) {
             if (dst[key].constructor === Array && src[key].constructor === Array) {
                 dst[key] = dst[key].concat(src[key]);
-            } else {
+            }
+            else {
                 dst[key] = deepmerge(dst[key], src[key]);
             }
-        } else {
+        }
+        else {
             dst[key] = src[key];
         }
     }

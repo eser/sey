@@ -1,5 +1,3 @@
-'use strict';
-
 const deepmerge = require('../utils/deepmerge.js'),
     runnerOpSetFile = require('../runnerOpSetFile.js');
 
@@ -15,13 +13,13 @@ class concat {
     }
 
     async exec(value, runnerOpSet, files) {
-        let newLines = (value === undefined || value.newline !== false);
+        const newLines = (value === undefined || value.newline !== false),
+            newFile = new runnerOpSetFile({
+                path: `/${value}`,
+                fullpath: `./${value}`
+            });
 
-        let newFile = new runnerOpSetFile({
-                path: '/' + value,
-                fullpath: './' + value
-            }),
-            content = '';
+        let content = '';
 
         for (let file of files) {
             newFile.addHash(file.getHash());
@@ -32,7 +30,7 @@ class concat {
         }
 
         newFile.setContent(content);
-        runnerOpSet.opSetFiles = [newFile];
+        runnerOpSet.opSetFiles = [ newFile ];
     }
 }
 

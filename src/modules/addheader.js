@@ -1,5 +1,3 @@
-'use strict';
-
 class addheader {
     onLoad(registry) {
         registry.addTask(this, {
@@ -17,7 +15,8 @@ class addheader {
         }
 
         for (let file of files) {
-            let content = file.getContent();
+            const content = file.getContent();
+
             file.setContent(runnerOpSet.config.banner + content);
         }
     }

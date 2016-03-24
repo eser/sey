@@ -1,5 +1,3 @@
-'use strict';
-
 const deepmerge = require('../utils/deepmerge.js');
 
 class cleancss {
@@ -22,6 +20,7 @@ class cleancss {
                 function (err, result) {
                     if (err) {
                         reject(err);
+
                         return;
                     }
 
@@ -33,7 +32,7 @@ class cleancss {
     }
 
     async exec(value, runnerOpSet, files) {
-        let options = {
+        const options = {
             advanced: true,
             keepBreaks: false,
             keepSpecialComments: false,
@@ -41,6 +40,7 @@ class cleancss {
             processImport: false,
             shorthandCompacting: true
         };
+
         if (runnerOpSet.config.cleancss !== undefined) {
             deepmerge(options, runnerOpSet.config.cleancss);
         }
@@ -48,6 +48,7 @@ class cleancss {
         for (let file of files) {
             if (this._cleancssInstance === undefined) {
                 const cleancssLib = require('clean-css');
+
                 this._cleancssInstance = new cleancssLib(options);
             }
 

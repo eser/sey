@@ -1,5 +1,3 @@
-'use strict';
-
 const deepmerge = require('../utils/deepmerge.js');
 
 class uglifyjs {
@@ -14,9 +12,10 @@ class uglifyjs {
     }
 
     async exec(value, runnerOpSet, files) {
-        let options = {
+        const options = {
             fromString: true
         };
+
         if (runnerOpSet.config.uglifyjs !== undefined) {
             deepmerge(options, runnerOpSet.config.uglifyjs);
         }
@@ -28,7 +27,7 @@ class uglifyjs {
                 this._uglifyjsLib = require('uglify-js');
             }
 
-            let result = this._uglifyjsLib.minify(
+            const result = this._uglifyjsLib.minify(
                 content,
                 options
             );

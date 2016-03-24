@@ -1,5 +1,3 @@
-'use strict';
-
 const stream = require('stream'),
     path = require('path'),
     tmp = require('tmp'),
@@ -23,9 +21,10 @@ class browserify {
                 return;
             }
 
-            let options = {
+            const options = {
                 fullPaths: true
             };
+
             if (runnerOpSet.config.browserify !== undefined) {
                 deepmerge(options, runnerOpSet.config.browserify);
             }
@@ -37,28 +36,31 @@ class browserify {
             tmp.dir({ unsafeCleanup: true }, (err, tmppath, cleanup) => {
                 if (err) {
                     reject(err);
+
                     return;
                 }
 
                 runnerOpSet.outputFilesTo(tmppath);
 
-                let browserifyInstance = this._browserifyLib();
+                const browserifyInstance = this._browserifyLib();
+
                 browserifyInstance.add(path.join(tmppath, value.entry));
 
                 let browserifyOutput = '';
-                let browserifyStream = browserifyInstance.bundle();
+                const browserifyStream = browserifyInstance.bundle();
 
                 browserifyStream
                     .on('readable', () => {
                         const chunk = browserifyStream.read();
+
                         if (chunk !== null) {
                             browserifyOutput += chunk.toString();
                         }
                     })
                     .on('end', () => {
-                        let newFile = new runnerOpSetFile({
-                            path: '/' + value.name,
-                            fullpath: './' + value.name
+                        const newFile = new runnerOpSetFile({
+                            path: `/${value.name}`,
+                            fullpath: `./${value.name}`
                         });
 
                         for (let file of files) {
@@ -66,7 +68,7 @@ class browserify {
                         }
 
                         newFile.setContent(browserifyOutput);
-                        runnerOpSet.opSetFiles = [newFile];
+                        runnerOpSet.opSetFiles = [ newFile ];
 
                         cleanup();
                         resolve();

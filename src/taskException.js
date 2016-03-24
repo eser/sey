@@ -1,5 +1,3 @@
-'use strict';
-
 class taskException {
     constructor() {
         this.issues = [];
@@ -14,8 +12,8 @@ class taskException {
     }
 
     export() {
-        const issuesLength = this.issues.length;
-        let messages = new Array(issuesLength);
+        const issuesLength = this.issues.length,
+            messages = new Array(issuesLength);
 
         for (let i = 0; i < issuesLength; i++) {
             const issue = this.issues[i],

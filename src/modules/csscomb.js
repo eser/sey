@@ -1,5 +1,3 @@
-'use strict';
-
 const deepmerge = require('../utils/deepmerge.js');
 
 class csscomb {
@@ -14,7 +12,7 @@ class csscomb {
     }
 
     async exec(value, runnerOpSet, files) {
-        let options = {
+        const options = {
             'remove-empty-rulesets': true,
             'always-semicolon': true,
             'color-case': 'upper',
@@ -23,7 +21,7 @@ class csscomb {
             'element-case': 'lower',
             'eof-newline': true,
             'leading-zero': true,
-            'quotes': 'single',
+            quotes: 'single',
             'space-before-colon': '',
             'space-after-colon': ' ',
             'space-before-combinator': ' ',
@@ -38,8 +36,9 @@ class csscomb {
             'tab-size': 4,
             'unitless-zero': true,
             'vendor-prefix-align': true,
-            'verbose': true
+            verbose: true
         };
+
         if (runnerOpSet.config.csscomb !== undefined) {
             deepmerge(options, runnerOpSet.config.csscomb);
         }
@@ -49,10 +48,12 @@ class csscomb {
 
             if (this._csscombInstance === undefined) {
                 const csscombType = require('csscomb');
+
                 this._csscombInstance = new csscombType(options, 'css');
             }
 
             const result = this._csscombInstance.processString(content);
+
             file.setContent(result);
         }
     }

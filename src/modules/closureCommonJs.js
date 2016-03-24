@@ -1,5 +1,3 @@
-'use strict';
-
 const // stream = require('stream'),
     path = require('path'),
     tmp = require('tmp'),
@@ -20,7 +18,7 @@ class closureCommonJs {
 
     exec(value, runnerOpSet, files) {
         return new Promise((resolve, reject) => {
-            let options = {
+            const options = {
                 process_common_js_modules: true
                 // common_js_entry_module: value.entry
             };
@@ -45,6 +43,7 @@ class closureCommonJs {
             tmp.dir({ unsafeCleanup: true }, (err, tmppath, cleanup) => {
                 if (err) {
                     reject(err);
+
                     return;
                 }
 
@@ -54,16 +53,17 @@ class closureCommonJs {
                     path.join(tmppath, value.entry), // [],
                     options,
                     // readableStream,
-                    function (err, result) {
-                        if (err) {
+                    function (err2, result) {
+                        if (err2) {
                             cleanup();
-                            reject(err);
+                            reject(err2);
+
                             return;
                         }
 
-                        let newFile = new runnerOpSetFile({
-                            path: '/' + value.name,
-                            fullpath: './' + value.name
+                        const newFile = new runnerOpSetFile({
+                            path: `/${value.name}`,
+                            fullpath: `./${value.name}`
                         });
 
                         for (let file of files) {
@@ -71,7 +71,7 @@ class closureCommonJs {
                         }
 
                         newFile.setContent(result);
-                        runnerOpSet.opSetFiles = [newFile];
+                        runnerOpSet.opSetFiles = [ newFile ];
 
                         cleanup();
                         resolve();

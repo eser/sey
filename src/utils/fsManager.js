@@ -1,5 +1,3 @@
-'use strict';
-
 const os = require('os'),
     fs = require('fs'),
     path = require('path'),
@@ -10,7 +8,8 @@ class fsManager {
     static getStat(pathstr) {
         try {
             return fs.statSync(pathstr);
-        } catch (ex) {
+        }
+        catch (ex) {
             if (ex.code !== 'ENOENT') {
                 throw ex;
             }
@@ -73,7 +72,8 @@ class fsManager {
 
         try {
             list = fs.readdirSync(pathstr);
-        } catch (ex) {
+        }
+        catch (ex) {
             if (ex.code === 'ENOENT') {
                 return;
             }
@@ -110,7 +110,7 @@ class fsManager {
 
     static writeFile(pathstr, content) {
         let buffer = [
-            [pathstr, true, content]
+            [ pathstr, true, content ]
         ];
 
         while (buffer.length > 0) {
@@ -120,23 +120,28 @@ class fsManager {
                 if (item[1]) {
                     if (item[2].constructor === Buffer) {
                         fs.writeFileSync(item[0], item[2], 0, item[2].length);
-                    } else {
+                    }
+                    else {
                         fs.writeFileSync(item[0], item[2]);
                     }
-                } else {
+                }
+                else {
                     fs.mkdirSync(item[0]);
                 }
 
                 buffer.shift();
-            } catch (ex) {
+            }
+            catch (ex) {
                 if (ex.code === 'ENOENT') {
                     let newpath = item[0];
+
                     do {
                         newpath = path.dirname(newpath);
                     } while (path.basename(newpath) === '.');
 
-                    buffer.unshift([newpath, false]);
-                } else {
+                    buffer.unshift([ newpath, false ]);
+                }
+                else {
                     throw ex;
                 }
             }

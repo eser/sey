@@ -1,5 +1,3 @@
-'use strict';
-
 const deepmerge = require('../utils/deepmerge.js');
 
 class babeljsx {
@@ -14,7 +12,7 @@ class babeljsx {
     }
 
     async exec(value, runnerOpSet, files) {
-        let options = {
+        const options = {
             ast: false,
             code: true,
             sourceMaps: false,
@@ -23,8 +21,9 @@ class babeljsx {
             plugins: [
                 require('babel-plugin-transform-react-jsx')
             ],
-            ignore: ['bower_components/', 'node_modules/']
+            ignore: [ 'bower_components/', 'node_modules/' ]
         };
+
         if (runnerOpSet.config.babel !== undefined) {
             deepmerge(options, runnerOpSet.config.babel);
         }

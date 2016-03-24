@@ -1,5 +1,3 @@
-'use strict';
-
 const deepmerge = require('../utils/deepmerge.js');
 
 class typescript {
@@ -14,7 +12,7 @@ class typescript {
     }
 
     async exec(value, runnerOpSet, files) {
-        let options = {
+        const options = {
             // isolatedModules: true,
             // noLib: true,
             // noResolve: true,

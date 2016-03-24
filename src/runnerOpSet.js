@@ -1,6 +1,4 @@
 /*global sey */
-'use strict';
-
 const chalk = require('chalk'),
     fsManager = require('./utils/fsManager.js'),
     globManager = require('./utils/globManager.js'),
@@ -50,7 +48,7 @@ class runnerOpSet {
 
     categorizeFiles(phaseOps) {
         // duplicate files array
-        let opSetFiles = this.opSetFiles.slice(0),
+        const opSetFiles = this.opSetFiles.slice(0),
             opSetFilesLength = opSetFiles.length,
             categorizedFiles = {};
 
@@ -62,7 +60,7 @@ class runnerOpSet {
             }
 
             const fileExtension = opSetFile.getExtension();
-            let opsDone = [];
+            const opsDone = [];
 
             for (let phaseOp of phaseOps) {
                 if (this.opSet[phaseOp.op] === undefined) {
@@ -110,10 +108,11 @@ class runnerOpSet {
                 const filesByMethods = filesByTasks[taskKey];
 
                 for (let methodKey in filesByMethods) {
-                    const files = filesByMethods[methodKey];
-                    let modifiedFiles = [];
+                    const files = filesByMethods[methodKey],
+                        modifiedFiles = [];
 
-                    const valueSerialized = JSON.stringify([taskKey, value]);
+                    const valueSerialized = JSON.stringify([ taskKey, value ]);
+
                     for (let opSetFile of files) {
                         opSetFile.addHash(valueSerialized);
                         if (opSetFile.cached) {
@@ -127,7 +126,7 @@ class runnerOpSet {
                         opKey :
                         `${opKey}:${taskKey}`;
 
-                    console.log(chalk.yellow('    ' + opDesc), chalk.gray(modifiedFiles.length + ' files'));
+                    console.log(chalk.yellow(`    ${opDesc}`), chalk.gray(`${modifiedFiles.length} files`));
                     await registry.modules[taskKey][methodKey](value, this, modifiedFiles);
                 }
             }
@@ -135,10 +134,11 @@ class runnerOpSet {
     }
 
     outputFilesTo(dest) {
-        const destPath = dest + '/';
+        const destPath = `${dest}/`;
 
         for (let opSetFile of this.opSetFiles) {
             const filePath = destPath + opSetFile.file.path;
+
             fsManager.writeFile(filePath, opSetFile.getContent());
         }
     }

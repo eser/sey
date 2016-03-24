@@ -1,5 +1,3 @@
-'use strict';
-
 const path = require('path'),
     chalk = require('chalk'),
     fsManager = require('./utils/fsManager.js'),
@@ -24,11 +22,12 @@ class sey {
     static initFile(file, preferApi, override) {
         if (fsManager.exists(file) && !override) {
             console.log(chalk.red('Aborted. File already exists:'), chalk.gray(file));
+
             return;
         }
 
         const sampleFile = (preferApi) ? 'seyfile.api.sample.js' : 'seyfile.config.sample.js',
-            content = fsManager.readFile(__dirname + '/../etc/' + sampleFile);
+            content = fsManager.readFile(`${__dirname}/../etc/${sampleFile}`);
 
         fsManager.writeFile(file, content);
 
@@ -36,7 +35,7 @@ class sey {
     }
 
     static clean() {
-        fsManager.rm(this.workingPath + '/*');
+        fsManager.rm(`${this.workingPath}/*`);
 
         console.log(chalk.white('Working path is cleaned.'));
     }
@@ -50,7 +49,8 @@ class sey {
 
         if (configInstance instanceof config) {
             currentConfig = configInstance;
-        } else {
+        }
+        else {
             currentConfig = new config(configInstance);
         }
 
