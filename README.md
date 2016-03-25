@@ -44,16 +44,15 @@ in other words, sey...
 ### Built-in Tasks
 
 * **addheader:** adds file header to each file
+* **compile:** compiles various source files (typescript, jsx, sass, less) into JavaScript
 * **commonjs:** enables commonjs modules in browser
 * **concat:** concatenates all content of source files
 * **eolfix:** replaces various EOL types with unix standard
-* **jsx:** converts React JSX files into browser compatible JavaScript
 * **lint:** lints source files
 * **minify:** minifies source files
 * **optimize:** optimizes source files if available
 * **preprocess:** proprocesses source files for macro support
-* **transpile:** transpiles source files to adapt standards (LESS/SASS -> CSS, ES6 -> JS, etc.)
-* **typescript:** compiles Microsoft TypeScript files into JS code
+* **transpile:** transpiles source files to adapt standards (ES6 -> ES5, etc.)
 
 
 ### Usage
@@ -112,27 +111,26 @@ let config = {
                 dest: './dist/scripts/',
 
                 addheader: true,
+                compile: true,
                 commonjs: { name: 'browserified.js', entry: './index.js' },
                 eolfix: true,
-                jsx: true,
                 lint: true,
                 optimize: true,
                 preprocess: true,
-                transpile: true,
-                typescript: true
+                transpile: true
             },
             {
                 src: ['./src/**/*.css', './src/**/*.less', './src/**/*.scss'],
                 dest: './dist/styles/',
 
                 addheader: true,
+                compile: true,
                 concat: 'style.css',
                 eolfix: true,
                 lint: true,
                 minify: true,
                 optimize: true,
-                preprocess: true,
-                transpile: true
+                preprocess: true
             },
             {
                 src: './test/*.js',
@@ -174,20 +172,20 @@ config.bundle('main')
 config.bundle('main')
     .src(['./src/**/*.js', './src/**/*.ts', './src/**/*.jsx'])
     .addheader()
+    .compile()
     .commonjs({ name: 'browserified.js', entry: './index.js' })
     .eolfix()
-    .jsx()
     .lint()
     .optimize()
     .preprocess()
     .transpile()
-    .typescript()
     .dest('./dist/scripts/')
     .exec();
 
 config.bundle('main')
     .src(['./src/**/*.css', './src/**/*.less', './src/**/*.scss'])
     .addheader()
+    .compile()
     .concat('style.css')
     .eolfix()
     .lint()
@@ -226,10 +224,12 @@ Sample Hierarchy:
     + preprocess
     + lint
     - compile (operations)
-      - jsx (tasks)
+      - compile (tasks)
         + babeljsx
+        + less
+        + sass
+        + typescript
       + transpile
-      + typescript
     + bundling
     + finalize
   + publish
@@ -253,7 +253,7 @@ To do so, the dominant (with higher weight point) task is elected depending on m
 
 - Deploy Task
 - Watch Task (Refresh Friendliness)
-- PostCSS Tasks
+- PostCSS Tasks (transpile op)
 - Sourcemaps
 - Fancy output including line counts, lint and test results
 

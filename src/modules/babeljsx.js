@@ -5,8 +5,8 @@ class babeljsx {
         registry.addTask(this, {
             phase: 'compile',
             formats: 'jsx',
-            op: 'jsx',
-            weight: 0.6,
+            op: 'compile',
+            weight: 0.5,
             method: 'exec'
         });
     }

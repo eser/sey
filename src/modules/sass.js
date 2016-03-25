@@ -5,7 +5,7 @@ class sass {
         registry.addTask(this, {
             phase: 'compile',
             formats: 'scss',
-            op: 'transpile',
+            op: 'compile',
             weight: 0.5,
             method: 'exec'
         });

@@ -6,7 +6,7 @@ class babel {
             phase: 'compile',
             formats: 'js',
             op: 'transpile',
-            weight: 0.5,
+            weight: 0.8,
             method: 'exec'
         });
     }
