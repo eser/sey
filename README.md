@@ -5,11 +5,11 @@
 [![dependencies][dep-image]][dep-url]
 [![license][license-image]][license-url]
 
-Simple JavaScript build tool with declarative and easy configuration. It also has incremental build support which only rebuilds changed files to pace up the build process.
+Simple JavaScript bundling tool with declarative and easy configuration. It also has incremental build support which only rebuilds changed files to pace up build and bundling processes.
 
 ![Sey](docs/sey-effect.png)
 
-Built-in tasks empower sey in order to achieve unique features like **dead code elimination** that no other build tool offered yet.
+Built-in modules take the responsibility of maintaining dependencies and compatibility issues.
 
 
 ## Why sey
@@ -26,7 +26,7 @@ This is where sey comes into play and offers alternative build system:
 | Configuration Type      | API and JSON | JSON         | API          |
 | Platform targeting      | node and web | Agnostic     | Agnostic     |
 | Incremental builds      | ✓            |              |              |
-| Built-in tasks          | ✓            |              |              |
+| Built-in modules        | ✓            |              |              |
 | No disk IO during tasks | ✓            |              |              |
 | No maintainance cost    | ✓            |              |              |
 
@@ -205,6 +205,48 @@ config.bundle('main')
 
 sey.run(config);
 ```
+
+### How sey works
+
+sey is usually being started from command line. It simply loads its configuration named `seyfile.js` and built-in modules first.
+
+Loaded modules may delegate any "phase". Or, they can subscribe any internal event.
+
+Depending on command line parameters, a "preset" will be executed.
+
+---
+
+Sample Hierarchy:
+
+```
+- \ (presets)
+  + lint
+  - build (phases)
+    + init
+    + preprocess
+    + lint
+    - compile (operations)
+      - jsx (tasks)
+        + babeljsx
+      + transpile
+      + typescript
+    + bundling
+    + finalize
+  + publish
+  + test
+  + server
+  + deploy
+```
+
+**Preset**: A set of phases in execution order. For example `build` executes init, preprocess, lint, compile, bundling and finalize "phase"s in a sequence.
+
+**Phase**: Each step of delivery. Consists of "operation"s.
+
+**Operation**: The delegation point of tasks. However configuration directives tell us which operation is asked, operation must correspond to a task to be executed.
+
+To do so, the dominant (with higher weight point) task is elected depending on modules' claims.
+
+**Task**: The class definition of the task.
 
 
 ### Todo List
