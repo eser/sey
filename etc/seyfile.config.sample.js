@@ -11,10 +11,7 @@ let config = new sey.config({
         less: {
         },
 
-        clean: {
-            before: ['./dist/*'],
-            after: []
-        }
+        eser: true
     },
 
     main: {
@@ -36,33 +33,37 @@ let config = new sey.config({
             BUNDLE: 'main'
         },
 
+        clean: {
+            before: ['./dist/*'],
+            after: []
+        },
+
         ops: [
             {
                 src: ['./src/**/*.js', './src/**/*.ts', './src/**/*.jsx'],
                 dest: './dist/scripts/',
 
                 addheader: true,
+                compile: true,
                 commonjs: { name: 'browserified.js', entry: './index.js' },
                 eolfix: true,
-                jsx: true,
                 lint: true,
                 optimize: true,
                 preprocess: true,
-                transpile: true,
-                typescript: true
+                transpile: true
             },
             {
                 src: ['./src/**/*.css', './src/**/*.less', './src/**/*.scss'],
                 dest: './dist/styles/',
 
                 addheader: true,
+                compile: true,
                 concat: 'style.css',
                 eolfix: true,
                 lint: true,
                 minify: true,
                 optimize: true,
-                preprocess: true,
-                transpile: true
+                preprocess: true
             },
             {
                 src: './test/*.js',

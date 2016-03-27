@@ -1,5 +1,3 @@
-'use strict';
-
 const deepmerge = require('../utils/deepmerge.js');
 
 class csscomb {
@@ -14,32 +12,13 @@ class csscomb {
     }
 
     async exec(value, runnerOpSet, files) {
-        let options = {
-            'remove-empty-rulesets': true,
-            'always-semicolon': true,
-            'color-case': 'upper',
-            'block-indent': '    ',
-            'color-shorthand': false,
-            'element-case': 'lower',
-            'eof-newline': true,
-            'leading-zero': true,
-            'quotes': 'single',
-            'space-before-colon': '',
-            'space-after-colon': ' ',
-            'space-before-combinator': ' ',
-            'space-after-combinator': ' ',
-            'space-between-declarations': '\n',
-            'space-before-opening-brace': ' ',
-            'space-after-opening-brace': '\n',
-            'space-after-selector-delimiter': ' ',
-            'space-before-selector-delimiter': '',
-            'space-before-closing-brace': '\n',
-            'strip-spaces': true,
-            'tab-size': 4,
-            'unitless-zero': true,
-            'vendor-prefix-align': true,
-            'verbose': true
+        const options = {
         };
+
+        if (runnerOpSet.config.eser === true) {
+            deepmerge(options, require('eser/.csscomb.json'));
+        }
+
         if (runnerOpSet.config.csscomb !== undefined) {
             deepmerge(options, runnerOpSet.config.csscomb);
         }
@@ -49,10 +28,12 @@ class csscomb {
 
             if (this._csscombInstance === undefined) {
                 const csscombType = require('csscomb');
+
                 this._csscombInstance = new csscombType(options, 'css');
             }
 
             const result = this._csscombInstance.processString(content);
+
             file.setContent(result);
         }
     }

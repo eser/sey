@@ -1,16 +1,15 @@
-'use strict';
-
 const globAll = require('glob-all'),
     globParent = require('glob-parent');
 
 class globManager {
     static _conversions(paths) {
-        const pathArray = (paths.constructor === Array) ? paths : [paths],
-            pathArrayLength = pathArray.length;
-        let result = new Array(pathArrayLength);
+        const pathArray = (paths.constructor === Array) ? paths : [ paths ],
+            pathArrayLength = pathArray.length,
+            result = new Array(pathArrayLength);
 
         for (let i = 0; i < pathArrayLength; i++) {
             const pathstr = pathArray[i];
+
             if (pathstr.substring(0, 1) === '!') {
                 continue;
             }
@@ -37,9 +36,9 @@ class globManager {
     static glob(paths, noDirs) {
         const pathConversions = this._conversions(paths),
             files = globAll.sync(paths, { nosort: true, nonull: false, nodir: (noDirs === true) }),
-            filesLength = files.length;
+            filesLength = files.length,
+            fileObjects = new Array(filesLength);
 
-        let fileObjects = new Array(filesLength);
         for (let i = 0; i < filesLength; i++) {
             fileObjects[i] = {
                 fullpath: files[i],

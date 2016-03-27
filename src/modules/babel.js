@@ -1,5 +1,3 @@
-'use strict';
-
 const deepmerge = require('../utils/deepmerge.js');
 
 class babel {
@@ -8,21 +6,22 @@ class babel {
             phase: 'compile',
             formats: 'js',
             op: 'transpile',
-            weight: 0.5,
+            weight: 0.8,
             method: 'exec'
         });
     }
 
     async exec(value, runnerOpSet, files) {
-        let options = {
+        const options = {
             ast: false,
             code: true,
             sourceMaps: false,
 
             // presets: [],
             plugins: [],
-            ignore: ['bower_components/', 'node_modules/']
+            ignore: [ 'bower_components/', 'node_modules/' ]
         };
+
         if (runnerOpSet.config.babel !== undefined) {
             deepmerge(options, runnerOpSet.config.babel);
         }

@@ -1,5 +1,3 @@
-'use strict';
-
 const // stream = require('stream'),
     fs = require('fs'),
     tmp = require('tmp'),
@@ -37,10 +35,11 @@ class closureCompile {
                     tmppath, // [],
                     options,
                     // readableStream,
-                    function (err, result) {
-                        if (err) {
+                    function (err2, result) {
+                        if (err2) {
                             cleanup();
-                            reject(err);
+                            reject(err2);
+
                             return;
                         }
 
@@ -54,7 +53,7 @@ class closureCompile {
     }
 
     async exec(value, runnerOpSet, files) {
-        let options = {
+        const options = {
             compilation_level: 'ADVANCED_OPTIMIZATIONS' // ,
             // formatting: 'PRETTY_PRINT'
         };

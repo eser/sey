@@ -5,11 +5,11 @@
 [![dependencies][dep-image]][dep-url]
 [![license][license-image]][license-url]
 
-Simple JavaScript build tool with declarative and easy configuration. It also has incremental build support which only rebuilds changed files to pace up the build process.
+Simple JavaScript bundling tool with declarative and easy configuration. It also has incremental build support which only rebuilds changed files to pace up build and bundling processes.
 
 ![Sey](docs/sey-effect.png)
 
-Built-in tasks empower sey in order to achieve unique features like **dead code elimination** that no other build tool offered yet.
+Built-in modules take the responsibility of maintaining dependencies and compatibility issues.
 
 
 ## Why sey
@@ -26,7 +26,7 @@ This is where sey comes into play and offers alternative build system:
 | Configuration Type      | API and JSON | JSON         | API          |
 | Platform targeting      | node and web | Agnostic     | Agnostic     |
 | Incremental builds      | ✓            |              |              |
-| Built-in tasks          | ✓            |              |              |
+| Built-in modules        | ✓            |              |              |
 | No disk IO during tasks | ✓            |              |              |
 | No maintainance cost    | ✓            |              |              |
 
@@ -44,16 +44,15 @@ in other words, sey...
 ### Built-in Tasks
 
 * **addheader:** adds file header to each file
+* **compile:** compiles various source files (typescript, jsx, sass, less) into JavaScript
 * **commonjs:** enables commonjs modules in browser
 * **concat:** concatenates all content of source files
 * **eolfix:** replaces various EOL types with unix standard
-* **jsx:** converts React JSX files into browser compatible JavaScript
 * **lint:** lints source files
 * **minify:** minifies source files
 * **optimize:** optimizes source files if available
 * **preprocess:** proprocesses source files for macro support
-* **transpile:** transpiles source files to adapt standards (LESS/SASS -> CSS, ES6 -> JS, etc.)
-* **typescript:** compiles Microsoft TypeScript files into JS code
+* **transpile:** transpiles source files to adapt standards (ES6 -> ES5, etc.)
 
 
 ### Usage
@@ -94,6 +93,8 @@ let config = {
             quotes: [ 2, 'single' ]
         },
 
+        eser: true,
+
         banner: [
             '/**',
             ' * my package',
@@ -112,27 +113,26 @@ let config = {
                 dest: './dist/scripts/',
 
                 addheader: true,
+                compile: true,
                 commonjs: { name: 'browserified.js', entry: './index.js' },
                 eolfix: true,
-                jsx: true,
                 lint: true,
                 optimize: true,
                 preprocess: true,
-                transpile: true,
-                typescript: true
+                transpile: true
             },
             {
                 src: ['./src/**/*.css', './src/**/*.less', './src/**/*.scss'],
                 dest: './dist/styles/',
 
                 addheader: true,
+                compile: true,
                 concat: 'style.css',
                 eolfix: true,
                 lint: true,
                 minify: true,
                 optimize: true,
-                preprocess: true,
-                transpile: true
+                preprocess: true
             },
             {
                 src: './test/*.js',
@@ -158,6 +158,8 @@ config.bundle('main')
             quotes: [ 2, 'single' ]
         },
 
+        eser: true,
+
         banner: [
             '/**',
             ' * my package',
@@ -174,20 +176,20 @@ config.bundle('main')
 config.bundle('main')
     .src(['./src/**/*.js', './src/**/*.ts', './src/**/*.jsx'])
     .addheader()
+    .compile()
     .commonjs({ name: 'browserified.js', entry: './index.js' })
     .eolfix()
-    .jsx()
     .lint()
     .optimize()
     .preprocess()
     .transpile()
-    .typescript()
     .dest('./dist/scripts/')
     .exec();
 
 config.bundle('main')
     .src(['./src/**/*.css', './src/**/*.less', './src/**/*.scss'])
     .addheader()
+    .compile()
     .concat('style.css')
     .eolfix()
     .lint()
@@ -206,12 +208,56 @@ config.bundle('main')
 sey.run(config);
 ```
 
+### How sey works
+
+sey is usually being started from command line. It simply loads its configuration named `seyfile.js` and built-in modules first.
+
+Loaded modules may delegate any "phase". Or, they can subscribe any internal event.
+
+Depending on command line parameters, a "preset" will be executed.
+
+---
+
+Sample Hierarchy:
+
+```
+- \ (presets)
+  + lint
+  - build (phases)
+    + init
+    + preprocess
+    + lint
+    - compile (operations)
+      - compile (tasks)
+        + babeljsx
+        + less
+        + sass
+        + typescript
+      + transpile
+    + bundling
+    + finalize
+  + publish
+  + test
+  + server
+  + deploy
+```
+
+**Preset**: A set of phases in execution order. For example `build` executes init, preprocess, lint, compile, bundling and finalize "phase"s in a sequence.
+
+**Phase**: Each step of delivery. Consists of "operation"s.
+
+**Operation**: The delegation point of tasks. However configuration directives tell us which operation is asked, operation must correspond to a task to be executed.
+
+To do so, the dominant (with higher weight point) task is elected depending on modules' claims.
+
+**Task**: The class definition of the task.
+
 
 ### Todo List
 
 - Deploy Task
 - Watch Task (Refresh Friendliness)
-- PostCSS Tasks
+- PostCSS Tasks (transpile op)
 - Sourcemaps
 - Fancy output including line counts, lint and test results
 

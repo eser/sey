@@ -1,5 +1,3 @@
-'use strict';
-
 /* -------------------------
  * Portions of this code are from Path utilities under the MIT license.
  *
@@ -19,19 +17,13 @@ class pathinfo {
     }
 
     static basename(pathstr) {
-        let base = this.filename(pathstr);
-        if (!~base.indexOf('.')) {
-            return '';
-        }
+        const base = this.filename(pathstr);
 
         return base.split('.').shift();
     }
 
     static extension(pathstr) {
-        let base = this.filename(pathstr);
-        if (!~base.indexOf('.')) {
-            return '';
-        }
+        const base = this.filename(pathstr);
 
         return base.split('.').pop();
     }

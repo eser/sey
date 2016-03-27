@@ -11,7 +11,9 @@ config.bundle('global')
         },
 
         less: {
-        }
+        },
+
+        eser: true
     });
 
 config.bundle('main')
@@ -42,27 +44,26 @@ config.bundle('main')
 config.bundle('main')
     .src(['./src/**/*.js', './src/**/*.ts', './src/**/*.jsx'])
     .addheader()
+    .compile()
     .commonjs({ name: 'browserified.js', entry: './index.js' })
     .eolfix()
-    .jsx()
     .lint()
     .optimize()
     .preprocess()
     .transpile()
-    .typescript()
     .dest('./dist/scripts/')
     .exec();
 
 config.bundle('main')
     .src(['./src/**/*.css', './src/**/*.less', './src/**/*.scss'])
     .addheader()
+    .compile()
     .concat('style.css')
     .eolfix()
     .lint()
     .minify()
     .optimize()
     .preprocess()
-    .transpile()
     .dest('./dist/styles/')
     .exec();
 

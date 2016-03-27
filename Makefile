@@ -7,7 +7,8 @@ node_modules:
 
 .PHONY: lint
 lint: node_modules
-	@$(NPM)/eslint --config ./.eslintrc ./bin/ ./src/ ./test/
+	@$(NPM)/eslint ./bin/ ./src/ ./test/
+	# @$(NPM)/csscomb --lint ./src/
 
 .PHONY: test
 test: build

@@ -1,6 +1,4 @@
 /*global sey */
-'use strict';
-
 const crc = require('crc'),
     pathinfo = require('./utils/pathinfo.js'),
     fsManager = require('./utils/fsManager.js');
@@ -14,21 +12,23 @@ class runnerOpSetFile {
                 String(fsManager.getLastMod(file.fullpath)),
                 crc.crc32(file.fullpath)
             );
-        } else {
+        }
+        else {
             this.hash = hash;
         }
 
         if (content === undefined) {
             this.contentFile = this.file.fullpath;
             this.cached = true;
-        } else {
+        }
+        else {
             this.content = content;
             this.cached = false;
         }
     }
 
     cacheFilename() {
-        return sey.workingPath + '/' + this.hash.toString(16) /* + '_' + this.file.path */;
+        return `${sey.workingPath}/${this.hash.toString(16)}`; // + `_${this.file.path}`
     }
 
     addHash(tag) {
@@ -41,6 +41,7 @@ class runnerOpSetFile {
             // if file does not exist
             if (fileModified === -1) {
                 this.cached = false;
+
                 return;
             }
 
@@ -62,9 +63,9 @@ class runnerOpSetFile {
     }
 
     setFilename(filename) {
-        let dirname = pathinfo.dirname(this.file.path);
+        const dirname = pathinfo.dirname(this.file.path);
 
-        this.file.path = dirname + '/' + filename;
+        this.file.path = `${dirname}/${filename}`;
     }
 
     getExtension() {
@@ -72,7 +73,7 @@ class runnerOpSetFile {
     }
 
     checkExtensionMatching(extensions) {
-        let currentExtension = this.getExtension();
+        const currentExtension = this.getExtension();
 
         for (let extension of extensions) {
             if (extension === '*' || extension === currentExtension) {
@@ -84,12 +85,12 @@ class runnerOpSetFile {
     }
 
     setExtension(extension) {
-        let dirname = pathinfo.dirname(this.file.path),
+        const dirname = pathinfo.dirname(this.file.path),
             basename = pathinfo.basename(this.file.path);
 
-        this.file.path = dirname + '/' + basename;
+        this.file.path = `${dirname}/${basename}`;
         if (extension) {
-            this.file.path += '.' + extension;
+            this.file.path += `.${extension}`;
         }
     }
 

@@ -1,5 +1,3 @@
-'use strict';
-
 class eolfix {
     onLoad(registry) {
         registry.addTask(this, {
@@ -13,7 +11,8 @@ class eolfix {
 
     async exec(value, runnerOpSet, files) {
         for (let file of files) {
-            let content = file.getContent();
+            const content = file.getContent();
+
             file.setContent(content.replace(/(?:\r\n|\r)/g, '\n'));
         }
     }

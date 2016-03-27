@@ -1,5 +1,3 @@
-'use strict';
-
 const deepmerge = require('../utils/deepmerge.js');
 
 class typescript {
@@ -7,14 +5,14 @@ class typescript {
         registry.addTask(this, {
             phase: 'compile',
             formats: 'ts',
-            op: 'typescript',
-            weight: 0.7,
+            op: 'compile',
+            weight: 0.5,
             method: 'exec'
         });
     }
 
     async exec(value, runnerOpSet, files) {
-        let options = {
+        const options = {
             // isolatedModules: true,
             // noLib: true,
             // noResolve: true,
@@ -33,6 +31,7 @@ class typescript {
             deepmerge(options, runnerOpSet.config.typescript);
         }
 
+        // TODO runnerOpSet.outputFilesTo(tmppath); ?
         for (let file of files) {
             const content = file.getContent();
 

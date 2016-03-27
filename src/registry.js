@@ -1,5 +1,3 @@
-'use strict';
-
 const pathLib = require('path'),
     fs = require('fs'),
     EventEmitter = require('events'),
@@ -29,7 +27,7 @@ class registry {
             files = fs.readdirSync(normalizedPath);
 
         for (let item of files) {
-            this.loadFromFile('./modules/' + item);
+            this.loadFromFile(`./modules/${item}`);
         }
 
         this.sort();
@@ -51,7 +49,7 @@ class registry {
         this.phases[taskInfo.phase].push({
             op: taskInfo.op,
             task: name,
-            formats: (taskInfo.formats.constructor === Array) ? taskInfo.formats : [taskInfo.formats],
+            formats: (taskInfo.formats.constructor === Array) ? taskInfo.formats : [ taskInfo.formats ],
             weight: taskInfo.weight,
             method: taskInfo.method
         });
@@ -60,23 +58,25 @@ class registry {
     }
 
     load(obj) {
-        const name = obj.name;
-        let instance = new obj();
+        const name = obj.name,
+            newInstance = new obj();
 
         if (!(name in this.modules)) {
-            this.modules[name] = instance;
+            this.modules[name] = newInstance;
         }
 
-        instance.onLoad(this);
+        newInstance.onLoad(this);
     }
 
     loadFromFile(filepath) {
         const obj = require(filepath);
+
         this.load(obj);
     }
 }
 
 let instance = new registry();
+
 instance.init();
 
 module.exports = instance;
