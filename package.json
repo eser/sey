@@ -1,6 +1,6 @@
 {
   "name": "sey",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "Simple JavaScript build tool with declarative and easy configuration",
   "keywords": [
     "tasks",
@@ -50,6 +50,7 @@
     "deepmerge": "^0.2.10",
     "eser": "^0.1.0",
     "eslint": "^2.4.0",
+    "estraverse": "^4.2.0",
     "estraverse-fb": "^1.3.1",
     "glob-all": "^3.0.1",
     "glob-parent": "^2.0.0",
