@@ -11,10 +11,7 @@ let config = new sey.config({
         less: {
         },
 
-        clean: {
-            before: ['./dist/*'],
-            after: []
-        }
+        eser: true
     },
 
     main: {
@@ -34,6 +31,11 @@ let config = new sey.config({
 
         preprocessVars: {
             BUNDLE: 'main'
+        },
+
+        clean: {
+            before: ['./dist/*'],
+            after: []
         },
 
         ops: [

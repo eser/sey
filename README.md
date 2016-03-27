@@ -93,6 +93,8 @@ let config = {
             quotes: [ 2, 'single' ]
         },
 
+        eser: true,
+
         banner: [
             '/**',
             ' * my package',
@@ -155,6 +157,8 @@ config.bundle('main')
         eslint: {
             quotes: [ 2, 'single' ]
         },
+
+        eser: true,
 
         banner: [
             '/**',

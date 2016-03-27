@@ -11,7 +11,9 @@ config.bundle('global')
         },
 
         less: {
-        }
+        },
+
+        eser: true
     });
 
 config.bundle('main')
