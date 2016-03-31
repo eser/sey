@@ -40,7 +40,6 @@ class babel {
                     require('babel-plugin-transform-es2015-computed-properties'),
                     require('babel-plugin-transform-es2015-for-of'),
                     require('babel-plugin-check-es2015-constants'),
-                    require('babel-plugin-transform-es2015-spread'),
                     require('babel-plugin-transform-es2015-block-scoping'),
                     require('babel-plugin-transform-es2015-typeof-symbol'),
                     [
@@ -50,13 +49,16 @@ class babel {
                 ]);
             }
 
+            // v4.0.0 and upper
             options.plugins = options.plugins.concat([
                 require('babel-plugin-transform-es2015-destructuring'),
                 require('babel-plugin-transform-es2015-function-name'),
                 require('babel-plugin-transform-es2015-parameters'),
+                require('babel-plugin-transform-es2015-spread'),
                 require('babel-plugin-transform-es2015-sticky-regex'),
                 require('babel-plugin-transform-es2015-unicode-regex'),
-                require('babel-plugin-transform-es2015-modules-commonjs')
+                require('babel-plugin-transform-es2015-modules-commonjs'),
+                require('babel-plugin-transform-es2015-generator-return')
             ]);
         }
 
