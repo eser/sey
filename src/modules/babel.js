@@ -35,7 +35,6 @@ class babel {
                     require('babel-plugin-transform-es2015-block-scoped-functions'),
                     require('babel-plugin-transform-es2015-classes'),
                     require('babel-plugin-transform-es2015-object-super'),
-                    require('babel-plugin-transform-es2015-shorthand-properties'),
                     // require('babel-plugin-transform-es2015-duplicate-keys'),
                     require('babel-plugin-transform-es2015-computed-properties'),
                     require('babel-plugin-transform-es2015-for-of'),
@@ -57,8 +56,8 @@ class babel {
                 require('babel-plugin-transform-es2015-spread'),
                 require('babel-plugin-transform-es2015-sticky-regex'),
                 require('babel-plugin-transform-es2015-unicode-regex'),
-                require('babel-plugin-transform-es2015-modules-commonjs'),
-                require('babel-plugin-transform-es2015-generator-return')
+                require('babel-plugin-transform-es2015-shorthand-properties'),
+                require('babel-plugin-transform-es2015-modules-commonjs')
             ]);
         }
 
