@@ -101,6 +101,9 @@ class jslint {
 
             throw taskEx;
         }
+
+        // FIXME temporarily quick fix for linter
+        this._lintLib = undefined;
     }
 }
 
