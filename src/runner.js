@@ -13,8 +13,8 @@ class runner {
     getBundleConfig(bundle) {
         const config = {};
 
-        if (this.config.content.global !== undefined) {
-            deepmerge(config, this.config.content.global);
+        if (bundle !== 'global' && bundle !== 'common' && this.config.content.common !== undefined) {
+            deepmerge(config, this.config.content.common);
         }
 
         if (this.config.content[bundle] !== undefined) {
@@ -40,10 +40,10 @@ class runner {
                 runnerOpSets[i] = new runnerOpSet(bundle, config.ops[i], config);
             }
 
-            for (let phase of this.config.content.presets[preset]) {
+            for (let phase of this.config.content.global.presets[preset]) {
                 const phaseOps = registry.phases[phase];
 
-                registry.events.emit(`before-${phase}`, config, bundle);
+                registry.events.emit(`bundle-before-${phase}`, config, bundle);
 
                 if (phaseOps.length > 0) {
                     const promises = new Array(opsLength);
@@ -55,7 +55,7 @@ class runner {
                     await Promise.all(promises);
                 }
 
-                registry.events.emit(`after-${phase}`, config, bundle);
+                registry.events.emit(`bundle-after-${phase}`, config, bundle);
             }
 
             for (let i = 0; i < opsLength; i++) {
@@ -73,12 +73,14 @@ class runner {
     }
 
     async run(preset, options) {
-        const bundleOnly = (options.bundle !== undefined);
+        const bundleOnly = (options.bundle !== undefined),
+            config = this.config.content;
 
         let bundleCount = 0;
 
-        for (let bundle in this.config.content) {
-            if (bundle === 'global' || bundle === 'presets') {
+        registry.events.emit(`runner-before`, config);
+        for (let bundle in config) {
+            if (bundle === 'global' || bundle === 'common') {
                 continue;
             }
             if (bundleOnly && options.bundle !== bundle) {
@@ -88,6 +90,7 @@ class runner {
             bundleCount++;
             await this.runBundle(preset, bundle);
         }
+        registry.events.emit(`runner-after`, config);
 
         if (bundleCount === 0) {
             if (bundleOnly) {
