@@ -85,6 +85,13 @@ Configuration Based:
 
 ```js
 let config = {
+    global: {
+        clean: {
+            before: ['./dist/*'],
+            after: []
+        }
+    },
+
     main: {
         target: 'node',
         standard: 2016,
@@ -101,11 +108,6 @@ let config = {
             ' */',
             ''
         ].join('\n'),
-
-        clean: {
-            before: ['./dist/*'],
-            after: []
-        },
 
         ops: [
             {
@@ -150,6 +152,13 @@ API Based:
 ```js
 let config = new sey.config();
 
+config.setGlobal({
+        clean: {
+            before: ['./dist/*'],
+            after: []
+        }
+    });
+
 config.bundle('main')
     .setTarget('node')
     .setStandard(2016)
@@ -165,12 +174,7 @@ config.bundle('main')
             ' * my package',
             ' */',
             ''
-        ].join('\n'),
-
-        clean: {
-            before: ['./dist/*'],
-            after: []
-        }
+        ].join('\n')
     });
 
 config.bundle('main')

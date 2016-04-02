@@ -4,13 +4,15 @@ const deepmerge = require('./utils/deepmerge.js'),
 class config {
     constructor(initialContent) {
         this.content = {
-            presets: {
-                lint: [ 'init', 'preprocess', 'lint', 'finalize' ],
-                build: [ 'init', 'preprocess', 'lint', 'compile', 'bundling', 'finalize' ],
-                publish: [ 'init', 'preprocess', 'lint', 'compile', 'bundling', 'optimization', 'branding', 'finalize' ],
-                test: [ 'init', 'preprocess', 'lint', 'compile', 'bundling', 'optimization', 'branding', 'testing', 'finalize' ],
-                server: [ 'init', 'preprocess', 'lint', 'compile', 'bundling', 'optimization', 'branding', 'finalize', 'development-server' ],
-                deploy: [ 'init', 'preprocess', 'lint', 'compile', 'bundling', 'optimization', 'branding', 'finalize', 'deploy' ]
+            global: {
+                presets: {
+                    lint: [ 'init', 'preprocess', 'lint', 'finalize' ],
+                    build: [ 'init', 'preprocess', 'lint', 'compile', 'bundling', 'finalize' ],
+                    publish: [ 'init', 'preprocess', 'lint', 'compile', 'bundling', 'optimization', 'branding', 'finalize' ],
+                    test: [ 'init', 'preprocess', 'lint', 'compile', 'bundling', 'optimization', 'branding', 'testing', 'finalize' ],
+                    server: [ 'init', 'preprocess', 'lint', 'compile', 'bundling', 'optimization', 'branding', 'finalize', 'development-server' ],
+                    deploy: [ 'init', 'preprocess', 'lint', 'compile', 'bundling', 'optimization', 'branding', 'finalize', 'deploy' ]
+                }
             }
         };
 
@@ -39,6 +41,10 @@ class config {
         }
 
         return this.bundles[name];
+    }
+
+    setGlobal(options) {
+        this.bundle('global').set(options);
     }
 }
 

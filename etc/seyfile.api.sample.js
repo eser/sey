@@ -2,7 +2,14 @@
 
 let config = new sey.config();
 
-config.bundle('global')
+config.setGlobal({
+        clean: {
+            before: ['./dist/*'],
+            after: []
+        }
+    });
+
+config.bundle('common')
     .set({
         babel: {
         },
@@ -33,11 +40,6 @@ config.bundle('main')
 
         preprocessVars: {
             BUNDLE: 'main'
-        },
-
-        clean: {
-            before: ['./dist/*'],
-            after: []
         }
     });
 
