@@ -5,7 +5,7 @@ class typescript {
         registry.addTask(this, {
             phase: 'compile',
             formats: 'ts',
-            op: 'compile',
+            op: 'typescript',
             weight: 0.5,
             method: 'exec'
         });
@@ -13,10 +13,18 @@ class typescript {
 
     async exec(value, runnerOpSet, files) {
         const options = {
+            // allowJs: true,
+            // emitDecoratorMetadata: true,
             // isolatedModules: true,
+            // noImplicitAny: true,
             // noLib: true,
             // noResolve: true,
-            allowNonTsExtensions: true
+            // noEmit: true,
+            declaration: false,
+            preserveConstEnums: true,
+            removeComments: false,
+            sourceMap: false,
+            module: 'commonjs' // this._tsLib.ModuleKind.CommonJS
         };
 
         if (runnerOpSet.isStandard(2015)) {
@@ -25,6 +33,7 @@ class typescript {
 
         if (runnerOpSet.isStandard(2016)) {
             options.experimentalAsyncFunctions = true;
+            // options.experimentalDecorators = true;
         }
 
         if (runnerOpSet.config.typescript !== undefined) {
