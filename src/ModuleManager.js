@@ -32,9 +32,11 @@ class ModuleManager {
         this.sort();
     }
 
-    registerOps(configBundle) {
-        for (let taskInfo of this.phases) {
-            configBundle.addOp(taskInfo.op);
+    registerOps(config) {
+        for (let taskInfoKey in this.phases) {
+            const taskInfo = this.phases[taskInfoKey];
+
+            config.addOp(taskInfo.op);
         }
     }
 

@@ -8,16 +8,6 @@ class ConfigBundle {
         this.reset();
     }
 
-    static addOp(name) {
-        if (name in ConfigBundle.prototype) {
-            return;
-        }
-
-        ConfigBundle.prototype[name] = function (value) {
-            return this.op(name, value);
-        };
-    }
-
     getConfigNode() {
         if (!(this.name in this.owner.content)) {
             this.owner.content[this.name] = {};

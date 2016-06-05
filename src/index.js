@@ -3,7 +3,6 @@ const path = require('path'),
     // logger = require('simple-node-logger'),
     fsManager = require('./utils/fsManager.js'),
     Config = require('./Config.js'),
-    ConfigBundle = require('./ConfigBundle.js'),
     ModuleManager = require('./ModuleManager.js'),
     Runner = require('./Runner.js');
 
@@ -16,7 +15,7 @@ class sey {
 
     init() {
         this.moduleManager.init();
-        this.moduleManager.registerOps(ConfigBundle);
+        this.moduleManager.registerOps(Config);
 
         this.workingPath = path.join(process.cwd(), '.sey');
 

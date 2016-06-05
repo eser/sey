@@ -23,6 +23,16 @@ class Config {
         this.bundles = {};
     }
 
+    static addOp(name) {
+        if (name in ConfigBundle.prototype) {
+            return;
+        }
+
+        ConfigBundle.prototype[name] = function (value) {
+            return this.op(name, value);
+        };
+    }
+
     load(content) {
         this.content = content;
     }
