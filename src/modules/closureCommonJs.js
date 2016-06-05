@@ -3,7 +3,7 @@ const // stream = require('stream'),
     tmp = require('tmp'),
     deepmerge = require('../utils/deepmerge.js'),
     fsManager = require('../utils/fsManager.js'),
-    runnerOpSetFile = require('../runnerOpSetFile.js');
+    RunnerOpSetFile = require('../RunnerOpSetFile.js');
 
 class closureCommonJs {
     onLoad(registry) {
@@ -61,7 +61,7 @@ class closureCommonJs {
                             return;
                         }
 
-                        const newFile = new runnerOpSetFile({
+                        const newFile = new RunnerOpSetFile({
                             path: `/${value.name}`,
                             fullpath: `./${value.name}`
                         });

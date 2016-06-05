@@ -1,11 +1,8 @@
-'use strict';
+const path = require('path'),
+    fs = require('fs'),
+    EventEmitter = require('events');
 
-const pathLib = require('path'),
-      fs = require('fs'),
-      EventEmitter = require('events'),
-      configBundle = require('./configBundle.js');
-
-class registry {
+class ModuleManager {
     constructor() {
         this.modules = {};
         this.events = new EventEmitter();
@@ -25,14 +22,20 @@ class registry {
     }
 
     init() {
-        const normalizedPath = pathLib.join(__dirname, './modules'),
-              files = fs.readdirSync(normalizedPath);
+        const normalizedPath = path.join(__dirname, './modules'),
+            files = fs.readdirSync(normalizedPath);
 
         for (let item of files) {
-            this.loadFromFile(`./modules/${ item }`);
+            this.loadFromFile(`./modules/${item}`);
         }
 
         this.sort();
+    }
+
+    registerOps(configBundle) {
+        for (let taskInfo of this.phases) {
+            configBundle.addOp(taskInfo.op);
+        }
     }
 
     sort() {
@@ -51,17 +54,15 @@ class registry {
         this.phases[taskInfo.phase].push({
             op: taskInfo.op,
             task: name,
-            formats: taskInfo.formats.constructor === Array ? taskInfo.formats : [taskInfo.formats],
+            formats: (taskInfo.formats.constructor === Array) ? taskInfo.formats : [ taskInfo.formats ],
             weight: taskInfo.weight,
             method: taskInfo.method
         });
-
-        configBundle.addOp(taskInfo.op);
     }
 
     load(obj) {
         const name = obj.name,
-              newInstance = new obj();
+            newInstance = new obj();
 
         if (!(name in this.modules)) {
             this.modules[name] = newInstance;
@@ -77,8 +78,4 @@ class registry {
     }
 }
 
-let instance = new registry();
-
-instance.init();
-
-module.exports = instance;
+module.exports = ModuleManager;

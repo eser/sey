@@ -3,7 +3,7 @@ const crc = require('crc'),
     pathinfo = require('./utils/pathinfo.js'),
     fsManager = require('./utils/fsManager.js');
 
-class runnerOpSetFile {
+class RunnerOpSetFile {
     constructor(file, hash, content) {
         this.file = file;
 
@@ -101,4 +101,4 @@ class runnerOpSetFile {
     }
 }
 
-module.exports = runnerOpSetFile;
+module.exports = RunnerOpSetFile;

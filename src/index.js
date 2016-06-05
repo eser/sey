@@ -1,25 +1,36 @@
 const path = require('path'),
     chalk = require('chalk'),
+    // logger = require('simple-node-logger'),
     fsManager = require('./utils/fsManager.js'),
-    config = require('./config.js'),
-    registry = require('./registry.js'),
-    runner = require('./runner.js');
+    Config = require('./Config.js'),
+    ConfigBundle = require('./ConfigBundle.js'),
+    ModuleManager = require('./ModuleManager.js'),
+    Runner = require('./Runner.js');
 
 class sey {
-    static preload() {
-        this.config = config;
-        this.options = {};
+    constructor() {
+        this.moduleManager = new ModuleManager();
+        this.config = Config;
+        this.startParameters = {};
+    }
 
-        this.registry = registry;
+    init() {
+        this.moduleManager.init();
+        this.moduleManager.registerOps(ConfigBundle);
 
         this.workingPath = path.join(process.cwd(), '.sey');
+
+        // this.logManager = logger.createLogManager();
+        // this.logManager.createConsoleAppender();
+
+        // this.log = this.logManager.createLogger('sey');
     }
 
-    static setOptions(options) {
-        this.options = options;
+    setStartParameters(startParameters) {
+        this.startParameters = startParameters;
     }
 
-    static initFile(file, preferApi, override) {
+    initFile(file, preferApi, override) {
         if (fsManager.exists(file) && !override) {
             console.log(chalk.red('Aborted. File already exists:'), chalk.gray(file));
 
@@ -34,32 +45,34 @@ class sey {
         console.log(chalk.white('File created:'), chalk.gray(file));
     }
 
-    static clean() {
+    clean() {
         fsManager.rm(`${this.workingPath}/*`);
 
         console.log(chalk.white('Working path is cleaned.'));
     }
 
-    static selfCheck() {
+    selfCheck() {
         return [];
     }
 
-    static async run(configInstance) {
+    async run(configInstance) {
         let currentConfig;
 
-        if (configInstance instanceof config) {
+        if (configInstance instanceof Config) {
             currentConfig = configInstance;
         }
         else {
-            currentConfig = new config(configInstance);
+            currentConfig = new Config(configInstance);
         }
 
-        const currentRunner = new runner(currentConfig);
+        const currentRunner = new Runner(this.moduleManager, currentConfig);
 
-        return await currentRunner.run('publish', this.options);
+        return await currentRunner.run('publish', this.startParameters);
     }
 }
 
-sey.preload();
+const instance = new sey();
 
-module.exports = sey;
+instance.init();
+
+module.exports = instance;

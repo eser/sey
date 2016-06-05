@@ -1,5 +1,5 @@
 const deepmerge = require('../utils/deepmerge.js'),
-    taskException = require('../taskException.js');
+    TaskException = require('../TaskException.js');
 
 class jslint {
     onLoad(registry) {
@@ -84,14 +84,14 @@ class jslint {
         }
 
         if (errorCount > 0) {
-            const taskEx = new taskException();
+            const taskEx = new TaskException();
 
             for (let item of allIssues) {
                 for (let issue of item.issues) {
                     const message = `Line ${issue.line} Column ${issue.column}: '${issue.source}'\n${issue.message}`;
 
                     taskEx.add(
-                        issue.fatal ? taskException.ERROR : taskException.WARNING,
+                        issue.fatal ? TaskException.ERROR : TaskException.WARNING,
                         item.file,
                         message,
                         true

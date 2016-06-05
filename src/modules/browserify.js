@@ -2,7 +2,7 @@ const stream = require('stream'),
     path = require('path'),
     tmp = require('tmp'),
     deepmerge = require('../utils/deepmerge.js'),
-    runnerOpSetFile = require('../runnerOpSetFile.js');
+    RunnerOpSetFile = require('../RunnerOpSetFile.js');
 
 class browserify {
     onLoad(registry) {
@@ -58,7 +58,7 @@ class browserify {
                         }
                     })
                     .on('end', () => {
-                        const newFile = new runnerOpSetFile({
+                        const newFile = new RunnerOpSetFile({
                             path: `/${value.name}`,
                             fullpath: `./${value.name}`
                         });

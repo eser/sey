@@ -1,49 +1,49 @@
 const chalk = require('chalk'),
     deepmerge = require('./utils/deepmerge.js'),
     // fsManager = require('./utils/fsManager.js'),
-    registry = require('./registry.js'),
-    runnerOpSet = require('./runnerOpSet.js'),
-    taskException = require('./taskException.js');
+    RunnerOpSet = require('./RunnerOpSet.js'),
+    TaskException = require('./TaskException.js');
 
-class runner {
-    constructor(config) {
+class Runner {
+    constructor(moduleManager, config) {
+        this.moduleManager = moduleManager;
         this.config = config;
     }
 
     getBundleConfig(bundle) {
-        const config = {};
+        const bundleConfig = {};
 
         if (bundle !== 'global' && bundle !== 'common' && this.config.content.common !== undefined) {
-            deepmerge(config, this.config.content.common);
+            deepmerge(bundleConfig, this.config.content.common);
         }
 
         if (this.config.content[bundle] !== undefined) {
-            deepmerge(config, this.config.content[bundle]);
+            deepmerge(bundleConfig, this.config.content[bundle]);
         }
 
-        return config;
+        return bundleConfig;
     }
 
     async runBundle(preset, bundle) {
-        const config = this.getBundleConfig(bundle);
+        const bundleConfig = this.getBundleConfig(bundle);
 
         console.log(chalk.green('bundle:'), chalk.bold.white(bundle));
         try {
-            if (config.ops === undefined) {
+            if (bundleConfig.ops === undefined) {
                 return;
             }
 
-            const opsLength = config.ops.length,
+            const opsLength = bundleConfig.ops.length,
                 runnerOpSets = new Array(opsLength);
 
             for (let i = 0; i < opsLength; i++) {
-                runnerOpSets[i] = new runnerOpSet(bundle, config.ops[i], config);
+                runnerOpSets[i] = new RunnerOpSet(this, bundle, bundleConfig.ops[i], bundleConfig);
             }
 
             for (let phase of this.config.content.global.presets[preset]) {
-                const phaseOps = registry.phases[phase];
+                const phaseOps = this.moduleManager.phases[phase];
 
-                registry.events.emit(`bundle-before-${phase}`, config, bundle);
+                this.moduleManager.events.emit(`bundle-before-${phase}`, bundleConfig, bundle);
 
                 if (phaseOps.length > 0) {
                     const promises = new Array(opsLength);
@@ -55,7 +55,7 @@ class runner {
                     await Promise.all(promises);
                 }
 
-                registry.events.emit(`bundle-after-${phase}`, config, bundle);
+                this.moduleManager.events.emit(`bundle-after-${phase}`, bundleConfig, bundle);
             }
 
             for (let i = 0; i < opsLength; i++) {
@@ -63,7 +63,7 @@ class runner {
             }
         }
         catch (ex) {
-            if (ex instanceof taskException) {
+            if (ex instanceof TaskException) {
                 console.log(ex.export());
             }
             else {
@@ -78,7 +78,7 @@ class runner {
 
         let bundleCount = 0;
 
-        registry.events.emit(`runner-before`, config);
+        this.moduleManager.events.emit(`runner-before`, config);
         for (let bundle in config) {
             if (bundle === 'global' || bundle === 'common') {
                 continue;
@@ -90,7 +90,7 @@ class runner {
             bundleCount++;
             await this.runBundle(preset, bundle);
         }
-        registry.events.emit(`runner-after`, config);
+        this.moduleManager.events.emit(`runner-after`, config);
 
         if (bundleCount === 0) {
             if (bundleOnly) {
@@ -109,4 +109,4 @@ class runner {
     }
 }
 
-module.exports = runner;
+module.exports = Runner;

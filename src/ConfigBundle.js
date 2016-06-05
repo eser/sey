@@ -1,8 +1,6 @@
-'use strict';
-
 const deepmerge = require('./utils/deepmerge.js');
 
-class configBundle {
+class ConfigBundle {
     constructor(owner, name) {
         this.owner = owner;
         this.name = name;
@@ -11,11 +9,11 @@ class configBundle {
     }
 
     static addOp(name) {
-        if (name in configBundle.prototype) {
+        if (name in ConfigBundle.prototype) {
             return;
         }
 
-        configBundle.prototype[name] = function (value) {
+        ConfigBundle.prototype[name] = function (value) {
             return this.op(name, value);
         };
     }
@@ -66,14 +64,16 @@ class configBundle {
         let newSource;
 
         if (this._op.src.constructor !== Array) {
-            newSource = [this._op.src];
-        } else {
+            newSource = [ this._op.src ];
+        }
+        else {
             newSource = this._op.src;
         }
 
         if (source.constructor === Array) {
             newSource = newSource.concat(source);
-        } else {
+        }
+        else {
             newSource.push(source);
         }
 
@@ -88,9 +88,7 @@ class configBundle {
         return this;
     }
 
-    op(name) {
-        let value = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
-
+    op(name, value = true) {
         this._op[name] = value;
 
         return this;
@@ -110,4 +108,4 @@ class configBundle {
     }
 }
 
-module.exports = configBundle;
+module.exports = ConfigBundle;

@@ -1,7 +1,7 @@
 const deepmerge = require('./utils/deepmerge.js'),
-    configBundle = require('./configBundle.js');
+    ConfigBundle = require('./ConfigBundle.js');
 
-class config {
+class Config {
     constructor(initialContent) {
         this.content = {
             global: {
@@ -37,7 +37,7 @@ class config {
 
     bundle(name) {
         if (!(name in this.bundles)) {
-            this.bundles[name] = new configBundle(this, name);
+            this.bundles[name] = new ConfigBundle(this, name);
         }
 
         return this.bundles[name];
@@ -48,4 +48,4 @@ class config {
     }
 }
 
-module.exports = config;
+module.exports = Config;
