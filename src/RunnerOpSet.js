@@ -5,11 +5,11 @@ const chalk = require('chalk'),
     RunnerOpSetFile = require('./RunnerOpSetFile.js');
 
 class RunnerOpSet {
-    constructor(runner, bundle, opSet, config) {
-        this.runner = runner;
+    constructor(moduleManager, bundle, bundleConfig, opSet) {
+        this.moduleManager = moduleManager;
         this.bundle = bundle;
+        this.bundleConfig = bundleConfig;
         this.opSet = opSet;
-        this.config = config;
 
         const files = globManager.glob(this.opSet.src, true),
             filesLength = files.length;
@@ -21,12 +21,12 @@ class RunnerOpSet {
     }
 
     getTarget() {
-        return this.config.target || 'node';
+        return this.bundleConfig.target || 'node';
     }
 
     isTargeting(target) {
-        if ((this.config.target === undefined && target === 'node') ||
-            (this.config.target === target)) {
+        if ((this.bundleConfig.target === undefined && target === 'node') ||
+            (this.bundleConfig.target === target)) {
             return true;
         }
 
@@ -34,12 +34,12 @@ class RunnerOpSet {
     }
 
     getStandard() {
-        return this.config.standard || 2016;
+        return this.bundleConfig.standard || 2016;
     }
 
     isStandard(standard) {
-        if ((this.config.standard === undefined && standard >= 2016) ||
-            (this.config.standard >= standard)) {
+        if ((this.bundleConfig.standard === undefined && standard >= 2016) ||
+            (this.bundleConfig.standard >= standard)) {
             return true;
         }
 
@@ -127,7 +127,7 @@ class RunnerOpSet {
                         `${opKey}:${taskKey}`;
 
                     console.log(chalk.yellow(`    ${opDesc}`), chalk.gray(`${modifiedFiles.length} files`));
-                    await this.runner.moduleManager.modules[taskKey][methodKey](value, this, modifiedFiles);
+                    await this.moduleManager.modules[taskKey][methodKey](value, this, modifiedFiles);
                 }
             }
         }

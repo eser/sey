@@ -10,14 +10,14 @@ class AddHeader {
     }
 
     async exec(value, runnerOpSet, files) {
-        if (runnerOpSet.config.banner === undefined) {
+        if (runnerOpSet.bundleConfig.banner === undefined) {
             return;
         }
 
         for (let file of files) {
             const content = file.getContent();
 
-            file.setContent(runnerOpSet.config.banner + content);
+            file.setContent(runnerOpSet.bundleConfig.banner + content);
         }
     }
 }

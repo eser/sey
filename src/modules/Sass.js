@@ -14,8 +14,8 @@ class Sass {
     async exec(value, runnerOpSet, files) {
         const options = {};
 
-        if (runnerOpSet.config.sass !== undefined) {
-            deepmerge(options, runnerOpSet.config.sass);
+        if (runnerOpSet.bundleConfig.sass !== undefined) {
+            deepmerge(options, runnerOpSet.bundleConfig.sass);
         }
 
         for (let file of files) {

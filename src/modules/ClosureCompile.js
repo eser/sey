@@ -67,8 +67,8 @@ class ClosureCompile {
             options.language_in = 'ES6';
         }
 
-        if (runnerOpSet.config.closure !== undefined) {
-            deepmerge(options, runnerOpSet.config.closure);
+        if (runnerOpSet.bundleConfig.closure !== undefined) {
+            deepmerge(options, runnerOpSet.bundleConfig.closure);
         }
 
         for (let file of files) {

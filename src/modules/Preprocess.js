@@ -17,8 +17,8 @@ class Preprocess {
         vars.BUNDLE = runnerOpSet.bundleName;
         vars.ENV = runnerOpSet.getTarget();
 
-        if (runnerOpSet.config.preprocessVars !== undefined) {
-            deepmerge(vars, runnerOpSet.config.preprocessVars);
+        if (runnerOpSet.bundleConfig.preprocessVars !== undefined) {
+            deepmerge(vars, runnerOpSet.bundleConfig.preprocessVars);
         }
 
         for (let file of files) {
