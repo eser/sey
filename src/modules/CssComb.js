@@ -15,12 +15,14 @@ class CssComb {
         const options = {
         };
 
-        if (runnerOpSet.bundleConfig.eser === true) {
+        const runnerBundle = runnerOpSet.runnerBundle;
+
+        if (runnerBundle.config.eser === true) {
             deepmerge(options, require('eser/.csscomb.json'));
         }
 
-        if (runnerOpSet.bundleConfig.csscomb !== undefined) {
-            deepmerge(options, runnerOpSet.bundleConfig.csscomb);
+        if (runnerBundle.config.csscomb !== undefined) {
+            deepmerge(options, runnerBundle.config.csscomb);
         }
 
         for (let file of files) {

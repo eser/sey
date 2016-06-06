@@ -22,12 +22,14 @@ class Babel {
             ignore: [ 'bower_components/', 'node_modules/' ]
         };
 
-        if (runnerOpSet.bundleConfig.babel !== undefined) {
-            deepmerge(options, runnerOpSet.bundleConfig.babel);
+        const runnerBundle = runnerOpSet.runnerBundle;
+
+        if (runnerBundle.config.babel !== undefined) {
+            deepmerge(options, runnerBundle.config.babel);
         }
 
-        if (runnerOpSet.isStandard(2015)) {
-            if (runnerOpSet.isTargeting('web')) {
+        if (runnerBundle.isStandard(2015)) {
+            if (runnerBundle.isTargeting('web')) {
                 options.plugins = options.plugins.concat([
                     require('babel-plugin-transform-es2015-template-literals'),
                     require('babel-plugin-transform-es2015-literals'),
@@ -61,7 +63,7 @@ class Babel {
             ]);
         }
 
-        if (runnerOpSet.isStandard(2016)) {
+        if (runnerBundle.isStandard(2016)) {
             options.plugins = options.plugins.concat([
                 require('babel-plugin-transform-async-to-generator'),
                 require('babel-plugin-transform-exponentiation-operator')

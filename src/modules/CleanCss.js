@@ -41,8 +41,10 @@ class CleanCss {
             shorthandCompacting: true
         };
 
-        if (runnerOpSet.bundleConfig.cleancss !== undefined) {
-            deepmerge(options, runnerOpSet.bundleConfig.cleancss);
+        const runnerBundle = runnerOpSet.runnerBundle;
+
+        if (runnerBundle.config.cleancss !== undefined) {
+            deepmerge(options, runnerBundle.config.cleancss);
         }
 
         for (let file of files) {

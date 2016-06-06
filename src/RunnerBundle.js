@@ -1,88 +1,75 @@
 const chalk = require('chalk'),
-    deepmerge = require('./utils/deepmerge.js'),
-    RunnerOpSet = require('./RunnerOpSet.js'),
-    TaskException = require('./TaskException.js');
+    RunnerOpSet = require('./RunnerOpSet.js');
 
 class RunnerBundle {
-    constructor(moduleManager, config, bundle) {
-        this.moduleManager = moduleManager;
+    constructor(name, config, moduleManager) {
+        this.name = name;
         this.config = config;
-        this.bundle = bundle;
-
-        this.sourcesToWatch = [];
+        this.moduleManager = moduleManager;
     }
 
-    getBundleConfig(bundle) {
-        const bundleConfig = {};
+    getTarget() {
+        return this.config.target || 'node';
+    }
 
-        if (/* bundle !== 'global' && bundle !== 'common' && */this.config.content.common !== undefined) {
-            deepmerge(bundleConfig, this.config.content.common);
+    isTargeting(target) {
+        if ((this.config.target === undefined && target === 'node') ||
+            (this.config.target === target)) {
+            return true;
         }
 
-        if (this.config.content[bundle] !== undefined) {
-            deepmerge(bundleConfig, this.config.content[bundle]);
+        return false;
+    }
+
+    getStandard() {
+        return this.config.standard || 2016;
+    }
+
+    isStandard(standard) {
+        if ((this.config.standard === undefined && standard >= 2016) ||
+            (this.config.standard >= standard)) {
+            return true;
         }
 
-        return bundleConfig;
+        return false;
     }
 
     async run(preset) {
-        console.log(chalk.green('bundle:'), chalk.bold.white(this.bundle));
-        try {
-            const bundleConfig = this.getBundleConfig(this.bundle);
-            if (bundleConfig.ops === undefined) {
-                return;
-            }
+        console.log(chalk.green('bundle:'), chalk.bold.white(this.name));
 
-            const opsLength = bundleConfig.ops.length,
-                runnerOpSets = new Array(opsLength);
-
-            for (let i = 0; i < opsLength; i++) {
-                const bundleOpConfig = bundleConfig.ops[i];
-
-                if (bundleOpConfig.src !== undefined) {
-                    if (bundleOpConfig.src.constructor === Array) {
-                        for (let bundleOpConfigSrcIndex in bundleOpConfig.src) {
-                            this.sourcesToWatch.push(bundleOpConfig.src[bundleOpConfigSrcIndex]);
-                        }
-                    }
-                    else {
-                        this.sourcesToWatch.push(bundleOpConfig.src);
-                    }
-                }
-
-                runnerOpSets[i] = new RunnerOpSet(this.moduleManager, this.bundle, bundleConfig, bundleOpConfig);
-            }
-
-            for (let phase of this.config.content.global.presets[preset]) {
-                const phaseOps = this.moduleManager.phases[phase];
-
-                this.moduleManager.events.emit(`bundle-before-${phase}`, bundleConfig, this.bundle);
-
-                if (phaseOps.length > 0) {
-                    const promises = new Array(opsLength);
-
-                    for (let i = 0; i < opsLength; i++) {
-                        promises[i] = runnerOpSets[i].exec(phase, phaseOps);
-                    }
-
-                    await Promise.all(promises);
-                }
-
-                this.moduleManager.events.emit(`bundle-after-${phase}`, bundleConfig, this.bundle);
-            }
-
-            for (let i = 0; i < opsLength; i++) {
-                runnerOpSets[i].outputFiles();
-            }
+        if (this.config.ops === undefined) {
+            return;
         }
-        catch (ex) {
-            if (ex instanceof TaskException) {
-                console.log(ex.export());
+
+        const opsLength = this.config.ops.length,
+            runnerOpSets = new Array(opsLength);
+
+        for (let i = 0; i < opsLength; i++) {
+            const bundleOpSetConfig = this.config.ops[i];
+
+            runnerOpSets[i] = new RunnerOpSet(bundleOpSetConfig, this, this.moduleManager);
+        }
+
+        for (let phase of this.moduleManager.presets[preset]) {
+            const phaseOps = this.moduleManager.phases[phase];
+
+            this.moduleManager.events.emit(`bundle-before-${phase}`, this.config, this.name);
+
+            if (phaseOps.length > 0) {
+                const promises = new Array(opsLength);
+
+                for (let i = 0; i < opsLength; i++) {
+                    promises[i] = runnerOpSets[i].exec(phase, phaseOps);
+                }
+
+                await Promise.all(promises);
             }
-            else {
-                console.log(ex);
-            }
+
+            this.moduleManager.events.emit(`bundle-after-${phase}`, this.config, this.name);
+        }
+
+        for (let i = 0; i < opsLength; i++) {
+            runnerOpSets[i].outputFiles();
         }
     }
 }

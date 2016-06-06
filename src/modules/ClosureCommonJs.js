@@ -23,17 +23,19 @@ class ClosureCommonJs {
                 // common_js_entry_module: value.entry
             };
 
-            if (runnerOpSet.isStandard(2015)) {
+            const runnerBundle = runnerOpSet.runnerBundle;
+
+            if (runnerBundle.isStandard(2015)) {
                 options.language_in = 'ES6';
             }
 
-            if (runnerOpSet.isStandard(2016)) {
+            if (runnerBundle.isStandard(2016)) {
                 // TODO will be replaced with es2016
                 options.language_in = 'ES6';
             }
 
-            if (runnerOpSet.bundleConfig.closure !== undefined) {
-                deepmerge(options, runnerOpSet.bundleConfig.closure);
+            if (runnerBundle.config.closure !== undefined) {
+                deepmerge(options, runnerBundle.config.closure);
             }
 
             if (this._closureLib === undefined) {

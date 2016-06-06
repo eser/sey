@@ -14,8 +14,10 @@ class Less {
     async exec(value, runnerOpSet, files) {
         const options = {};
 
-        if (runnerOpSet.bundleConfig.less !== undefined) {
-            deepmerge(options, runnerOpSet.bundleConfig.less);
+        const runnerBundle = runnerOpSet.runnerBundle;
+
+        if (runnerBundle.config.less !== undefined) {
+            deepmerge(options, runnerBundle.config.less);
         }
 
         for (let file of files) {

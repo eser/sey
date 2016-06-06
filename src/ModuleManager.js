@@ -6,6 +6,16 @@ class ModuleManager {
     constructor() {
         this.modules = {};
         this.events = new EventEmitter();
+
+        this.presets = {
+            lint: [ 'init', 'preprocess', 'lint', 'finalize' ],
+            build: [ 'init', 'preprocess', 'lint', 'compile', 'bundling', 'finalize' ],
+            publish: [ 'init', 'preprocess', 'lint', 'compile', 'bundling', 'optimization', 'branding', 'finalize' ],
+            test: [ 'init', 'preprocess', 'lint', 'compile', 'bundling', 'optimization', 'branding', 'testing', 'finalize' ],
+            server: [ 'init', 'preprocess', 'lint', 'compile', 'bundling', 'optimization', 'branding', 'finalize', 'development-server' ],
+            deploy: [ 'init', 'preprocess', 'lint', 'compile', 'bundling', 'optimization', 'branding', 'finalize', 'deploy' ]
+        };
+
         this.phases = {
             'init': [],
             'preprocess': [],

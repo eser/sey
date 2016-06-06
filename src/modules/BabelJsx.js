@@ -24,8 +24,10 @@ class BabelJsx {
             ignore: [ 'bower_components/', 'node_modules/' ]
         };
 
-        if (runnerOpSet.bundleConfig.babel !== undefined) {
-            deepmerge(options, runnerOpSet.bundleConfig.babel);
+        const runnerBundle = runnerOpSet.runnerBundle;
+
+        if (runnerBundle.config.babel !== undefined) {
+            deepmerge(options, runnerBundle.config.babel);
         }
 
         for (let file of files) {

@@ -27,17 +27,19 @@ class TypeScript {
             module: 'commonjs' // this._tsLib.ModuleKind.CommonJS
         };
 
-        if (runnerOpSet.isStandard(2015)) {
+        const runnerBundle = runnerOpSet.runnerBundle;
+
+        if (runnerBundle.isStandard(2015)) {
             options.target = 'ES6';
         }
 
-        if (runnerOpSet.isStandard(2016)) {
+        if (runnerBundle.isStandard(2016)) {
             options.experimentalAsyncFunctions = true;
             // options.experimentalDecorators = true;
         }
 
-        if (runnerOpSet.bundleConfig.typescript !== undefined) {
-            deepmerge(options, runnerOpSet.bundleConfig.typescript);
+        if (runnerBundle.config.typescript !== undefined) {
+            deepmerge(options, runnerBundle.config.typescript);
         }
 
         // TODO runnerOpSet.outputFilesTo(tmppath); ?
