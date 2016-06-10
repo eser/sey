@@ -32,6 +32,14 @@ class ConfigBundle {
         return this;
     }
 
+    setDestination(destination) {
+        const configNode = this.getConfigNode();
+
+        configNode.destination = destination;
+
+        return this;
+    }
+
     set(options) {
         const configNode = this.getConfigNode();
 

@@ -84,7 +84,7 @@ To clean working directory:
 Configuration Based:
 
 ```js
-let config = {
+module.exports = {
     global: {
         clean: {
             before: ['./dist/*'],
@@ -143,8 +143,6 @@ let config = {
         ]
     }
 };
-
-sey.run(config);
 ```
 
 API Based:
@@ -152,7 +150,7 @@ API Based:
 ```js
 let config = new sey.config();
 
-config.setGlobal({
+config.set('global', {
         clean: {
             before: ['./dist/*'],
             after: []

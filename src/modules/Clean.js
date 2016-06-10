@@ -12,7 +12,6 @@ class Clean {
             return;
         }
 
-        console.log('   ', chalk.cyan('clean'));
         fsManager.rm(config.global.clean.before);
     }
 

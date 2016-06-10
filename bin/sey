@@ -111,10 +111,7 @@ const buildCmdR = function (argv) {
         startParameters.bundle = argv._[1];
     }
 
-    global.sey = sey;
-    global.sey.setStartParameters(startParameters);
-
-    require(seyfile);
+    sey.runFile(seyfile, startParameters);
 };
 
 const buildCmd = function (args) {

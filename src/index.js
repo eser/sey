@@ -25,10 +25,6 @@ class sey {
         // this.log = this.logManager.createLogger('sey');
     }
 
-    setStartParameters(startParameters) {
-        this.startParameters = startParameters;
-    }
-
     initFile(file, preferApi, override) {
         if (fsManager.exists(file) && !override) {
             console.log(chalk.red('Aborted. File already exists:'), chalk.gray(file));
@@ -67,6 +63,17 @@ class sey {
         const currentRunner = new Runner(this.moduleManager, currentConfig);
 
         return await currentRunner.run('publish', this.startParameters);
+    }
+
+    async runFile(filepath, startParameters) {
+        global.sey = this;
+        this.startParameters = startParameters;
+
+        const returnValue = require(filepath);
+
+        if (Object.keys(returnValue).length > 0) {
+            await this.run(returnValue);
+        }
     }
 }
 

@@ -1,4 +1,3 @@
-/*global sey */
 const chalk = require('chalk'),
     fsManager = require('./utils/fsManager.js'),
     globManager = require('./utils/globManager.js'),

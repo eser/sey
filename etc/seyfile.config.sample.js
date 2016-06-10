@@ -1,7 +1,8 @@
 'use strict';
 
-let config = new sey.config({
+module.exports = {
     global: {
+        destination: './build/',
         clean: {
             before: ['./dist/*'],
             after: []
@@ -73,6 +74,4 @@ let config = new sey.config({
             }
         ]
     }
-});
-
-sey.run(config);
+};

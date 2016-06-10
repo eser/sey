@@ -5,6 +5,7 @@ class Config {
     constructor(initialContent) {
         this.content = {
             global: {
+                destination: './build/'
             }
         };
 
@@ -33,6 +34,14 @@ class Config {
         deepmerge(this.content, content);
     }
 
+    set(name, content) {
+        const encapsulated = {};
+
+        encapsulated[this.name] = content;
+
+        this.merge(encapsulated);
+    }
+
     save() {
         return this.content;
     }
@@ -43,10 +52,6 @@ class Config {
         }
 
         return this.bundles[name];
-    }
-
-    setGlobal(options) {
-        this.bundle('global').set(options);
     }
 }
 

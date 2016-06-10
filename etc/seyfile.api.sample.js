@@ -2,15 +2,15 @@
 
 let config = new sey.config();
 
-config.setGlobal({
+config.set('global', {
+        destination: './build/',
         clean: {
             before: ['./dist/*'],
             after: []
         }
     });
 
-config.bundle('common')
-    .set({
+config.set('common', {
         babel: {
         },
 
