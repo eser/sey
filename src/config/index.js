@@ -1,5 +1,5 @@
-const deepmerge = require('./utils/deepmerge.js'),
-    ConfigBundle = require('./ConfigBundle.js');
+const deepmerge = require('../utils/deepmerge.js'),
+    Bundle = require('./Bundle.js');
 
 class Config {
     constructor(initialContent) {
@@ -17,11 +17,11 @@ class Config {
     }
 
     static addOp(name) {
-        if (name in ConfigBundle.prototype) {
+        if (name in Bundle.prototype) {
             return;
         }
 
-        ConfigBundle.prototype[name] = function (value) {
+        Bundle.prototype[name] = function (value) {
             return this.op(name, value);
         };
     }
@@ -48,7 +48,7 @@ class Config {
 
     bundle(name) {
         if (!(name in this.bundles)) {
-            this.bundles[name] = new ConfigBundle(this, name);
+            this.bundles[name] = new Bundle(this, name);
         }
 
         return this.bundles[name];

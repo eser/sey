@@ -2,9 +2,9 @@ const path = require('path'),
     chalk = require('chalk'),
     // logger = require('simple-node-logger'),
     fsManager = require('./utils/fsManager.js'),
-    Config = require('./Config.js'),
-    ModuleManager = require('./ModuleManager.js'),
-    Runner = require('./Runner.js');
+    Config = require('./config/'),
+    Runner = require('./runner/'),
+    ModuleManager = require('./ModuleManager.js');
 
 class sey {
     constructor() {

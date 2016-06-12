@@ -15,6 +15,10 @@ class EolFix {
 
             file.setContent(content.replace(/(?:\r\n|\r)/g, '\n'));
         }
+
+        return {
+            processedFiles: files
+        };
     }
 }
 

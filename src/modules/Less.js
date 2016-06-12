@@ -14,7 +14,7 @@ class Less {
     async exec(value, runnerOpSet, files) {
         const options = {};
 
-        const runnerBundle = runnerOpSet.runnerBundle;
+        const runnerBundle = runnerOpSet.bundle;
 
         if (runnerBundle.config.less !== undefined) {
             deepmerge(options, runnerBundle.config.less);
@@ -34,6 +34,10 @@ class Less {
             file.setExtension('css');
             file.setContent(result.css);
         }
+
+        return {
+            processedFiles: files
+        };
     }
 }
 

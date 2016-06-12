@@ -22,7 +22,7 @@ class Babel {
             ignore: [ 'bower_components/', 'node_modules/' ]
         };
 
-        const runnerBundle = runnerOpSet.runnerBundle;
+        const runnerBundle = runnerOpSet.bundle;
 
         if (runnerBundle.config.babel !== undefined) {
             deepmerge(options, runnerBundle.config.babel);
@@ -85,6 +85,10 @@ class Babel {
 
             file.setContent(result.code);
         }
+
+        return {
+            processedFiles: files
+        };
     }
 }
 

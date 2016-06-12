@@ -13,7 +13,7 @@ class EsLint {
     }
 
     async exec(value, runnerOpSet, files) {
-        const runnerBundle = runnerOpSet.runnerBundle;
+        const runnerBundle = runnerOpSet.bundle;
 
         const options = {
             parserOptions: {
@@ -106,6 +106,10 @@ class EsLint {
 
         // FIXME temporarily quick fix for linter
         this._lintLib = undefined;
+
+        return {
+            processedFiles: files
+        };
     }
 }
 

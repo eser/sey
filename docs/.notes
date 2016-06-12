@@ -1,0 +1,38 @@
+destination: './build/',
+ops: [
+    {
+        src: [ './src/polyfills/**/*.js' ],
+        dest: './dist/scripts/',
+
+        addheader: true,
+        compile: true,
+        eolfix: true,
+        optimize: true,
+        preprocess: true,
+        transpile: true
+    }
+]
+
+./seyfile.js.lock
+
+{
+    core: {
+        version: '0.5',
+        'seyfile.js': lastMod
+    },
+    bundles: {
+        polyfills: [
+            [
+                { path: './src/polyfills/test.js', lastMod: 4 },
+                { path: './src/polyfills/test2.js', lastMod: 4 }
+            ]
+        ]
+    }
+}
+
+---
+
+registerOpClass(AddHeader)
+registerOpMethod({ hede: adsa }, function (opFiles) { ... });
+
+// iki metod da olacak.

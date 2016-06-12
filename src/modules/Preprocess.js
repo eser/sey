@@ -14,7 +14,7 @@ class Preprocess {
     async exec(value, runnerOpSet, files) {
         const vars = process.env;
 
-        const runnerBundle = runnerOpSet.runnerBundle;
+        const runnerBundle = runnerOpSet.bundle;
 
         vars.BUNDLE = runnerBundle.name;
         vars.ENV = runnerBundle.getTarget();
@@ -34,6 +34,10 @@ class Preprocess {
 
             file.setContent(result);
         }
+
+        return {
+            processedFiles: files
+        };
     }
 }
 

@@ -58,7 +58,7 @@ class ClosureCompile {
             // formatting: 'PRETTY_PRINT'
         };
 
-        const runnerBundle = runnerOpSet.runnerBundle;
+        const runnerBundle = runnerOpSet.bundle;
 
         if (runnerBundle.isStandard(2015)) {
             options.language_in = 'ES6';
@@ -80,6 +80,10 @@ class ClosureCompile {
 
             await this.execSingle(value, file, options);
         }
+
+        return {
+            processedFiles: files
+        };
     }
 }
 

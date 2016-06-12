@@ -1,13 +1,34 @@
 const chalk = require('chalk'),
-    deepmerge = require('./utils/deepmerge.js'),
-    RunnerBundle = require('./RunnerBundle.js'),
-    TaskException = require('./TaskException.js');
+    deepmerge = require('../utils/deepmerge.js'),
+    TaskException = require('../TaskException.js'),
+    Bundle = require('./Bundle.js');
 
 class Runner {
     constructor(moduleManager, config) {
         this.moduleManager = moduleManager;
         this.config = config;
+        // this.bundles = {};
+    }
+
+    load() {
         this.bundles = {};
+
+        for (let bundleName in this.config.content) {
+            if (bundleName === 'global' || bundleName === 'common') {
+                continue;
+            }
+
+            const bundleConfig = this.getBundleConfig(bundleName);
+
+            this.bundles[bundleName] = new Bundle(bundleName, bundleConfig, this);
+            this.bundles[bundleName].load();
+        }
+    }
+
+    populateFiles(lockContent) {
+        for (let bundleName in this.bundles) {
+            this.bundles[bundleName].populateFiles(lockContent);
+        }
     }
 
     getBundleConfig(bundleName) {
@@ -33,19 +54,13 @@ class Runner {
         try {
             this.moduleManager.events.emit('runner-before', config);
 
-            for (let bundleName in config) {
-                if (bundleName === 'global' || bundleName === 'common') {
-                    continue;
-                }
+            for (let bundleName in this.bundles) {
                 if (bundleOnly && options.bundle !== bundleName) {
                     continue;
                 }
 
                 bundleCount++;
 
-                const bundleConfig = this.getBundleConfig(bundleName);
-
-                this.bundles[bundleName] = new RunnerBundle(bundleName, bundleConfig, this.moduleManager);
                 await this.bundles[bundleName].run(preset);
             }
 

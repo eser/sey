@@ -4,12 +4,23 @@ module.exports = {
     global: {
         destination: './build/',
         clean: {
-            before: ['./dist/*'],
+            before: [ './dist/*' ],
             after: []
         }
     },
 
     common: {
+        banner: [
+            '/**',
+            ' * my package',
+            ' *',
+            ' * @version v1.0.0',
+            ' * @link https://...',
+            ' * @license Apache-2.0',
+            ' */',
+            ''
+        ].join('\n'),
+
         babel: {
         },
 
@@ -22,20 +33,34 @@ module.exports = {
         eser: true
     },
 
+    polyfills: {
+        target: 'node',
+        standard: 2016,
+
+        preprocessVars: {
+            BUNDLE: 'polyfills'
+        },
+
+        ops: [
+            {
+                src: [ './src/polyfills/**/*.js' ],
+                dest: './dist/scripts/',
+
+                addheader: true,
+                compile: true,
+                eolfix: true,
+                optimize: true,
+                preprocess: true,
+                transpile: true
+            }
+        ]
+    },
+
     main: {
         target: 'node',
         standard: 2016,
 
-        banner: [
-            '/**',
-            ' * my package',
-            ' *',
-            ' * @version v1.0.0',
-            ' * @link https://...',
-            ' * @license Apache-2.0',
-            ' */',
-            ''
-        ].join('\n'),
+        depends: [ 'polyfills' ],
 
         preprocessVars: {
             BUNDLE: 'main'
@@ -43,7 +68,7 @@ module.exports = {
 
         ops: [
             {
-                src: ['./src/**/*.js', './src/**/*.ts', './src/**/*.jsx'],
+                src: [ './src/**/*.js', './src/**/*.ts', './src/**/*.jsx' ],
                 dest: './dist/scripts/',
 
                 addheader: true,
@@ -56,7 +81,7 @@ module.exports = {
                 transpile: true
             },
             {
-                src: ['./src/**/*.css', './src/**/*.less', './src/**/*.scss'],
+                src: [ './src/**/*.css', './src/**/*.less', './src/**/*.scss' ],
                 dest: './dist/styles/',
 
                 addheader: true,

@@ -1,8 +1,6 @@
-'use strict';
+const deepmerge = require('../utils/deepmerge.js');
 
-const deepmerge = require('./utils/deepmerge.js');
-
-class ConfigBundle {
+class Bundle {
     constructor(owner, name) {
         this.owner = owner;
         this.name = name;
@@ -18,36 +16,30 @@ class ConfigBundle {
         return this.owner.content[this.name];
     }
 
-    setTarget(target) {
-        const configNode = this.getConfigNode();
-
-        configNode.target = target;
-
-        return this;
-    }
-
-    setStandard(standard) {
-        const configNode = this.getConfigNode();
-
-        configNode.standard = standard;
-
-        return this;
-    }
-
-    setDestination(destination) {
-        const configNode = this.getConfigNode();
-
-        configNode.destination = destination;
-
-        return this;
-    }
-
     set(options) {
         const configNode = this.getConfigNode();
 
         deepmerge(configNode, options);
 
         return this;
+    }
+
+    setTarget(target) {
+        return this.set({
+            target: target
+        });
+    }
+
+    setStandard(standard) {
+        return this.set({
+            standard: standard
+        });
+    }
+
+    setDestination(destination) {
+        return this.set({
+            destination: destination
+        });
     }
 
     reset() {
@@ -64,14 +56,16 @@ class ConfigBundle {
         let newSource;
 
         if (this._op.src.constructor !== Array) {
-            newSource = [this._op.src];
-        } else {
+            newSource = [ this._op.src ];
+        }
+        else {
             newSource = this._op.src;
         }
 
         if (source.constructor === Array) {
             newSource = newSource.concat(source);
-        } else {
+        }
+        else {
             newSource.push(source);
         }
 
@@ -86,9 +80,7 @@ class ConfigBundle {
         return this;
     }
 
-    op(name) {
-        let value = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
-
+    op(name, value = true) {
         this._op[name] = value;
 
         return this;
@@ -108,4 +100,4 @@ class ConfigBundle {
     }
 }
 
-module.exports = ConfigBundle;
+module.exports = Bundle;

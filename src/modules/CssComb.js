@@ -15,7 +15,7 @@ class CssComb {
         const options = {
         };
 
-        const runnerBundle = runnerOpSet.runnerBundle;
+        const runnerBundle = runnerOpSet.bundle;
 
         if (runnerBundle.config.eser === true) {
             deepmerge(options, require('eser/.csscomb.json'));
@@ -38,6 +38,10 @@ class CssComb {
 
             file.setContent(result);
         }
+
+        return {
+            processedFiles: files
+        };
     }
 }
 

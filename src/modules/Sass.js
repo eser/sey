@@ -14,7 +14,7 @@ class Sass {
     async exec(value, runnerOpSet, files) {
         const options = {};
 
-        const runnerBundle = runnerOpSet.runnerBundle;
+        const runnerBundle = runnerOpSet.bundle;
 
         if (runnerBundle.config.sass !== undefined) {
             deepmerge(options, runnerBundle.config.sass);
@@ -34,6 +34,10 @@ class Sass {
             file.setExtension('css');
             file.setContent(result.css.toString());
         }
+
+        return {
+            processedFiles: files
+        };
     }
 }
 

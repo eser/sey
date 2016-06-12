@@ -27,7 +27,7 @@ class TypeScript {
             module: 'commonjs' // this._tsLib.ModuleKind.CommonJS
         };
 
-        const runnerBundle = runnerOpSet.runnerBundle;
+        const runnerBundle = runnerOpSet.bundle;
 
         if (runnerBundle.isStandard(2015)) {
             options.target = 'ES6';
@@ -56,6 +56,10 @@ class TypeScript {
             file.setExtension('js');
             file.setContent(result);
         }
+
+        return {
+            processedFiles: files
+        };
     }
 }
 

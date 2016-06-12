@@ -3,7 +3,7 @@ const // stream = require('stream'),
     tmp = require('tmp'),
     deepmerge = require('../utils/deepmerge.js'),
     fsManager = require('../utils/fsManager.js'),
-    RunnerOpSetFile = require('../RunnerOpSetFile.js');
+    RunnerSourceFile = require('../runner/SourceFile.js');
 
 class ClosureCommonJs {
     onLoad(moduleManager) {
@@ -23,7 +23,7 @@ class ClosureCommonJs {
                 // common_js_entry_module: value.entry
             };
 
-            const runnerBundle = runnerOpSet.runnerBundle;
+            const runnerBundle = runnerOpSet.bundle;
 
             if (runnerBundle.isStandard(2015)) {
                 options.language_in = 'ES6';
@@ -63,7 +63,7 @@ class ClosureCommonJs {
                             return;
                         }
 
-                        const newFile = new RunnerOpSetFile({
+                        const newFile = new RunnerSourceFile({
                             path: `/${value.name}`,
                             fullpath: `./${value.name}`
                         });
@@ -81,6 +81,10 @@ class ClosureCommonJs {
                 );
             });
         });
+
+        return {
+            processedFiles: files
+        };
     }
 }
 

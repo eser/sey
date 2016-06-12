@@ -16,7 +16,7 @@ class UglifyJs {
             fromString: true
         };
 
-        const runnerBundle = runnerOpSet.runnerBundle;
+        const runnerBundle = runnerOpSet.bundle;
 
         if (runnerBundle.config.uglifyjs !== undefined) {
             deepmerge(options, runnerBundle.config.uglifyjs);
@@ -36,6 +36,10 @@ class UglifyJs {
 
             file.setContent(result.code);
         }
+
+        return {
+            processedFiles: files
+        };
     }
 }
 

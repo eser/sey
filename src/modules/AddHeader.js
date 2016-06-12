@@ -9,18 +9,22 @@ class AddHeader {
         });
     }
 
-    async exec(value, runnerOpSet, files) {
-        const runnerBundle = runnerOpSet.runnerBundle;
-
-        if (runnerBundle.config.banner === undefined) {
+    async exec(value, opSet, opFiles) {
+        if (opSet.bundle.config.banner === undefined) {
             return;
         }
 
-        for (let file of files) {
-            const content = file.getContent();
+        /*
+        for (let opFile of opFiles) {
+            const content = opFile.getContent();
 
-            file.setContent(runnerBundle.config.banner + content);
+            opFile.setContent(opSet.bundle.config.banner + content);
         }
+        */
+
+        return {
+            processedFiles: opFiles
+        };
     }
 }
 

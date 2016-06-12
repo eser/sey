@@ -12,6 +12,9 @@ class Test {
     }
 
     async exec(value, runnerOpSet, files) {
+        return {
+            processedFiles: files
+        };
     }
 }
 
