@@ -25,12 +25,6 @@ class Runner {
         }
     }
 
-    populateFiles(lockContent) {
-        for (let bundleName in this.bundles) {
-            this.bundles[bundleName].populateFiles(lockContent);
-        }
-    }
-
     getBundleConfig(bundleName) {
         const bundleConfig = {};
 
@@ -43,6 +37,18 @@ class Runner {
         }
 
         return bundleConfig;
+    }
+
+    populateFiles(preset, options) {
+        let lockFileInstance;
+
+        if (options.lockFile !== false) {
+            lockFileInstance = require(options.lockFile);
+        }
+
+        for (let bundleName in this.bundles) {
+            this.bundles[bundleName].populateFiles(preset, lockFileInstance);
+        }
     }
 
     async run(preset, options) {

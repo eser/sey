@@ -50,7 +50,7 @@ class sey {
         return [];
     }
 
-    async run(configInstance) {
+    async run(configInstance, lockFileInstance) {
         let currentConfig;
 
         if (configInstance instanceof Config) {
@@ -62,6 +62,8 @@ class sey {
 
         const currentRunner = new Runner(this.moduleManager, currentConfig);
 
+        currentRunner.load();
+        currentRunner.populateFiles('publish', this.startParameters);
         return await currentRunner.run('publish', this.startParameters);
     }
 
@@ -69,10 +71,18 @@ class sey {
         global.sey = this;
         this.startParameters = startParameters;
 
-        const returnValue = require(filepath);
+        const configInstance = require(filepath);
 
-        if (Object.keys(returnValue).length > 0) {
-            await this.run(returnValue);
+        if (this.startParameters.lockFile === undefined) {
+            const lockFilepath = `${filepath}.lock`;
+
+            if (fsManager.exists(lockFilepath)) {
+                this.startParameters.lockFile = lockFilepath;
+            }
+        }
+
+        if (Object.keys(configInstance).length > 0) {
+            await this.run(configInstance);
         }
     }
 }
