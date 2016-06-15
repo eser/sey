@@ -49,31 +49,26 @@ class sey {
     }
 
     async run(config) {
-        let currentConfig;
+        const currentConfig = (config instanceof Config) ? config : new Config(config);
 
-        if (configInstance instanceof Config) {
-            currentConfig = configInstance;
-        }
-        else {
-            currentConfig = new Config(configInstance);
-        }
+        const runner = new Runner(this.moduleManager, currentConfig);
 
-        const currentRunner = new Runner(this.moduleManager, currentConfig);
+        runner.load();
+        runner.populateFiles('publish', this.options);
 
-        currentRunner.load();
-        currentRunner.populateFiles('publish', this.options);
+        const result = await runner.run('publish', this.options);
 
-        return await currentRunner.run('publish', this.options);
+        return result;
     }
 
     async build(options) {
         global.sey = this;
         this.options = options;
 
-        const configInstance = require(this.options.seyfile);
+        const config = require(this.options.seyfile);
 
-        if (Object.keys(configInstance).length > 0) {
-            await this.run(configInstance);
+        if (Object.keys(config).length > 0) {
+            await this.run(config);
         }
     }
 }

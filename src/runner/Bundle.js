@@ -52,9 +52,9 @@ class Bundle {
         return false;
     }
 
-    populateFiles(preset, lockFileInstance) {
+    populateFiles(preset, options) {
         for (let opSetName in this.opSets) {
-            this.opSets[opSetName].populateFiles(lockContent);
+            this.opSets[opSetName].populateFiles(options);
         }
     }
 

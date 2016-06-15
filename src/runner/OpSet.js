@@ -52,7 +52,7 @@ class OpSet {
         return categorizedFiles;
     }
 
-    populateFiles(lockFileInstance) {
+    populateFiles(options) {
         const sourceFiles = globManager.glob(this.config.src, true);
 
         const targetFiles = sourceFiles.map((sourceFile) => {
