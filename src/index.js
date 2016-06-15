@@ -10,14 +10,12 @@ class sey {
     constructor() {
         this.moduleManager = new ModuleManager();
         this.config = Config;
-        this.startParameters = {};
+        this.options = {};
     }
 
     init() {
         this.moduleManager.init();
         this.moduleManager.registerOps(Config);
-
-        this.workingPath = path.join(process.cwd(), '.sey');
 
         // this.logManager = logger.createLogManager();
         // this.logManager.createConsoleAppender();
@@ -41,7 +39,7 @@ class sey {
     }
 
     clean() {
-        fsManager.rm(`${this.workingPath}/*`);
+        // fsManager.rm(`${this.workingPath}/*`);
 
         console.log(chalk.white('Working path is cleaned.'));
     }
@@ -50,7 +48,7 @@ class sey {
         return [];
     }
 
-    async run(configInstance, lockFileInstance) {
+    async run(config) {
         let currentConfig;
 
         if (configInstance instanceof Config) {
@@ -63,23 +61,16 @@ class sey {
         const currentRunner = new Runner(this.moduleManager, currentConfig);
 
         currentRunner.load();
-        currentRunner.populateFiles('publish', this.startParameters);
-        return await currentRunner.run('publish', this.startParameters);
+        currentRunner.populateFiles('publish', this.options);
+
+        return await currentRunner.run('publish', this.options);
     }
 
-    async runFile(filepath, startParameters) {
+    async build(options) {
         global.sey = this;
-        this.startParameters = startParameters;
+        this.options = options;
 
-        const configInstance = require(filepath);
-
-        if (this.startParameters.lockFile === undefined) {
-            const lockFilepath = `${filepath}.lock`;
-
-            if (fsManager.exists(lockFilepath)) {
-                this.startParameters.lockFile = lockFilepath;
-            }
-        }
+        const configInstance = require(this.options.seyfile);
 
         if (Object.keys(configInstance).length > 0) {
             await this.run(configInstance);

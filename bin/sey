@@ -22,21 +22,22 @@ process.on('exit', function () {
 updateNotifier({ pkg: pkg })
     .notify({ defer: false });
 
-const locateSeyFile = function (file) {
-    if (file === undefined) {
-        return path.join(process.cwd(), 'seyfile.js');
-    }
+const locateFiles = function (args) {
+    const cwd = process.cwd();
 
-    if (!path.isAbsolute(file)) {
-        return path.join(process.cwd(), file);
-    }
+    const seyfile = args.f || 'seyfile.js',
+        lockfile = args.l || 'seyfile.js.lock';
 
-    return file;
+    return {
+        seyfile: (!path.isAbsolute(seyfile)) ? path.join(cwd, seyfile) : seyfile,
+        lockfile: (!path.isAbsolute(lockfile)) ? path.join(cwd, lockfile) : lockfile
+    };
 };
 
 const initCmdR = function (argv) {
-    const seyfile = locateSeyFile(argv.f);
-    sey.initFile(seyfile, argv.a, argv.o);
+    const files = locateFiles(argv);
+
+    sey.initFile(files.seyfile, argv.a, argv.o);
 };
 
 const initCmd = function (args) {
@@ -104,14 +105,18 @@ const selfCheckCmd = function (args) {
 };
 
 const buildCmdR = function (argv) {
-    const seyfile = locateSeyFile(argv.f);
+    const files = locateFiles(argv);
 
-    let startParameters = {};
+    let options = {
+        seyfile: files.seyfile,
+        lockfile: files.lockfile
+    };
+
     if (argv._.length >= 2) {
-        startParameters.bundle = argv._[1];
+        options.bundle = argv._[1];
     }
 
-    sey.runFile(seyfile, startParameters);
+    sey.build(options);
 };
 
 const buildCmd = function (args) {
@@ -124,6 +129,16 @@ const buildCmd = function (args) {
                 demand: true,
                 default: 'seyfile.js',
                 describe: 'loads specified seyfile',
+                type: 'string'
+            }
+        )
+        .option(
+            'l',
+            {
+                alias: 'lockfile',
+                demand: false,
+                default: 'seyfile.js.lock',
+                describe: 'loads specified seyfile lock',
                 type: 'string'
             }
         )
@@ -144,6 +159,16 @@ const rebuildCmd = function (args) {
                 demand: true,
                 default: 'seyfile.js',
                 describe: 'loads specified seyfile',
+                type: 'string'
+            }
+        )
+        .option(
+            'l',
+            {
+                alias: 'lockfile',
+                demand: false,
+                default: 'seyfile.js.lock',
+                describe: 'loads specified seyfile lock',
                 type: 'string'
             }
         )
