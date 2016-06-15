@@ -109,14 +109,15 @@ const buildCmdR = function (argv) {
 
     let options = {
         seyfile: files.seyfile,
-        lockfile: files.lockfile
+        lockfile: files.lockfile,
+        preset: 'publish'
     };
 
     if (argv._.length >= 2) {
         options.bundle = argv._[1];
     }
 
-    sey.build(options);
+    sey.start(options);
 };
 
 const buildCmd = function (args) {

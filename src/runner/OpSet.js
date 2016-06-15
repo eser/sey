@@ -9,6 +9,16 @@ class OpSet {
         this.bundle = bundle;
     }
 
+    populateFiles(options) {
+        const sourceFiles = globManager.glob(this.config.src, true);
+
+        const targetFiles = sourceFiles.map((sourceFile) => {
+            return new TargetFile(sourceFile);
+        });
+
+        return targetFiles;
+    }
+
     categorizeFiles(targetFiles, phaseOps) {
         // duplicate files array
         const categorizedFiles = {};
@@ -50,16 +60,6 @@ class OpSet {
         }
 
         return categorizedFiles;
-    }
-
-    populateFiles(options) {
-        const sourceFiles = globManager.glob(this.config.src, true);
-
-        const targetFiles = sourceFiles.map((sourceFile) => {
-            return new TargetFile(sourceFile);
-        });
-
-        return targetFiles;
     }
 
     async exec(phase, phaseOps) {

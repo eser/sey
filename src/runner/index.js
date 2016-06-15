@@ -25,6 +25,12 @@ class Runner {
         }
     }
 
+    populateFiles(options) {
+        for (let bundleName in this.bundles) {
+            this.bundles[bundleName].populateFiles(options);
+        }
+    }
+
     getBundleConfig(bundleName) {
         const bundleConfig = {};
 
@@ -39,13 +45,7 @@ class Runner {
         return bundleConfig;
     }
 
-    populateFiles(preset, options) {
-        for (let bundleName in this.bundles) {
-            this.bundles[bundleName].populateFiles(preset, options);
-        }
-    }
-
-    async run(preset, options) {
+    async run(options) {
         const bundleOnly = (options.bundle !== undefined),
             config = this.config.content;
 
@@ -61,7 +61,7 @@ class Runner {
 
                 bundleCount++;
 
-                await this.bundles[bundleName].run(preset);
+                await this.bundles[bundleName].run(options.preset);
             }
 
             this.moduleManager.events.emit('runner-after', config);

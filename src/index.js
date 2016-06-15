@@ -10,7 +10,6 @@ class sey {
     constructor() {
         this.moduleManager = new ModuleManager();
         this.config = Config;
-        this.options = {};
     }
 
     init() {
@@ -48,28 +47,29 @@ class sey {
         return [];
     }
 
-    async run(config) {
-        const currentConfig = (config instanceof Config) ? config : new Config(config);
+    async start(options) {
+        this.runtimeOptions = options;
 
-        const runner = new Runner(this.moduleManager, currentConfig);
+        if (this.runtimeOptions.seyfileContent === undefined) {
+            this.runtimeOptions.seyfileContent = require(this.runtimeOptions.seyfile);
+        }
 
-        runner.load();
-        runner.populateFiles('publish', this.options);
-
-        const result = await runner.run('publish', this.options);
-
-        return result;
+        if (Object.keys(this.runtimeOptions.seyfileContent).length > 0) {
+            await this.run(this.runtimeOptions.seyfileContent, this.runtimeOptions);
+        }
     }
 
-    async build(options) {
-        global.sey = this;
-        this.options = options;
+    async run(seyfileContent, options) {
+        const currentSeyfileContent = (seyfileContent instanceof Config) ? seyfileContent : new Config(seyfileContent);
 
-        const config = require(this.options.seyfile);
+        const currentOptions = options || this.runtimeOptions;
 
-        if (Object.keys(config).length > 0) {
-            await this.run(config);
-        }
+        const runner = new Runner(this.moduleManager, currentSeyfileContent);
+
+        runner.load();
+        runner.populateFiles(currentOptions);
+
+        await runner.run(currentOptions);
     }
 }
 
@@ -77,4 +77,5 @@ const instance = new sey();
 
 instance.init();
 
+global.sey = instance;
 module.exports = instance;

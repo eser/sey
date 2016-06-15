@@ -26,6 +26,12 @@ class Bundle {
         }
     }
 
+    populateFiles(options) {
+        for (let opSetName in this.opSets) {
+            this.opSets[opSetName].populateFiles(options);
+        }
+    }
+
     getTarget() {
         return this.config.target || 'node';
     }
@@ -50,12 +56,6 @@ class Bundle {
         }
 
         return false;
-    }
-
-    populateFiles(preset, options) {
-        for (let opSetName in this.opSets) {
-            this.opSets[opSetName].populateFiles(options);
-        }
     }
 
     async run(preset) {
