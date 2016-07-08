@@ -1,3 +1,20 @@
+// main module
+sey.events.on('before-task-taskname', function () {});
+
+// tasks submodule
+sey.tasks.add(taskname, prerequisites, function (resolve, reject) {}); // is it necessary?
+sey.tasks.add(taskname, prerequisites, Promise);
+sey.tasks.exec(taskname);
+
+// bundles submodule
+sey.bundles.add('main', { target: 'node', standard: 2016, dest: 'build/' });
+sey.bundles.ops.add({ src: [], dest: 'extra/', addheader: { enabled: true, banner: 'x' }, eolfix: true });
+sey.bundles.build('main');
+
+// watch submodule
+// test submodule
+// publish submodule
+
 destination: './build/',
 ops: [
     {
