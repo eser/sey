@@ -12,6 +12,8 @@ sey.fs.writeFile();
 sey.fs.readFile();
 sey.fs.getLastModified();
 
+sey.shell('npm install');
+
 var list = new FileList();
 list.include('./src/**/*.js');
 list.exclude(/tes[td]\.js/);

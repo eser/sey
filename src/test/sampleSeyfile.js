@@ -60,3 +60,5 @@ sey.bundles.main.standard = 2016;
 sey.bundles.main.ops.add({ src: [], dest: 'extra/', addheader: { enabled: true, banner: 'x' }, eolfix: true });
 // sey.bundles.main.exec();
 console.log('bundles', sey.bundles.keys);
+
+sey.shell('dir /w');

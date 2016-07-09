@@ -1,4 +1,5 @@
 const events = require('events'),
+    childProcess = require('child_process'),
     ConfigManager = require('./config/index.js'),
     AddInManager = require('./addins/index.js');
 
@@ -19,6 +20,21 @@ class Sey {
         global.sey = backup;
 
         return returnValue;
+    }
+
+    shell(commands) {
+        const commands_ = (commands.constructor === Array) ? commands : [ commands ];
+
+        for (let command of commands_) {
+            childProcess.spawnSync(
+                command,
+                [],
+                {
+                    stdio: 'inherit',
+                    shell: true
+                }
+            );
+        }
     }
 }
 
