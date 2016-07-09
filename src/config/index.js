@@ -1,57 +1,28 @@
-const deepmerge = require('../utils/deepmerge.js'),
-    Bundle = require('./Bundle.js');
+const deepmerge = require('../utils/deepmerge.js');
 
 class Config {
     constructor(initialContent) {
-        this.content = {
-            global: {
-                destination: './build/'
-            }
-        };
-
-        if (initialContent !== undefined) {
-            this.merge(initialContent);
-        }
-
-        this.bundles = {};
+        this.content = initialContent || {};
     }
 
-    static addOp(name) {
-        if (name in Bundle.prototype) {
-            return;
-        }
-
-        Bundle.prototype[name] = function (value) {
-            return this.op(name, value);
-        };
+    load(config) {
+        this.content = config;
     }
 
-    load(content) {
-        this.content = content;
-    }
-
-    merge(content) {
-        deepmerge(this.content, content);
-    }
-
-    set(name, content) {
-        const encapsulated = {};
-
-        encapsulated[this.name] = content;
-
-        this.merge(encapsulated);
+    merge(config) {
+        deepmerge(this.content, config);
     }
 
     save() {
         return this.content;
     }
 
-    bundle(name) {
-        if (!(name in this.bundles)) {
-            this.bundles[name] = new Bundle(this, name);
-        }
+    set(name, value) {
+        this.content[name] = value;
+    }
 
-        return this.bundles[name];
+    get(name) {
+        return this.content[name];
     }
 }
 

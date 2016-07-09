@@ -4,12 +4,13 @@ sey.events.on('before-task-taskname', function () {});
 // tasks submodule
 sey.tasks.add(taskname, prerequisites, function (resolve, reject) {}); // is it necessary?
 sey.tasks.add(taskname, prerequisites, Promise);
-sey.tasks.exec(taskname);
+sey.tasks[taskname].exec();
 
 // bundles submodule
 sey.bundles.add('main', { target: 'node', standard: 2016, dest: 'build/' });
-sey.bundles.ops.add({ src: [], dest: 'extra/', addheader: { enabled: true, banner: 'x' }, eolfix: true });
-sey.bundles.build('main');
+sey.bundles.main.ops.add({ src: [], dest: 'extra/', addheader: { enabled: true, banner: 'x' }, eolfix: true });
+sey.bundles.main.exec();
+sey.bundles.readFromConfig();
 
 // watch submodule
 // test submodule
