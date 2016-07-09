@@ -1,4 +1,5 @@
-const BundleItem = require('./BundleItem.js');
+const deepmerge = require('../../utils/deepmerge.js'),
+    BundleItem = require('./BundleItem.js');
 
 class BundleManager {
     constructor(owner) {
@@ -12,8 +13,36 @@ class BundleManager {
     }
 
     readFromConfig() {
-        // TODO not implemented yet
-        throw new Error('not implemented yet: BundleManager.readFromConfig');
+        // TODO not tested
+        const config = this.owner.config.save(),
+            reservedNodeKeys = [ 'global', 'common' ],
+            commonNode = config.common;
+
+        for (let nodeKey in config) {
+            if (nodeKey in reservedNodeKeys) {
+                continue;
+            }
+
+            const node = config[nodeKey];
+
+            if (commonNode !== undefined) {
+                deepmerge(node, commonNode);
+            }
+
+            const ops = node.ops;
+
+            if (node.ops !== undefined) {
+                delete node.ops;
+            }
+
+            this.add(nodeKey, node);
+
+            if (ops !== undefined) {
+                for (let op of ops) {
+                    this[nodeKey].ops.add(op);
+                }
+            }
+        }
     }
 }
 

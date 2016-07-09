@@ -1,26 +1,22 @@
 class TaskItem {
-    constructor(owner, name, prerequisites, promise) {
+    constructor(owner, name, prerequisites, callback) {
         this.owner = owner;
         this.name = name;
 
-        if (promise === undefined) {
+        if (callback === undefined) {
             this.prerequisites = [];
-            this.promise = prerequisites;
+            this.callback = prerequisites;
         }
         else {
             this.prerequisites = prerequisites;
-            this.promise = promise;
-        }
-
-        if (this.promise.constructor !== Promise) {
-            this.promise = new Promise(this.promise);
+            this.callback = callback;
         }
     }
 
     exec() {
-        // TODO not implemented yet
+        // TODO it's a very primitive implementation
         // TODO throw before and after events
-        throw new Error('not implemented yet: TaskItem.exec');
+        return new Promise(this.callback);
     }
 }
 
