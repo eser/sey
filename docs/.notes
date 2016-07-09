@@ -1,6 +1,22 @@
 // main module
 sey.events.on('before-task-taskname', function () {});
 
+sey.config.load(content);
+sey.config.set(key, value);
+sey.config.merge(content);
+sey.config.save();
+
+sey.fs.mkdirp(path);
+sey.fs.rm(fileList);
+sey.fs.writeFile();
+sey.fs.readFile();
+sey.fs.getLastModified();
+
+var list = new FileList();
+list.include('./src/**/*.js');
+list.exclude(/tes[td]\.js/);
+var files = x.populate();
+
 // tasks submodule
 sey.tasks.add(taskname, prerequisites, function (resolve, reject) {}); // is it necessary?
 sey.tasks.add(taskname, prerequisites, Promise);
@@ -15,6 +31,12 @@ sey.bundles.readFromConfig();
 // watch submodule
 // test submodule
 // publish submodule
+
+// TODO yargs-parser to tasks and bundles options
+// TODO interactive option input (via readline)
+// TODO sey.env for env
+// TODO sey.env.os = WIN|UNIX
+// TODO sey.exec, childprocess.spawn + stdout
 
 destination: './build/',
 ops: [
