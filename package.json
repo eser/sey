@@ -58,7 +58,7 @@
     "isbinaryfile": "^3.0.0",
     "less": "^2.7.1",
     "maester": "0.0.1",
-    "node-sass": "^3.8.0",
+    "node-sass": "^4.14.1",
     "preprocess": "^3.1.0",
     "simple-node-logger": "^0.93.12",
     "tmp": "0.0.28",
