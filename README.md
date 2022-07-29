@@ -5,6 +5,15 @@
 [![dependencies][dep-image]][dep-url]
 [![license][license-image]][license-url]
 
+
+# Update
+
+This project was DEPRECATED in favor of [darty](https://github.com/eserozvataf/darty).
+See https://github.com/eserozvataf/darty for details.
+
+
+# README
+
 Simple JavaScript bundling tool with declarative and easy configuration. It also has incremental build support which only rebuilds changed files to pace up build and bundling processes.
 
 ![Sey](docs/sey-effect.png)
